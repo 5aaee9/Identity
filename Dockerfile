@@ -11,5 +11,5 @@ RUN npm install --production
 
 EXPOSE 3000:80
 
-ENTRYPOINT ["npm"]
-CMD ["run", "run"]
+ENTRYPOINT ["node"]
+CMD ["app.js"]
