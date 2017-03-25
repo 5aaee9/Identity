@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 var config = require('./config')
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/veryauth');
+mongoose.connect(config.getDbLink());
 var user = require("./schema/user")
 var db = mongoose.connection;
 
