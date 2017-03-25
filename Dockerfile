@@ -1,4 +1,4 @@
-FROM hyalx/node.js
+FROM mhart/alpine-node
 MAINTAINER Indexyz <r18@indexes.nu>
 
 
