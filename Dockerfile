@@ -7,9 +7,9 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY . /usr/src/app
-RUN npm install --production
+RUN cd /usr/src/app && npm install
 
-EXPOSE 3000:80
+EXPOSE 8080:80
 
 ENTRYPOINT ["node"]
 CMD ["app.js"]
