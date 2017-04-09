@@ -1,0 +1,26 @@
+{
+  "name": "identity",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./Bin/run",
+    "test": "mocha --reporter spec --bail --check-leaks Tests/"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "cookie-parser": "~1.4.3",
+    "cookie-session": "^2.0.0-alpha.1",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "jade": "~1.11.0",
+    "mailgun-js": "^0.7.12",
+    "mongoose": "^4.9.3",
+    "morgan": "~1.7.0",
+    "node-uuid": "^1.4.8",
+    "serve-favicon": "~2.3.0"
+  },
+  "devDependencies": {
+    "should": "^11.1.0",
+    "mocha": "^2.5.3"
+  }
+}
