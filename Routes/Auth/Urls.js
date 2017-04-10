@@ -9,6 +9,7 @@ const express = require('express');
 let router = express.Router();
 
 router.get('/login', require('./Login').get);
+router.post('/login', require('./Login').post);
 router.get('/register', require('./Register').get);
 router.post('/register', require('./Register').post);
 router.get('/resend', require('./Resend').get);

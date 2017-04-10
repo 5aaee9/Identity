@@ -4,22 +4,26 @@
 extends ../navbar
 
 block content
-    .section.page-section
+    .section.page-section.mdl-shadow--2dp
         .index--block
             h1 Login to the world
+
     .login-form.container
         if (info)
             span.mdl-chip.mdl-chip--contact
                 span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white I
                 span.mdl-chip__text=info
-
+        if (e)
+            span.mdl-chip.mdl-chip--contact
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white E
+                span.mdl-chip__text=e
         form(method="POST")
             .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
-                input#username.mdl-textfield__input(type='text')
+                input#username.mdl-textfield__input(type='text', name="username")
                 label.mdl-textfield__label(for='username') 用户名
             br
             .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
-                input#password.mdl-textfield__input(type='password')
+                input#password.mdl-textfield__input(type='password', name="password")
                 label.mdl-textfield__label(for='password') 密码
             br
             br

@@ -13,13 +13,23 @@ block body
                 .mdl-layout-spacer
                 // Navigation. We hide it in small screens.
                 nav.mdl-navigation.mdl-layout--large-screen-only.index-navigation
+                    if (user == null)
+                        a.mdl-navigation__link(href='/auth/login') Login
+                        a.mdl-navigation__link(href='/auth/register') Register
+                    else
+                        span.mdl-navigation__link=user.username
+                        a.mdl-navigation__link(href='/member') Member
+        .mdl-layout__drawer
+            if (user == null)
+                span.mdl-layout-title Identity
+            else
+                span.mdl-layout-title="Hello, " + user.username
+            nav.mdl-navigation
+                if (user == null)
                     a.mdl-navigation__link(href='/auth/login') Login
                     a.mdl-navigation__link(href='/auth/register') Register
-        .mdl-layout__drawer
-            span.mdl-layout-title Identity
-            nav.mdl-navigation
-                a.mdl-navigation__link(href='/auth/login') Login
-                a.mdl-navigation__link(href='/auth/register') Register
+                else
+                    a.mdl-navigation__link(href='/member') Member
         main.mdl-layout__content
             .page-content
                 .wrapper

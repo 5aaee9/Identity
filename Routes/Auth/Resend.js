@@ -13,6 +13,7 @@ module.exports.get = (req, res, next) => {
     userModel.findOne({
         email: email
     }, (err, doc) => {
+        if (!doc.emailToken) { res.redirect("/"); return }
         if (err) { res.redirect("/auth/register"); return }
         doc.sendMail(req.protocol + '://' + req.get('host'), err => {
             if (err) { res.redirect("/auth/register"); return }
