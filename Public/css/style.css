@@ -1,0 +1,25 @@
+
+.index-navigation {
+    direction: ltr;
+    -webkit-justify-content: flex-end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.index-navigation .mdl-navigation__link {
+    display: inline-block;
+    height: 60px;
+    line-height: 68px;
+    background-color: transparent !important;
+    border-bottom: 4px solid transparent;
+}
+.index-navigation .mdl-navigation__link:hover {
+    border-bottom: 4px solid #8bc34a;
+}
+
+#background-img {
+    background: url('/img/Sketch.png') no-repeat ;
+    height: 100vh;
+    background-size: cover;
+    z-index: -1;
+}

@@ -1,0 +1,42 @@
+//
+   Created by Indexyz on 2017/4/10.
+
+extends ./basic
+
+block body
+    .mdl-layout.mdl-js-layout.mdl-layout--fixed-header
+        header.mdl-layout__header
+            .mdl-layout__header-row
+                // Title
+                span.mdl-layout-title Identity
+                // Add spacer, to align navigation to the right
+                .mdl-layout-spacer
+                // Navigation. We hide it in small screens.
+                nav.mdl-navigation.mdl-layout--large-screen-only.index-navigation
+                    a.mdl-navigation__link(href='') Login
+                    a.mdl-navigation__link(href='') Register
+        .mdl-layout__drawer
+            span.mdl-layout-title Identity
+            nav.mdl-navigation
+                a.mdl-navigation__link(href='') Link
+                a.mdl-navigation__link(href='') Link
+                a.mdl-navigation__link(href='') Link
+                a.mdl-navigation__link(href='') Link
+        main.mdl-layout__content
+            .page-content
+                block content
+
+                footer.mdl-mini-footer
+                    .mdl-mini-footer__left-section
+                        .mdl-logo Identity
+                        ul.mdl-mini-footer__link-list
+                            li
+                                a(href='#') Help
+                            li
+                                a(href='#') Privacy & Terms
+                    .mdl-mini-footer__right-section
+                        ul.mdl-mini-footer__link-list
+                            li
+                                a Made with love
+
+
