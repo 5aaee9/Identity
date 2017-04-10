@@ -16,7 +16,6 @@ module.exports = {
     db_username    : _('DB_USER', ""),
     db_password    : _('DB_PASS', ""),
     salt           : _("SALT", "ChangeMe"),
-    mail_domain    : _("MAIL_DOMAIN", ""),
     mail_key       : _("MAIL_KEY", ""),
     mail_sender    : _("MAIL_SENDER", "")
 };

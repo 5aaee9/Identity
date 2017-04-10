@@ -1,0 +1,21 @@
+//
+   Created by Indexyz on 2017/4/10.
+
+extends ../navbar
+
+block content
+    .section.page-section
+        .index--block
+            h1 邮件已发送!
+
+    .center
+
+        .card-square.mdl-card.mdl-shadow--2dp
+            .mdl-card__title.mdl-card--expand
+                h2.mdl-card__title-text 已发送
+            .mdl-card__supporting-text
+                | 邮件送达有时间延时 请稍等1-5分钟
+                | 如果还未送达 请点击以下链接
+            .mdl-card__actions.mdl-card--border
+                a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="/auth/resend?mail=" + mail)
+                    | 重新发送

@@ -4,6 +4,8 @@ const config = require('../../config');
 const crypto = require('crypto');
 const uuid  = require('node-uuid');
 const stringHelper = require('../../Utils/String');
+const mail = require("../../Utils/Mail");
+
 
 let UserSchema = mongoose.Schema({
     username: {type: String, unique: true, required: true, index: {unique: true}},
@@ -54,6 +56,16 @@ UserSchema.methods.generatorID = function(){
 
 UserSchema.methods.generatorEmailToken = function(){
     this.emailToken = uuid.v4()
+};
+
+UserSchema.methods.sendMail = function (url, func) {
+    mail.send(
+        this.email, "VeryAuth verify mail", "Your verify url: " +
+        url + "/auth/email?code=" + this.emailToken,
+        err => {
+            func(err)
+        }
+    )
 };
 
 module.exports = UserSchema;

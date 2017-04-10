@@ -11,6 +11,7 @@ Db(() => {
     router.get('/', (req, res, next) => {
         res.render('index')
     });
+    router.use('/auth', require('./Auth/Urls'))
 });
 
 module.exports = router;

@@ -1,3 +1,27 @@
 //
    Created by Indexyz on 2017/4/10.
 
+extends ../navbar
+
+block content
+    .section.page-section
+        .index--block
+            h1 Login to the world
+    .login-form.container
+        if (info)
+            span.mdl-chip.mdl-chip--contact
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white I
+                span.mdl-chip__text=info
+
+        form(method="POST")
+            .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
+                input#username.mdl-textfield__input(type='text')
+                label.mdl-textfield__label(for='username') 用户名
+            br
+            .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
+                input#password.mdl-textfield__input(type='password')
+                label.mdl-textfield__label(for='password') 密码
+            br
+            br
+            button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.input--text(type="submit")
+                | 提交

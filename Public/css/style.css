@@ -23,3 +23,104 @@
     background-size: cover;
     z-index: -1;
 }
+
+/** Page */
+.container {
+    padding-left: 5vh;
+    padding-right: 5vh;
+    padding-top: 2vh;
+}
+
+/** Footer */
+
+.wrapper {
+    min-height: 90vh;
+    margin: 0 auto -6.05em;
+}
+@media (max-width: 1439px) {
+    .wrapper {
+        margin: 0 auto -6.4em;
+    }
+}
+@media (max-width: 759px) {
+    .wrapper {
+        margin: 0 auto -6em !important;
+    }
+}
+@media (max-width: 1024px) {
+    .wrapper {
+        min-height: 85vh;
+        margin: 0 auto -3.15em;
+    }
+}
+.push {
+    height: 2em;
+}
+
+/** Auth */
+.section {
+    height: 20vh;
+}
+
+.page-section {
+    background-color: #37474f;
+}
+
+.section > .index--block {
+    padding-left: 15vh;
+    padding-top: 5vh;
+}
+@media (max-width: 620px) {
+    .section > .index--block {
+        padding-left: 5%;
+    }
+}
+@media (max-width: 461px) {
+    .section {
+        height: 30vh;
+    }
+}
+.index--block {
+    color: #e0f7fa;
+}
+.index--block > * {
+    margin-top: 0px;
+}
+
+.login-form {
+    width: 100%;
+    text-align: center;
+}
+.login-form {
+    padding-left: 0% !important;
+}
+
+.input--text {
+    width: 60%;
+}
+.login-form {
+    margin-top: 5%;
+}
+.register-form {
+    width: 100%;
+    text-align: center;
+    padding-left: 0% !important;
+}
+
+.card-square.mdl-card {
+    vertical-align: middle;
+    align-content: center;
+    text-align: center;
+    margin: 0 auto;
+    width: 75%;
+    height: 320px;
+}
+.card-square > .mdl-card__title {
+    color: #fff;
+    background: url('/img/dog.png') bottom right 15% no-repeat #46B6AC;
+}
+
+
+.wrapper > .center {
+    padding-top: 2vh;
+}
