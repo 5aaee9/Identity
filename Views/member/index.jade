@@ -1,0 +1,45 @@
+//
+   Created by Indexyz on 2017/4/11.
+
+extends ../navbar
+
+block nearHeader
+
+block content
+    .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer.mdl-layout--overlay-drawer-button.mdl-layout--large-screen-only
+        .mdl-layout__drawer.mdl-color--blue-grey-800
+            span.mdl-layout-title.font-white Member
+            nav.mdl-navigation
+                a.mdl-navigation__link.font-white(href='/member') Index
+                a.mdl-navigation__link.font-white(href='/member/profile') Profile
+    .container.panel-carv
+
+        #chartContainer(style="height: 300px; width: 100%;")
+        h4.font-center 最近十次登陆记录
+        ul.demo-list-three.mdl-list
+            - for log in logs
+                li.mdl-list__item.mdl-list__item--three-line
+                    span.mdl-list__item-primary-content
+                        i.material-icons.mdl-list__item-avatar person
+                        span="登陆地址: " + log.ip
+                        span.mdl-list__item-text-body=log.log
+                    span.mdl-list__item-secondary-content
+                        p=log.date
+        br
+
+block javascript
+    script(src="/js/canvasjs.min.js")
+    script(type='text/javascript').
+        var chart = new CanvasJS.Chart("chartContainer", {
+            exportEnabled: false,
+            animationEnabled: true,
+            title: {
+                text: "过去7日登陆情况"
+            },
+            data: [{
+                type: "splineArea",
+                dataPoints: !{data}
+            }],
+
+        });
+        chart.render();

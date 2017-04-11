@@ -57,6 +57,11 @@
     height: 2em;
 }
 
+footer {
+    z-index: 9999;
+    position: relative;
+}
+
 /** Auth */
 .section {
     height: 20vh;
@@ -123,4 +128,29 @@
 
 .wrapper > .center {
     padding-top: 2vh;
+}
+
+.font-white {
+    color: #e0f7fa !important;
+}
+.mdl-navigation__link.font-white:hover {
+    color: #5d4037 !important;
+}
+
+.panel-carv {
+    
+}
+@media (min-width: 1025px) {
+    .panel-carv {
+        padding-left: 280px;
+    }
+}
+
+.font-center {
+    text-align: center;
+}
+
+.wrapper > .mdl-layout__container {
+    position: fixed;
+    width: 240px;
 }
