@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require('mongoose');
-const config = require('../../config');
+const config = require('../../Config');
 const crypto = require('crypto');
 const uuid  = require('node-uuid');
 const stringHelper = require('../../Utils/String');
