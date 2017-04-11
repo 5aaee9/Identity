@@ -1,0 +1,14 @@
+//
+   Created by Indexyz on 2017/4/11.
+
+extends ../navbar
+
+block content
+    .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer.mdl-layout--overlay-drawer-button.mdl-layout--large-screen-only
+        .mdl-layout__drawer.mdl-color--blue-grey-800
+            span.mdl-layout-title.font-white Member
+            nav.mdl-navigation
+                a.mdl-navigation__link.font-white(href='/member') Index
+                a.mdl-navigation__link.font-white(href='/member/profile') Profile
+    .container.panel-carv
+        block panel

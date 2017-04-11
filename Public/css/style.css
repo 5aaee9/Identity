@@ -23,7 +23,9 @@
     background-size: cover;
     z-index: -1;
 }
-
+#background-img > * {
+    margin-top: 0px;
+}
 /** Page */
 .container {
     padding-left: 5vh;
@@ -153,4 +155,28 @@ footer {
 .wrapper > .mdl-layout__container {
     position: fixed;
     width: 240px;
+}
+
+.index--fullwidth {
+    width: 100%;
+    min-height: 0px;
+}
+#detail {
+    color: lightcyan;
+    text-shadow: 1px 1px 6px black;
+    line-height: 50px;
+    text-align: center;
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+}
+#detail > h1 {
+    font-size: 50px;
+}
+#detail > p {
+    font-size: 20px;
+}
+@media (min-width: 1024px) {
+    #detail {
+        line-height: 10px;
+    }
 }
