@@ -1,5 +1,6 @@
 # Identity
 [![](https://images.microbadger.com/badges/image/indexyz/identity:reload.svg)](https://microbadger.com/images/indexyz/identity:reload "Get your own image badge on microbadger.com")
+[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
 
 Identity is a Minecraft login solution
 
