@@ -16,4 +16,4 @@ RUN cd /usr/src/app && npm install
 EXPOSE 8080:80
 
 ENTRYPOINT ["node"]
-CMD ["app.js"]
+CMD ["Bin/run"]
