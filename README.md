@@ -1,4 +1,6 @@
 # Identity
+[![](https://images.microbadger.com/badges/image/indexyz/identity:reload.svg)](https://microbadger.com/images/indexyz/identity:reload "Get your own image badge on microbadger.com")
+
 Identity is a Minecraft login solution
 
 ## Require
