@@ -125,12 +125,13 @@ footer {
     color: #5d4037 !important;
 }
 
-.panel-carv {
+
+main {
     margin-top: 64px;
 }
 
 @media screen and (max-width: 1024px) {
-    .panel-carv {
+    main {
         margin-top: 56px;
     }
 }
