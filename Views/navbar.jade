@@ -8,7 +8,7 @@ block body
         header.mdl-layout__header
             .mdl-layout__header-row
                 // Title
-                span.mdl-layout-title Identity
+                a.mdl-layout-title.text--link(href="/") Identity
                 // Add spacer, to align navigation to the right
                 .mdl-layout-spacer
                 // Navigation. We hide it in small screens.
@@ -17,7 +17,7 @@ block body
                         a.mdl-navigation__link(href='/auth/login') Login
                         a.mdl-navigation__link(href='/auth/register') Register
                     else
-                        span.mdl-navigation__link=user.username
+                        a.mdl-navigation__link(href="/member/profile")=user.username
                         a.mdl-navigation__link(href='/member') Member
         .mdl-layout__drawer
             if (user == null)
@@ -37,17 +37,17 @@ block body
                 .wrapper
                     block content
                     .push
-                footer.mdl-mini-footer
-                    .mdl-mini-footer__left-section
-                        .mdl-logo Identity
-                        ul.mdl-mini-footer__link-list
-                            li
-                                a(href='#') Help
-                            li
-                                a(href='#') Privacy & Terms
-                    .mdl-mini-footer__right-section
-                        ul.mdl-mini-footer__link-list
-                            li
-                                a Made with love
+        footer.mdl-mini-footer
+            .mdl-mini-footer__left-section
+                .mdl-logo Identity
+                ul.mdl-mini-footer__link-list
+                    li
+                        a(href='https://github.com/Indexyz/Identity/wiki') Help
+            .mdl-mini-footer__right-section
+                ul.mdl-mini-footer__link-list
+                    li
+                        a Made with love
+                    li
+                        a(href='https://github.com/Indexyz/Identity/') Identity
 
 
