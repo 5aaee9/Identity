@@ -6,7 +6,7 @@
 const express = require('express');
 let router = express.Router();
 
-router.use("/mojang", require("./Mojang/Urls"));
-router.use("/server", require("./Server/Urls"));
+router.get("/ping", require("./Ping").get);
+router.post("/loginByToken", require('./LoginByToken').post);
 
 module.exports = router;
