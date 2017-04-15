@@ -1,7 +1,7 @@
 /**
  * Created by Indexyz on 2017/4/11.
  */
-
+'use strict';
 const db = require("mongoose");
 const logSchema = require("../../Db/Schema/Log");
 const dateHelper = require("../../Utils/DateTime");

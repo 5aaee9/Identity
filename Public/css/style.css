@@ -121,9 +121,6 @@ footer {
 .font-white {
     color: #e0f7fa !important;
 }
-.mdl-navigation__link.font-white:hover {
-    color: #5d4037 !important;
-}
 
 
 main {
@@ -179,8 +176,27 @@ main.mdl-layout__content {
 footer {
     min-height: 36px;
 }
+.mdl-navigation__link .material-icons {
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.56);
+    margin-right: 32px;
+}
 
 .text--link {
     color: white;
     text-decoration: none;
+}
+
+.mdl-layout__drawer.is-visible {
+    position: fixed;
+}
+.mdl-layout__obfuscator.is-visible {
+    position: fixed;
+}
+.mdl-navigation__link {
+    font-weight: 500;
+    font-size: 14px;
+}
+a.font-white:hover {
+    background-color: teal !important;
 }

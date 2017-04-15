@@ -20,6 +20,11 @@ let UserSchema = mongoose.Schema({
         Token: String,
         UserID: String,
         authToken: String
+    },
+    skin: {
+        lastUpdate: Date,
+        skin: { type: mongoose.Schema.Types.ObjectId, required: true },
+        cap: { type: mongoose.Schema.Types.ObjectId, required: true }
     }
 });
 
@@ -32,6 +37,8 @@ UserSchema.pre('save', function(next) {
     // SHA1 password
     if (!this.isModified('password')) return next();
     this.password = getSaltedPassword(this.password);
+    if (!this.isModified('skin')) return next();
+    this.skin.lastUpdate = new Date();
     return next()
 });
 

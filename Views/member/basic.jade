@@ -8,7 +8,15 @@ block content
         .mdl-layout__drawer.mdl-color--blue-grey-800
             span.mdl-layout-title.font-white Member
             nav.mdl-navigation
-                a.mdl-navigation__link.font-white(href='/member') Index
-                a.mdl-navigation__link.font-white(href='/member/profile') Profile
+                a.mdl-navigation__link.font-white(href='/member')
+                    i.material-icons home
+                    |Index
+                a.mdl-navigation__link.font-white(href='/member/profile')
+                    i.material-icons settings
+                    |Profile
+                a.mdl-navigation__link.font-white(href='/member/skin')
+                    i.material-icons accessibility
+                    |Skin
+
     .container.panel-carv
         block panel
