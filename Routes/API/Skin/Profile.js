@@ -8,7 +8,6 @@ const userSchema = require('../../../Db/Schema/User');
 module.exports.get = (req, res, next) => {
     let username = req.params.username,
         userModel = db.model('users', userSchema);
-
     userModel.findOne({
         username: username
     }, (err, doc) => {
@@ -16,10 +15,11 @@ module.exports.get = (req, res, next) => {
         res.send({
             player_name: doc.username,
             last_update: doc.skin ? undefined : doc.skin.lastUpdate.getTime(),
-            model_preference: ["default", "cape"],
+            model_preference: ["default", "cape", doc.skin.slim ? "slim" : null].filter(item => item !== null),
             skins: {
                 "default": doc.skin.skin,
-                cap: doc.skin.cap
+                slim: doc.skin.slim,
+                cap: doc.skin.cap,
             },
             cap: doc.skin.cap
         })

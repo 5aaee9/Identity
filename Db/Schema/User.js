@@ -23,8 +23,9 @@ let UserSchema = mongoose.Schema({
     },
     skin: {
         lastUpdate: Date,
-        skin: { type: mongoose.Schema.Types.ObjectId, required: true },
-        cap: { type: mongoose.Schema.Types.ObjectId, required: true }
+        skin: { type: mongoose.Schema.Types.ObjectId },
+        cap: { type: mongoose.Schema.Types.ObjectId },
+        slim: { type: mongoose.Schema.Types.ObjectId }
     }
 });
 

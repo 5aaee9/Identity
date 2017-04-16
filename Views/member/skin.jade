@@ -1,0 +1,67 @@
+//
+   Created by Indexyz on 2017/4/15.
+
+extends ./basic
+
+block panel
+    style(type='text/css').
+        mc-skinpreview {
+            display: inline-block;
+        }
+    .font-center
+        if (succ)
+            span.mdl-chip.mdl-chip--contact
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white S
+                span.mdl-chip__text 上传成功
+        if (err)
+            span.mdl-chip.mdl-chip--contact
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white E
+                span.mdl-chip__text=err
+    .mdl-grid
+        .mdl-cell.mdl-cell--8-col.mdl-cell--8-col-tablet
+            .mdl-card.mdl-shadow--2dp.index--fullwidth
+                .mdl-card__title
+                    h2.mdl-card__title-text 皮肤预览
+                mc-skinpreview#skinpreview(src="/member/skin/skin" width=400 height=500 running style="text-align: center;")
+
+
+        .mdl-cell.mdl-cell--4-col.mdl-cell--4-col-tablet
+            .mdl-card.mdl-shadow--2dp.index--fullwidth
+                .mdl-card__title
+                    h2.mdl-card__title-text 皮肤上传
+                .mdl-card__supporting-text
+                    | 披风
+                    form(method='post', id="formCup", enctype='multipart/form-data', action='/member/skin/cup')
+                        .mdl-grid
+                            .mdl-cell.mdl-cell--8-col.mdl-cell--8-col-tablet
+                                a.file-uploader.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="javascript:;",
+                                    onchange="document.getElementById(\"formCup\").submit();"
+                                ) 上传文件
+                                    input(type='file', name='uploadCup')
+                    | 皮肤
+                    form(method='post', id="formSkin", enctype='multipart/form-data', action='/member/skin/skin')
+                        .mdl-grid
+                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='isSlim')
+                                input#isSlim.mdl-checkbox__input(type='checkbox', name="isSlim")
+                                span.mdl-checkbox__label 我的皮肤适合新版 Alex
+                            .mdl-cell.mdl-cell--8-col.mdl-cell--8-col-tablet
+
+                                a.file-uploader.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="javascript:;",
+                                    onchange="document.getElementById(\"formSkin\").submit();"
+                                ) 上传文件
+                                    input(type='file', name='uploadSkin')
+            .mdl-card.mdl-shadow--2dp.index--fullwidth
+                .mdl-card__title
+                    h2.mdl-card__title-text API 地址
+                .mdl-card__supporting-text
+                    p 使用以下地址在游戏中使用皮肤
+                    | /api/skin/ - UniSkinMod / OfflineSkin
+                    | /api/skin/skin/{USERNAME}.png - Legacy Skin
+                    | /api/skin/cap/{USERNAME}.png - Legacy Cap
+
+
+block javascript
+    script(src='//cdn.bootcss.com/polymer/0.5.6/polymer.js')
+    link(rel='import', href='/js/mc-skinpreview.polymer')
+
+
