@@ -215,3 +215,10 @@ a.font-white:hover {
 .file-uploader > .mdl-button__ripple-container {
     display: none;
 }
+@media screen and (min-width: 1024px) {
+    .login-info-list {
+        width: 70%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}

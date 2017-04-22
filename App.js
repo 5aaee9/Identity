@@ -10,6 +10,7 @@ const cookieSession = require('cookie-session');
 const config = require('./Config');
 const db = require('mongoose');
 const app = express();
+const moment = require('./Libs/moment.min');
 
 app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'jade');
@@ -23,7 +24,6 @@ app.use(cookieSession({
     secret: config.salt
 }));
 app.use(express.static(path.join(__dirname, 'Public')));
-
 
 // Database connection
 require("./Db/Db")(() => {
@@ -42,6 +42,7 @@ require("./Db/Db")(() => {
             res.locals.user = null;
             next()
         }
+        res.locals.moment = moment;
     });
 
     // router

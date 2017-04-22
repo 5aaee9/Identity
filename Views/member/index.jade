@@ -9,7 +9,7 @@ block title
 block panel
         #chartContainer(style="height: 300px; width: 100%;")
         h4.font-center 最近十次登陆记录
-        ul.demo-list-three.mdl-list
+        ul.login-info-list.mdl-list.font-center
             - for log in logs
                 li.mdl-list__item.mdl-list__item--three-line
                     span.mdl-list__item-primary-content
@@ -17,7 +17,7 @@ block panel
                         span="登陆地址: " + log.ip
                         span.mdl-list__item-text-body=log.log
                     span.mdl-list__item-secondary-content
-                        p=log.date
+                        p=moment(log.date).fromNow()
 
 
 block javascript
@@ -32,7 +32,6 @@ block javascript
             data: [{
                 type: "splineArea",
                 dataPoints: !{data}
-            }],
-
+            }]
         });
         chart.render();
