@@ -9,6 +9,7 @@ router.get('/', (req, res, next) => {
     res.render('index')
 });
 router.use('/auth', require('./Auth/Urls'));
+router.use('/oauth', require('./OAuth/Urls'));
 router.use('/member', require("./Member/Urls"));
 router.use('/api', require("./API/Urls"));
 
