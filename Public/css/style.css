@@ -52,7 +52,7 @@ footer {
 
 /** Auth */
 .section {
-    height: 20vh;
+    min-height: 20vh;
 }
 
 .page-section {
@@ -68,11 +68,7 @@ footer {
         padding-left: 5%;
     }
 }
-@media (max-width: 461px) {
-    .section {
-        height: 30vh;
-    }
-}
+
 .index--block {
     color: #e0f7fa;
 }
@@ -217,8 +213,30 @@ a.font-white:hover {
 }
 @media screen and (min-width: 1024px) {
     .login-info-list {
-        width: 70%;
         margin-right: auto;
         margin-left: auto;
+    }
+}
+
+.access-form {
+    text-align:center;
+}
+
+@media screen and (min-width: 1024px) {
+    .access-list {
+        width: 50%;
+        display:inline-block;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .access-list {
+        width: 95%;
+        display:inline-block;
+    }
+}
+
+@media screen and (max-width: 760px) {
+    footer {
+        min-height: 54px;
     }
 }
