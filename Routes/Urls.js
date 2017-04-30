@@ -13,4 +13,7 @@ router.use('/oauth', require('./OAuth/Urls'));
 router.use('/member', require("./Member/Urls"));
 router.use('/api', require("./API/Urls"));
 
+// Get Global Resources
+router.get('/resources/:fileId', require("./Resources").get);
+
 module.exports = router;

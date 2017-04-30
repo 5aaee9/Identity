@@ -89,6 +89,6 @@ router.get('/skin', (req, res, next) => {
         _id: req.session.user._id
     }, (err, doc) => {
         if (err) { return res.redirect("/member/skin?err=" + encodeURIComponent(err.message)) }
-        res.redirect("/api/skin/textures/" + doc.skin.skin)
+        res.redirect("/resources/" + doc.skin.skin)
     })
 });
