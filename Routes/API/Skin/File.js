@@ -8,6 +8,13 @@ const grid = require('gridfs-stream');
 
 grid.mongo = db.mongo;
 
+module.exports.get = (req, res, next) => {
+    if (!req.params.fileId || req.params.fileId === "undefined"){
+        return res.sendStatus(404);
+    }
+    res.redirect('/resources/' + req.params.fileId)
+};
+
 let getSkin = (username, func) => {
     let userModel = db.model('users', userSchema);
     userModel.findOne({
