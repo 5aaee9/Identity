@@ -1,3 +1,16 @@
 //
    Created by Indexyz on 2017/5/1.
 
+extends ../navbar
+
+block title
+    title Identity · Code
+
+block content
+    .section.page-section.mdl-shadow--2dp
+        .index--block
+            h1 返回您的应用并填写以下Code
+    .container
+        .mdl-textfield.mdl-js-textfield.fullwidth
+            input#code.mdl-textfield__input(type='text' value='#{code}')
+            label.mdl-textfield__label(for='code') Your Code

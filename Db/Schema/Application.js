@@ -13,14 +13,4 @@ let applicationSchema = mongoose.Schema({
     redirectUri: String
 });
 
-let applicationCode = mongoose.Schema({
-    app: { type: mongoose.Schema.Types.ObjectId, require: true },
-    code: { type: String, require: true }
-});
-
-applicationCode.methods.getCode = function () {
-    this.code = stringHelper.randomString(16);
-};
-
 module.exports = applicationSchema;
-module.exports.code = applicationCode;

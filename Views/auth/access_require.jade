@@ -9,7 +9,7 @@ block title
 block content
     .section.page-section.mdl-shadow--2dp
         .index--block
-            h1 {{ App.name }} 正在请求权限
+            h1=app.name + " 正在请求权限"
     br
     .mdl-typography--text-center.access-form
         .mdl-card.mdl-shadow--2dp.access-list
@@ -17,32 +17,35 @@ block content
             span.mdl-chip.mdl-chip--contact.mdl-typography--text-center.mdl-shadow--2dp
                 span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white N
                 //img.mdl-chip__contact(src='/templates/dashboard/images/user.jpg')
-                span.mdl-chip__text {{ App.name }}
-            .container
-                ul.mdl-list
-                    li.mdl-list__item
-                        span.mdl-list__item-primary-content
-                            i.material-icons.mdl-list__item-avatar person
-                            |       获取个人资料
-                        span.mdl-list__item-secondary-action
-                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-info')
-                                input#get-info.mdl-checkbox__input(type='checkbox', checked='' disabled=true)
-                    li.mdl-list__item
-                        span.mdl-list__item-primary-content
-                            i.material-icons.mdl-list__item-avatar person
-                            |       读取登陆信息
-                        span.mdl-list__item-secondary-action
-                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-login')
-                                input#get-login.mdl-checkbox__input(type='checkbox', checked='')
-                    li.mdl-list__item
-                        span.mdl-list__item-primary-content
-                            i.material-icons.mdl-list__item-avatar person
-                            |       上传/更换 皮肤
-                        span.mdl-list__item-secondary-action
-                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='post-skin')
-                                input#post-skin.mdl-checkbox__input(type='checkbox', checked='')
+                span.mdl-chip__text=app.name
+            form(method="POST")
+                .container
+                    ul.mdl-list
+                        li.mdl-list__item
+                            span.mdl-list__item-primary-content
+                                i.material-icons.mdl-list__item-avatar person
+                                |       获取个人资料
+                            span.mdl-list__item-secondary-action
+                                label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-info')
+                                    input#get-info.mdl-checkbox__input(type='checkbox', checked='' disabled=true)
+                        if scope.indexOf("get-login") != -1
+                            li.mdl-list__item
+                                span.mdl-list__item-primary-content
+                                    i.material-icons.mdl-list__item-avatar person
+                                    |       读取登陆信息
+                                span.mdl-list__item-secondary-action
+                                    label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-login')
+                                        input#get-login.mdl-checkbox__input(type='checkbox', checked='' name="get-login")
+                        if scope.indexOf("modify-skin") != -1
+                            li.mdl-list__item
+                                span.mdl-list__item-primary-content
+                                    i.material-icons.mdl-list__item-avatar person
+                                    |       上传/更换 皮肤
+                                span.mdl-list__item-secondary-action
+                                    label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='post-skin')
+                                        input#post-skin.mdl-checkbox__input(type='checkbox', checked='' name="post-skin")
 
 
-            .mdl-card__actions.mdl-card--border
-                a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
-                    | 同意
+                .mdl-card__actions.mdl-card--border
+                    button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+                        | 同意

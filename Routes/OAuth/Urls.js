@@ -10,6 +10,16 @@ router.get('/', (req, res, next) => {
     // res.status(204).send();
 });
 
+router.use('/authorize', (req, res, next) => {
+    if (!req.session.user) {
+        res.redirect("/auth/login?redirect=" + encodeURIComponent(req.originalUrl))
+    } else {
+        next()
+    }
+});
+router.get('/authorize', require('./Authorize').get);
+router.post('/authorize', require('./Authorize').post);
 
+router.get('/getCode', require('./GetCode').get);
 
 module.exports = router;

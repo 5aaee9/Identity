@@ -28,6 +28,10 @@ module.exports.post = (req, res, next) => {
     }, (err, doc) => {
         if (err || !doc) { res.render("auth/login", {"e": "用户信息未找到"}); return }
         req.session.user = doc;
-        res.redirect("/")
+        if (!req.query.redirect){
+            res.redirect("/")
+        } else {
+            res.redirect(req.query.redirect)
+        }
     })
 };

@@ -240,3 +240,6 @@ a.font-white:hover {
         min-height: 54px;
     }
 }
+.fullwidth {
+    width: 100%;
+}
