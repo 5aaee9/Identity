@@ -6,8 +6,7 @@ const express = require('express');
 let router = express.Router();
 
 router.get('/', (req, res, next) => {
-    res.render("auth/access_require")
-    // res.status(204).send();
+    res.status(204).send();
 });
 
 router.use('/authorize', (req, res, next) => {
