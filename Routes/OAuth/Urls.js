@@ -22,4 +22,6 @@ router.post('/authorize', require('./Authorize').post);
 
 router.get('/getCode', require('./GetCode').get);
 
+router.post('/token', require('./Token').post);
+
 module.exports = router;

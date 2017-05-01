@@ -20,7 +20,7 @@ authSchema.methods.refresh = function () {
     this.code = stringHelper.randomString(16);
     this.accessToken = stringHelper.randomString(32);
     this.refToken = stringHelper.randomString(32);
-    this.expiresTime = new Date(new Date().getTime() + 600000)
+    this.expiresTime = new Date(new Date().getTime() + 3600000)
 };
 
 module.exports = authSchema;
