@@ -29,8 +29,15 @@ block body
                     a.mdl-navigation__link(href='/auth/login') Login
                     a.mdl-navigation__link(href='/auth/register') Register
                 else
-                    a.mdl-navigation__link(href='/member') Member
-                    a.mdl-navigation__link(href='/member/profile') Profile
+                    a.mdl-navigation__link(href='/member')
+                        i.material-icons.index-color--blue-grey-800 home
+                        |Member
+                    a.mdl-navigation__link(href='/member/profile')
+                        i.material-icons.index-color--blue-grey-800 settings
+                        |Profile
+                    a.mdl-navigation__link(href='/member/skin')
+                        i.material-icons.index-color--blue-grey-800 accessibility
+                        | Skin
         block nearHeader
         main.mdl-layout__content
             .page-content

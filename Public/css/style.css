@@ -243,3 +243,7 @@ a.font-white:hover {
 .fullwidth {
     width: 100%;
 }
+
+.index-color--blue-grey-800 {
+    color: #37474f !important;
+}
