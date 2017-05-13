@@ -20,6 +20,7 @@ router.post("/profile", require("./Profile").post);
 
 router.use("/skin", require("./Skin"));
 
-router.get("/apps", require("./Apps").get);
+router.use('/apps', require('./Apps/Urls'));
+// router.get("/apps", require("./Apps").get);
 
 module.exports = router;
