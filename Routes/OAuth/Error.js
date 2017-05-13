@@ -40,6 +40,10 @@ module.exports.Types = {
         name: "grant_error",
         error_description: "grant type is not support",
         code: 400
+    },
+    TYPE_ERROR: {
+        name: "type_error",
+        error_description: "Request resources type error",
+        code: 400
     }
-}
-;
+};
