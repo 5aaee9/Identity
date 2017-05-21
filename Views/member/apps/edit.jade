@@ -1,3 +1,65 @@
-//
-   Created by Indexyz on 2017/5/14.
+extends ../basic
 
+block panel
+    .mdl-shadow--2dp
+        .mdl-card__title.underline
+            h2.mdl-card__title-text=app.name
+        form(method='post', id="appEdit", enctype='multipart/form-data')
+            .mdl-card__supporting-text
+                .underline
+                    h1=userCount + " users"
+                    p
+                        strong Client ID
+                    p=app.client_id
+                    p
+                        strong Client Secret
+                    p=app.client_secret
+                div
+                    br
+                    p
+                        strong Application Logo
+                        .mdl-grid
+                            .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-tablet.center.mdl-typography--text-center.logo--button--upload
+                                a.file-uploader.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="javascript:;") 上传文件
+                                    input(type='file', name='uploadLogo', onchange="loadFile(event)")
+                            .mdl-cell.mdl-cell--4-col.mdl-cell--4-col-tablet
+                                img.normal--logo#blah
+                    p
+                        strong Application name
+                    .mdl-textfield.mdl-js-textfield.no-padding
+                        input#appname.mdl-textfield__input(type='text' name="appname" value=app.name)
+                    p Something users will recognize and trust
+                    p
+                        strong Homepage URL
+                    .mdl-textfield.mdl-js-textfield.no-padding
+                        input#homepage.mdl-textfield__input(type='text' name="homepage" value=app.homePage pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
+                        span.mdl-textfield__error Input is not a URL!
+                    br
+                    br
+                    p The full URL to your application homepage
+                    p
+                        strong Authorization callback URL
+                    .mdl-textfield.mdl-js-textfield.no-padding
+                        input#callback.mdl-textfield__input(type='text' name="callback" value=app.redirectUri pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
+                        span.mdl-textfield__error Input is not a URL!
+                    br
+                    br
+                    p Your application’s callback URL.
+            .mdl-card__actions.mdl-card--border.mdl-typography--text-center
+                button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(type="submit")
+                    | 更新应用
+                a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href='/member/apps/remove/' + app._id)
+                    | 删除应用
+
+    br
+
+block javascript
+    script(type='text/javascript').
+        var loadFile = function (event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('blah');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }

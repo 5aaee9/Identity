@@ -256,3 +256,14 @@ a.font-white:hover {
     line-height: normal !important;
     padding-top: 3px !important;
 }
+
+.normal--logo {
+    height: 64px;
+    width: 64px;
+}
+.logo--button--upload {
+    padding-top: 12px;
+}
+.no-padding {
+     padding: 0 0;
+}

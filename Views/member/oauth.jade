@@ -35,12 +35,9 @@ block panel
                             span.mdl-list__item-primary-content
                                 i.material-icons.mdl-list__item extension
                                 span=app.name
-                            a.mdl-list__item-secondary-action(href='/member/apps/remove/' + app._id, id="cancel-" + app._id)
-                                i.material-icons clear
-                                .mdl-tooltip(data-mdl-for='cancel-' + app._id) 删除应用
                             a.mdl-list__item-secondary-action(href='/member/apps/edit/' + app._id, id="edit-" + app._id)
                                 i.material-icons edit
-                                .mdl-tooltip(data-mdl-for='edit-' + app._id) 编辑应用
+                            .mdl-tooltip(data-mdl-for='edit-' + app._id) 编辑应用
                 .mdl-card__actions.mdl-card--border
                     a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="/member/apps/new")
                         span.mdl-list__item-primary-content

@@ -27,7 +27,8 @@ module.exports.post = (req, res, next) => {
             homePage: homepage,
             redirectUri: callback,
             owner: req.session.user._id,
-            client_id: stringHelper.randomString(32)
+            client_id: stringHelper.randomString(32),
+            client_secret: stringHelper.randomString(64)
         });
         app.save(err => {
             if (err) { return next(err) }
