@@ -58,10 +58,18 @@ module.exports.post = (req, res, next) => {
             owner: req.session.user._id
         }, (err, doc) => {
             if (err || !doc) { return res.redirect("/member/apps") }
-            doc.image = fileId;
+            if (fileId){
+                doc.image = fileId;
+            }
             doc.name = appName;
             doc.homePage = homepage;
             doc.redirectUri = callback;
+            doc.scope = [];
+            for (let reqKey in req.body){
+                if (req.body[reqKey] === "on"){
+                    doc.scope.push(reqKey)
+                }
+            }
             doc.save(err => {
                 if (err) { return next(err) }
                 res.redirect("/member/apps?success=" + encodeURIComponent("修改成功: " + doc.name))

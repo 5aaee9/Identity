@@ -3,5 +3,6 @@
  */
 module.exports.scope = {
     GET_LOGIN: "get-login",
-    MODIFY_SKIN: "modify-skin"
+    MODIFY_SKIN: "modify-skin",
+    GET_LOG: "get-log"
 };

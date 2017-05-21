@@ -48,6 +48,31 @@ block panel
                     br
                     br
                     p Your application’s callback URL.
+                    p
+                        strong 权限
+                    .mdl-grid
+                        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-tablet
+                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-log')
+                                if app.scope.indexOf("get-log") != -1
+                                    input#get-log.mdl-checkbox__input(type='checkbox' name="get-log" checked='')
+                                else
+                                    input#get-log.mdl-checkbox__input(type='checkbox' name="get-log")
+                                span.mdl-checkbox__label 获取日志
+                        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-tablet
+                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='get-login')
+                                if app.scope.indexOf("get-login") != -1
+                                    input#get-login.mdl-checkbox__input(type='checkbox' name='get-login' checked='')
+                                else
+                                    input#get-login.mdl-checkbox__input(type='checkbox' name='get-login')
+                                span.mdl-checkbox__label 获取登陆信息
+                        .mdl-cell.mdl-cell--2-col.mdl-cell--2-col-tablet
+                            label.mdl-checkbox.mdl-js-checkbox.mdl-js-ripple-effect(for='modify-skin')
+                                if app.scope.indexOf("modify-skin") != -1
+                                    input#modify-skin.mdl-checkbox__input(type='checkbox' name='modify-skin', checked='')
+                                else
+                                    input#modify-skin.mdl-checkbox__input(type='checkbox' name='modify-skin')
+                                span.mdl-checkbox__label 修改皮肤
+
             .mdl-card__actions.mdl-card--border.mdl-typography--text-center
                 button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(type="submit")
                     | 更新应用
