@@ -23,7 +23,10 @@ block panel
                                 a.file-uploader.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="javascript:;") 上传文件
                                     input(type='file', name='uploadLogo', onchange="loadFile(event)")
                             .mdl-cell.mdl-cell--4-col.mdl-cell--4-col-tablet
-                                img.normal--logo#blah
+                                if (app.image)
+                                    img#blah.normal--logo(src="/resources/" + app.image)
+                                else
+                                    img.normal--logo#blah
                     p
                         strong Application name
                     .mdl-textfield.mdl-js-textfield.no-padding

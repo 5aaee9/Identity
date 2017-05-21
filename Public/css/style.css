@@ -261,9 +261,19 @@ a.font-white:hover {
     height: 64px;
     width: 64px;
 }
+
+.small--logo {
+    height: 32px;
+    min-width: 32px;
+}
+
 .logo--button--upload {
     padding-top: 12px;
 }
 .no-padding {
      padding: 0 0;
+}
+
+.icon-image {
+    padding-right: 8px;
 }

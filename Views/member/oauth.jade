@@ -19,7 +19,10 @@ block panel
                     .mdl-list
                         .mdl-list__item
                             span.mdl-list__item-primary-content
-                                i.material-icons.mdl-list__item extension
+                                if (app.image)
+                                    img.icon-image.no-padding.small--logo.material-icons.mdl-list__item(src="/resources/" + app.image)
+                                else
+                                    i.material-icons.mdl-list__item extension
                                 span=app.name
                             a.mdl-list__item-secondary-action(href='/member/apps/cancel/' + app.source._id, id="clear-" + app._id)
                                 i.material-icons clear
@@ -33,7 +36,10 @@ block panel
                     - for app in createApps
                         .mdl-list__item
                             span.mdl-list__item-primary-content
-                                i.material-icons.mdl-list__item extension
+                                if (app.image)
+                                    img.icon-image.no-padding.small--logo.material-icons.mdl-list__item(src="/resources/" + app.image)
+                                else
+                                    i.material-icons.mdl-list__item extension
                                 span=app.name
                             a.mdl-list__item-secondary-action(href='/member/apps/edit/' + app._id, id="edit-" + app._id)
                                 i.material-icons edit
