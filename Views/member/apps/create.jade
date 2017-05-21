@@ -1,0 +1,36 @@
+//
+   Created by Indexyz on 2017/5/14.
+
+extends ../basic
+
+block panel
+    if (e)
+        .mdl-typography--text-center
+            span.mdl-chip.mdl-chip--contact.mdl-shadow--2dp
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon close
+                span.mdl-chip__text=e
+        br
+    .mdl-shadow--2dp.mdl-typography--text-center
+        .mdl-card__title.underline
+            h2.mdl-card__title-text Register a new application
+        form(method='POST')
+            .mdl-card__supporting-text
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#appname.mdl-textfield__input(type='text' name="appname")
+                    label.mdl-textfield__label(for='appname') Application name
+                    span.mdl-textfield__error Input is not a number!
+                br
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#homepage.mdl-textfield__input(type='text' name="homepage" pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
+                    label.mdl-textfield__label(for='homepage') Homepage URL
+                    span.mdl-textfield__error Input is not a URL!
+                br
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
+                    input#callback.mdl-textfield__input(type='text' name="callback" pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
+                    label.mdl-textfield__label(for='callback') Authorization callback URL
+                    span.mdl-textfield__error Input is not a URL!
+
+            .mdl-card__actions.mdl-card--border
+                    button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(type="submit")
+                        | Create

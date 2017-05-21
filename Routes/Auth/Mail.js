@@ -15,7 +15,6 @@ module.exports.get = (req, res, next) => {
         if (!doc || err) { res.redirect("/"); return }
         doc.emailToken = "";
         doc.save();
-        res.redirect("/auth/login?info=%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E6%88%90%E5%8A%9F%20%E8%AF%B7%E7%99%BB%E9%99%86");
-        return
+        return res.redirect("/auth/login?info=%E9%82%AE%E7%AE%B1%E9%AA%8C%E8%AF%81%E6%88%90%E5%8A%9F%20%E8%AF%B7%E7%99%BB%E9%99%86");
     })
 };

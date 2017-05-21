@@ -247,3 +247,12 @@ a.font-white:hover {
 .index-color--blue-grey-800 {
     color: #37474f !important;
 }
+
+.underline {
+    border-bottom: 1px #e1e4e8 solid;
+}
+
+.chip--icon {
+    line-height: normal !important;
+    padding-top: 3px !important;
+}

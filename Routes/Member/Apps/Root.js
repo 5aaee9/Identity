@@ -27,7 +27,8 @@ module.exports.get = (req, res, next) => {
                 if (err) { return next(err) }
                 res.render('member/oauth', {
                     userAuth: retDoc,
-                    createApps: apps
+                    createApps: apps,
+                    success: req.query.success
                 })
             })
         };

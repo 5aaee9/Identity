@@ -14,11 +14,13 @@ block content
     .login-form.container
         if (info)
             span.mdl-chip.mdl-chip--contact
-                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white I
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon priority_high
                 span.mdl-chip__text=info
         if (e)
             span.mdl-chip.mdl-chip--contact
-                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white E
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon close
                 span.mdl-chip__text=e
         form(method="POST")
             .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text

@@ -4,6 +4,12 @@
 extends ./basic
 
 block panel
+    if (success)
+        .mdl-typography--text-center
+            span.mdl-chip.mdl-chip--contact.mdl-shadow--2dp
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon check
+                span.mdl-chip__text=success
     .mdl-grid
         .mdl-cell.mdl-cell--6-col.mdl-cell--6-col-tablet
             .mdl-card.mdl-shadow--2dp.index--fullwidth

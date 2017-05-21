@@ -11,11 +11,13 @@ block panel
     .font-center
         if (succ)
             span.mdl-chip.mdl-chip--contact
-                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white S
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon check
                 span.mdl-chip__text 上传成功
         if (err)
             span.mdl-chip.mdl-chip--contact
-                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white E
+                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                    i.material-icons.mdl-chip__contact.chip--icon close
                 span.mdl-chip__text=err
     .mdl-grid
         .mdl-cell.mdl-cell--8-col.mdl-cell--8-col-tablet

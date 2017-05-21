@@ -10,7 +10,8 @@ let applicationSchema = mongoose.Schema({
     scope: [],
     name: { type: String, require: true, unique: true },
     image: mongoose.Schema.Types.ObjectId,
-    redirectUri: String
+    redirectUri: String,
+    homePage: String
 });
 
 module.exports = applicationSchema;

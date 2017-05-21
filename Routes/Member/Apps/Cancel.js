@@ -11,15 +11,13 @@ let userAuthModel = db.model(dbName.Db.APP_USER_DB, userAuth);
 
 module.exports.get = (req, res, next) => {
     let appId = req.params["appId"];
-    userAuthModel.findOne({
-        _id: appId
-    }, (err, doc) => {
+
+    userAuthModel.remove({
+        _id: appId,
+        user: req.session.user._id
+    }, err => {
         if (err) { return next(err) }
-        userAuthModel.remove({
-            _id: appId
-        }, err => {
-            if (err) { return next(err) }
-            res.redirect('/member/apps')
-        })
+        res.redirect('/member/apps?success=' + encodeURIComponent("取消成功"))
     })
+
 };
