@@ -31,6 +31,11 @@ module.exports.Types = {
         error_description: "The request is missing a required parameter",
         code: 400
     },
+    INVALID_SECRET: {
+        name: "invalid_secret",
+        error_description: "You may send an error secret",
+        code: 401
+    },
     SERVER_ERROR: {
         name: "server_error",
         error_description: "Server may has some problem, please try again later",

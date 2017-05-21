@@ -9,14 +9,14 @@ const db = require('mongoose');
 const userSchema = require('../../Db/Schema/User');
 const appSchema = require('../../Db/Schema/Application');
 const userAuthSchema = require('../../Db/Schema/UserAuth');
-const grid = require('gridfs-stream');
 const fs = require("fs");
+const stringUtils = require('../../Utils/String');
+const Gridfs = require('gridfs-stream');
 
+let gfs = new Gridfs(db.connection.db, db.mongo);
 let userModel = db.model(dbEnum.USER_DB, userSchema),
     appModel = db.model(dbEnum.APPS_DB, appSchema),
-    userAuthModel = db.model(dbEnum.APP_USER_DB, userAuthSchema),
-
-    gfs = grid(db.connection.db, db);
+    userAuthModel = db.model(dbEnum.APP_USER_DB, userAuthSchema);
 
 module.exports.get = (req, res, next) => {
     if (req.resType === typeEnum.GET_LOGIN){
@@ -35,29 +35,54 @@ module.exports.get = (req, res, next) => {
 
 module.exports.upload = (req, res, next) => {
     let writeStream = gfs.createWriteStream({
-        filename: req.file.filename + ".png",
-        mode: 'w',
-        content_type: req.file.mimetype
+        filename: stringUtils.randomString(10) + ".png",
+        mode: "w"
     });
-    writeStream.on('close', filen => {
-        fs.unlink(req.file.path, err => {
-            if (err) { return makeError(req, makeError.Types.SERVER_ERROR) }
+
+    writeStream.on('close', file => {
+        if (file.length >= 1024 * 64) {
+            gfs.remove({
+                _id: file._id
+            }, err => {
+                res.stat(406).send({
+                    error: "Body too big"
+                })
+            })
+        } else {
             userModel.findOne({
                 _id: req.doc.user
             }, (err, doc) => {
-                if (err || !doc) { return makeError(res, makeError.Types.INVALID_TOKEN) }
-                let actions = {
-                    "cap": () => { doc.skin.cap = filen._id },
-                    "skin": () => { doc.skin.skin = filen._id },
-                    "slim": () => { doc.skin.slim = filen._id }
-                };
-                actions[req.skinType]();
+                if (err || !doc) { return makeError(res, makeError.Types.INVALID_REQUEST) }
+                doc.skin[req.skinType] = file._id;
                 doc.save(err => {
                     if (err) { return makeError(res, makeError.Types.SERVER_ERROR) }
                     res.status(204).send()
                 })
             })
-        })
+        }
     });
-    fs.createReadStream(req.file.path).pipe(writeStream);
+
+    req.pipe(writeStream);
+
+    // writeStream.on('close', filen => {
+    //     fs.unlink(req.file.path, err => {
+    //         if (err) { return makeError(req, makeError.Types.SERVER_ERROR) }
+    //         userModel.findOne({
+    //             _id: req.doc.user
+    //         }, (err, doc) => {
+    //             if (err || !doc) { return makeError(res, makeError.Types.INVALID_TOKEN) }
+    //             let actions = {
+    //                 "cap": () => { doc.skin.cap = filen._id },
+    //                 "skin": () => { doc.skin.skin = filen._id },
+    //                 "slim": () => { doc.skin.slim = filen._id }
+    //             };
+    //             actions[req.skinType]();
+    //             doc.save(err => {
+    //                 if (err) { return makeError(res, makeError.Types.SERVER_ERROR) }
+    //                 res.status(204).send()
+    //             })
+    //         })
+    //     })
+    // });
+    // fs.createReadStream(req.file.path).pipe(writeStream);
 };
