@@ -14,7 +14,7 @@ module.exports.post = (req, res, next) => {
         email: username,
         password: userSchema.getSaltedPassword(password)
     }, (err, doc) => {
-        if (!doc || err) { res.status(403).send(errors.ForbiddenOperationExceptionUserAccount); return }
+        if (!doc || err) { return res.status(403).send(errors.ForbiddenOperationExceptionUserAccount); }
         doc.refresh();
         if (req.body.clientToken){
             doc.profile.UUID = req.body.clientToken

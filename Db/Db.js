@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const config = require('../Config');
 const mongoose = require('mongoose');
