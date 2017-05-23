@@ -6,6 +6,10 @@
     "start": "node ./Bin/run",
     "test": "mocha --reporter spec --bail --check-leaks Tests/"
   },
+  "main": "App.js",
+  "bin": {
+    "identify": "./Bin/run"
+  },
   "dependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
