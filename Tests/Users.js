@@ -140,12 +140,12 @@ describe("User", function () {
         })
     })
     describe("Login", function(){
-        var user, cookies, passowrd;
+        var user, cookies, password;
         beforeEach(function(done){
-            passowrd = stringLib.randomString(16)
+            password = stringLib.randomString(16)
             user = new userModel({
                 username: stringLib.randomString(8),
-                password: passowrd,
+                password: password,
                 email: "test@email.com"
             })
             user.generatorID();
@@ -171,7 +171,7 @@ describe("User", function () {
                 .post('/auth/login')
                 .send({
                     username: user.username,
-                    password: passowrd
+                    password: password
                 })
                 .expect(302)
                 .end(function(err, res){

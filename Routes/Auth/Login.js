@@ -21,7 +21,6 @@ module.exports.post = (req, res, next) => {
 
     if (!username || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
 
-    console.log(username); console.log(password);
     userModel.findOne({
         username: username,
         password: userSchema.getSaltedPassword(password)

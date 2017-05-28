@@ -9,7 +9,8 @@ let router = express.Router();
 
 // Application Request Method Check
 router.use((req, res, next) => {
-    if (req.headers["content-type"].indexOf("application/json") === -1){
+
+    if (req.headers["content-type"] === undefined || req.headers["content-type"].indexOf("application/json") === -1){
         res.status(415).send(errors.UnsupportedMediaType);
     } else {
         next();
