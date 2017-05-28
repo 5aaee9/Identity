@@ -1,3 +1,3 @@
 test:
   post:
-    - chmod +x ./node_modules/.bin/codacy-coverage && cat ./coverage/lcov.info | node ./node_modules/.bin/codacy-coverage
+    - ./node_modules/.bin/mocha test -R mocha-lcov-reporter | ./node_modules/.bin/codacy-coverage

@@ -29,6 +29,9 @@
     "codacy-coverage": "^2.0.2",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "^1.3.0",
-    "should": "^11.1.0"
+    "should": "^11.1.0",
+    "istanbul": "~0.x",
+    "jsinspect": "~0.x",
+    "eslint": "^3.x"
   }
 }
