@@ -63,44 +63,13 @@ describe("User", function () {
                         done();
                     })
             })
-            it("exists user", function(done){
-                let randomUsername = stringLib.randomString(8),
-                    randomPassword = stringLib.randomString(16);
-                request(application)
-                    .post("/auth/register")
-                    .send({
-                        username: randomUsername,
-                        password: randomPassword,
-                        email: "test@true.mail"
-                    })
-                    .expect(200)
-                    .end(function(err, res){
-                        console.log(res.viewName)
-                        if (err) return done(err)
-                        request(application)
-                            .post("/auth/register")
-                            .send({
-                                username: randomUsername,
-                                password: randomPassword,
-                                email: "test@true.mail"
-                            })
-                            .expect(200)
-                            .end(function(err, res){
-                                if (err) return done(err)
-                                userModel.remove({
-                                    username: randomUsername
-                                }, err => {
-                                    if (err) return done(err);
-                                    return done();
-                                })
-                            })
-                    })
-            })
         })
-        it("Register User", function(done){
-            let randomUsername = stringLib.randomString(8),
+        describe("on", function(){
+            var randomUsername, randomPassword;
+            beforeEach(function(done){
+                randomUsername = stringLib.randomString(8),
                 randomPassword = stringLib.randomString(16);
-            request(application)
+                request(application)
                     .post("/auth/register")
                     .send({
                         username: randomUsername,
@@ -111,18 +80,63 @@ describe("User", function () {
                     .end(function(err, res){
                         userModel.findOne({
                             username: randomUsername
+                        }, (err, doc) => {
+                            if (err) return done(err);
+                            if (!doc) return done(new Error("Not found user"))
+                            done();
+                        })
+                })
+            })
+            it("Email Verify", function(done){
+                request(application)
+                    .post("/auth/register")
+                    .send({
+                        username: randomUsername,
+                        password: randomPassword,
+                        email: "test@true.mail"
+                    })
+                    .expect(200)
+                    .end(function(err, res){
+                        if (err) return done(err);
+                        userModel.findOne({
+                            username: randomUsername
                         }).then(doc => {
-                            if (!doc) { return done(new Error("Not found created user")); }
-                            userModel.remove({
-                                username: randomUsername
-                            }, err => {
-                                if (err) { return done(err) }
-                                done();
-                            })
+                            request(application)
+                                .get("/auth/email?code=" + doc.emailToken)
+                                .expect(302)
+                                .end(function(err, res){
+                                    if (err) return done(err);
+                                    done()
+                                })
                         }, err => {
                             return done(err)
                         })
                     })
+            })
+            it("exists user check", function(done){
+                request(application)
+                    .post("/auth/register")
+                    .send({
+                        username: randomUsername,
+                        password: randomPassword,
+                        email: "test@true.mail"
+                    })
+                    .expect(200)
+                    .end(function(err, res){
+                        if (err) return done(err)
+                        res.text.indexOf("duplicate key error").should.not.equal(-1)
+                        done()
+                    })
+            })
+            afterEach(function(done){
+                userModel.remove({
+                    username: randomUsername
+                }).then(doc => {
+                    done();
+                }, err => {
+                    return done(err);
+                })
+            })
         })
     })
 })
