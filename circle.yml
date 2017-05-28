@@ -1,0 +1,3 @@
+test:
+  post:
+    - chmod +x ./bin/codacy-coverage.js && cat ./coverage/lcov.info | node ./bin/codacy-coverage.js
