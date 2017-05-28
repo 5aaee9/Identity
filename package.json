@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./Bin/run",
-    "test": "mocha --reporter spec --bail --check-leaks Tests/"
+    "test": "mocha --reporter spec --bail Tests/"
   },
   "main": "App.js",
   "bin": {
@@ -27,11 +27,12 @@
   },
   "devDependencies": {
     "codacy-coverage": "^2.0.2",
+    "eslint": "^3.x",
+    "istanbul": "~0.x",
+    "jsinspect": "~0.x",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "^1.3.0",
     "should": "^11.1.0",
-    "istanbul": "~0.x",
-    "jsinspect": "~0.x",
-    "eslint": "^3.x"
+    "supertest": "^3.0.0"
   }
 }
