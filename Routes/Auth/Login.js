@@ -1,7 +1,7 @@
 /**
  * Created by Indexyz on 2017/4/10.
  */
-'use strict';
+"use strict";
 /**
  * Created by Indexyz on 2017/4/7.
  */
@@ -17,7 +17,7 @@ module.exports.get = (req, res, next) => {
 module.exports.post = (req, res, next) => {
     let username = req.body.username,
         password = req.body.password,
-        userModel = db.model('users', userSchema);
+        userModel = db.model("users", userSchema);
 
     if (!username || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
 

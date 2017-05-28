@@ -2,16 +2,16 @@
  * Created by Indexyz on 2017/5/1.
  */
 
-const makeError = require('./Error');
-const typeEnum = require('../../Define/OAuth').scope;
-const dbEnum = require('../../Define/Db').Db;
-const db = require('mongoose');
-const userSchema = require('../../Db/Schema/User');
-const appSchema = require('../../Db/Schema/Application');
-const userAuthSchema = require('../../Db/Schema/UserAuth');
+const makeError = require("./Error");
+const typeEnum = require("../../Define/OAuth").scope;
+const dbEnum = require("../../Define/Db").Db;
+const db = require("mongoose");
+const userSchema = require("../../Db/Schema/User");
+const appSchema = require("../../Db/Schema/Application");
+const userAuthSchema = require("../../Db/Schema/UserAuth");
 const fs = require("fs");
-const stringUtils = require('../../Utils/String');
-const Gridfs = require('gridfs-stream');
+const stringUtils = require("../../Utils/String");
+const Gridfs = require("gridfs-stream");
 
 let gfs = new Gridfs(db.connection.db, db.mongo);
 let userModel = db.model(dbEnum.USER_DB, userSchema),
@@ -39,7 +39,7 @@ module.exports.upload = (req, res, next) => {
         mode: "w"
     });
 
-    writeStream.on('close', file => {
+    writeStream.on("close", file => {
         if (file.length >= 1024 * 64) {
             gfs.remove({
                 _id: file._id
@@ -64,7 +64,7 @@ module.exports.upload = (req, res, next) => {
 
     req.pipe(writeStream);
 
-    // writeStream.on('close', filen => {
+    // writeStream.on("close", filen => {
     //     fs.unlink(req.file.path, err => {
     //         if (err) { return makeError(req, makeError.Types.SERVER_ERROR) }
     //         userModel.findOne({

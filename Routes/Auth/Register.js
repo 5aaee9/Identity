@@ -1,9 +1,9 @@
 /**
  * Created by Indexyz on 2017/4/10.
  */
-'use strict';
+"use strict";
 const db = require("mongoose");
-const mail = require('../../Utils/Mail');
+const mail = require("../../Utils/Mail");
 const userSchema = require("../../Db/Schema/User");
 
 module.exports.get = (req, res, next) => {
@@ -20,7 +20,7 @@ module.exports.post = (req, res, next) => {
         || password.length < 6) {
         res.render("auth/register", {"e": "数据检验出错"}); return;
     }
-    let userModel = db.model('users', userSchema);
+    let userModel = db.model("users", userSchema);
     let user = new userModel({
         username: username,
         password: password,
@@ -32,7 +32,7 @@ module.exports.post = (req, res, next) => {
     user.refreshSession();
     user.save(err => {
         if (err){ res.render("auth/register", {"e": err.message}); return; }
-        user.sendMail(req.protocol + '://' + req.get('host'), err => {
+        user.sendMail(req.protocol + "://" + req.get("host"), err => {
             if (err){ res.render("auth/register", {"e": err.message}); return; }
             res.render("auth/mailed", {
                 "mail": user.email

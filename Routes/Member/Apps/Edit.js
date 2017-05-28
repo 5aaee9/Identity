@@ -1,11 +1,11 @@
 /**
  * Created by Indexyz on 2017/5/21.
  */
-const db = require('mongoose');
-const apps = require('../../../Db/Schema/Application');
-const dbEnum = require('../../../Define/Db');
-const userAuth = require('../../../Db/Schema/UserAuth');
-const grid = require('gridfs-stream');
+const db = require("mongoose");
+const apps = require("../../../Db/Schema/Application");
+const dbEnum = require("../../../Define/Db");
+const userAuth = require("../../../Db/Schema/UserAuth");
+const grid = require("gridfs-stream");
 const fs = require("fs");
 
 let appModel = db.model(dbEnum.Db.APPS_DB, apps),
@@ -23,7 +23,7 @@ module.exports.get = (req, res, next) => {
             app: appId
         }, (err, count) => {
             if (err || !doc) { res.redirect("/member/apps") }
-            res.render('member/apps/edit', {
+            res.render("member/apps/edit", {
                 app: doc,
                 userCount: count
             })
@@ -35,10 +35,10 @@ module.exports.get = (req, res, next) => {
 let uploadFile = (file, func) => {
     let writeStream = gfs.createWriteStream({
         filename: file.filename + ".png",
-        mode: 'w',
+        mode: "w",
         content_type: file.mimetype
     });
-    writeStream.on('close', filen => {
+    writeStream.on("close", filen => {
         fs.unlink(file.path, err => {
             func(err, filen)
         })

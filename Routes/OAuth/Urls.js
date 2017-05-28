@@ -2,41 +2,41 @@
  * Created by Indexyz on 2017/4/30.
  */
 
-const express = require('express');
-const typeEnum = require('../../Define/OAuth').scope;
-const multer  = require('multer');
-const makeError = require('./Error');
-const db = require('mongoose');
-const userAuthSchema = require('../../Db/Schema/UserAuth');
-const appSchema = require('../../Db/Schema/Application');
-const dbEnum = require('../../Define/Db').Db;
+const express = require("express");
+const typeEnum = require("../../Define/OAuth").scope;
+const multer  = require("multer");
+const makeError = require("./Error");
+const db = require("mongoose");
+const userAuthSchema = require("../../Db/Schema/UserAuth");
+const appSchema = require("../../Db/Schema/Application");
+const dbEnum = require("../../Define/Db").Db;
 let router = express.Router();
 
 let upload = multer({
-    dest: 'tmp/',
+    dest: "tmp/",
     limits: { fileSize:  1024 * 64 }
 });
 
-router.get('/', (req, res, next) => {
+router.get("/", (req, res, next) => {
     res.status(204).send();
 });
 
-router.use('/authorize', (req, res, next) => {
+router.use("/authorize", (req, res, next) => {
     if (!req.session.user) {
         res.redirect("/auth/login?redirect=" + encodeURIComponent(req.originalUrl))
     } else {
         next()
     }
 });
-router.get('/authorize', require('./Authorize').get);
-router.post('/authorize', require('./Authorize').post);
+router.get("/authorize", require("./Authorize").get);
+router.post("/authorize", require("./Authorize").post);
 
-router.get('/getCode', require('./GetCode').get);
+router.get("/getCode", require("./GetCode").get);
 
-router.post('/token', require('./Token').post);
+router.post("/token", require("./Token").post);
 
 
-router.use('/resources/:type', (req, res, next) => {
+router.use("/resources/:type", (req, res, next) => {
     if (!req.params.type || req.params.type === "undefined"){
         return makeError(res, makeError.Types.TYPE_ERROR);
     } else {
@@ -61,8 +61,8 @@ router.use('/resources/:type', (req, res, next) => {
     }
 });
 
-router.post('/resources/' + typeEnum.MODIFY_SKIN, (req, res, next) => {
-    if (!req.headers.type || (!req.headers.type in ['cap', 'slim', 'skin'])){
+router.post("/resources/" + typeEnum.MODIFY_SKIN, (req, res, next) => {
+    if (!req.headers.type || (!req.headers.type in ["cap", "slim", "skin"])){
         return makeError(res, makeError.Types.INVALID_REQUEST)
     } else {
         req.skinType = req.headers.type;
@@ -70,8 +70,8 @@ router.post('/resources/' + typeEnum.MODIFY_SKIN, (req, res, next) => {
     }
 });
 
-router.post('/resources/' + typeEnum.MODIFY_SKIN, require('./Resources').upload);
+router.post("/resources/" + typeEnum.MODIFY_SKIN, require("./Resources").upload);
 
-router.get('/resources/:type', require('./Resources').get);
+router.get("/resources/:type", require("./Resources").get);
 
 module.exports = router;

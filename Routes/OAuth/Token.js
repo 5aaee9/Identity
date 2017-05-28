@@ -2,11 +2,11 @@
  * Created by Indexyz on 2017/5/1.
  */
 
-const db = require('mongoose');
-const userAuth = require('../../Db/Schema/UserAuth');
-const appSchema = require('../../Db/Schema/Application');
-const DbDefine = require('../../Define/Db');
-const makeError = require('./Error');
+const db = require("mongoose");
+const userAuth = require("../../Db/Schema/UserAuth");
+const appSchema = require("../../Db/Schema/Application");
+const DbDefine = require("../../Define/Db");
+const makeError = require("./Error");
 
 
 let returnToken = (res, doc) => {
@@ -24,10 +24,10 @@ let returnToken = (res, doc) => {
 module.exports.post = (req, res, next) => {
     if (!req.headers["authorization"]) { return makeError(res, makeError.Types.UNAUTHORIZED) }
     // Check username, Defined in RFC6749
-    if (Buffer.from(req.headers["authorization"].split(" ")[1], 'base64').toString().split(":")[0] !== "Bearer") {
+    if (Buffer.from(req.headers["authorization"].split(" ")[1], "base64").toString().split(":")[0] !== "Bearer") {
         return makeError(res, makeError.Types.USER_NAME_ERROR)
     }
-    let code = Buffer.from(req.headers["authorization"].split(" ")[1], 'base64').toString().split(":")[1],
+    let code = Buffer.from(req.headers["authorization"].split(" ")[1], "base64").toString().split(":")[1],
         userAuthModel = db.model(DbDefine.Db.APP_USER_DB, userAuth),
         appModel = db.model(DbDefine.Db.APPS_DB, appSchema);
     appModel.findOne({

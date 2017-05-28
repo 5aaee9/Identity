@@ -1,15 +1,15 @@
 /**
  * Created by Indexyz on 2017/4/10.
  */
-'use strict';
+"use strict";
 
 const db = require("mongoose");
-const userSchema = require('../../Db/Schema/User');
+const userSchema = require("../../Db/Schema/User");
 
 module.exports.get = (req, res, next) => {
     let code = req.query.code;
     if (!code) { res.redirect("/"); return }
-    let userModel = db.model('users', userSchema);
+    let userModel = db.model("users", userSchema);
     // console.log(code);
     userModel.findOne({ "emailToken": code }, (err, doc) => {
         if (!doc || err) { res.redirect("/"); return }

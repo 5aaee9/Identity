@@ -3,7 +3,7 @@
  */
 
 module.exports = function (res, error) {
-    res.setHeader('WWW-Authenticate', "error=" + error.name + ",error_description=" + error.error_description);
+    res.setHeader("WWW-Authenticate", "error=" + error.name + ",error_description=" + error.error_description);
     res.status(error.code).send({
         error: error.name,
         description: error.error_description

@@ -2,10 +2,10 @@
  * Created by Indexyz on 2017/5/14.
  */
 
-const userAuth = require('../../../Db/Schema/UserAuth');
-const appsSchema = require('../../../Db/Schema/Application');
-const db = require('mongoose');
-const dbName = require('../../../Define/Db');
+const userAuth = require("../../../Db/Schema/UserAuth");
+const appsSchema = require("../../../Db/Schema/Application");
+const db = require("mongoose");
+const dbName = require("../../../Define/Db");
 
 let userAuthModel = db.model(dbName.Db.APP_USER_DB, userAuth),
     appModel = db.model(dbName.Db.APPS_DB, appsSchema);
@@ -25,7 +25,7 @@ module.exports.get = (req, res, next) => {
                 owner: req.session.user._id
             }, (err, apps) => {
                 if (err) { return next(err) }
-                res.render('member/oauth', {
+                res.render("member/oauth", {
                     userAuth: retDoc,
                     createApps: apps,
                     success: req.query.success

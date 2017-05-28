@@ -1,7 +1,7 @@
 /**
  * Created by Indexyz on 2017/4/11.
  */
-'use strict';
+"use strict";
 const db = require("mongoose");
 const logSchema = require("../../Db/Schema/Log");
 const dateHelper = require("../../Utils/DateTime");
@@ -12,7 +12,7 @@ let getLastWeekLog = (user, func) => {
     for (let i = 0; i <= 6; i++){
         let startTime = dateHelper.getPreTimesDay(i, dateHelper.getZeroTime(new Date()));
         let endTime = dateHelper.getPreTimesDay(i - 1, dateHelper.getZeroTime(new Date()));
-        let logModel = db.model('logs', logSchema);
+        let logModel = db.model("logs", logSchema);
         logModel.count({
             user: user,
             date: {
@@ -42,7 +42,7 @@ let convToShow = (doc) => {
 };
 
 let getLastLog = (user, func) => {
-    let logModel = db.model('logs', logSchema);
+    let logModel = db.model("logs", logSchema);
     logModel.find({
         user: user
     }).limit(10).sort({date: -1}).then(docs => {

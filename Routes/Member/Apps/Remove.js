@@ -2,10 +2,10 @@
  * Created by Indexyz on 2017/5/21.
  */
 
-const db = require('mongoose');
-const apps = require('../../../Db/Schema/Application');
-const dbEnum = require('../../../Define/Db');
-const userAuth = require('../../../Db/Schema/UserAuth');
+const db = require("mongoose");
+const apps = require("../../../Db/Schema/Application");
+const dbEnum = require("../../../Define/Db");
+const userAuth = require("../../../Db/Schema/UserAuth");
 
 let appModel = db.model(dbEnum.Db.APPS_DB, apps),
     userAuthModel = db.model(dbEnum.Db.APP_USER_DB, userAuth);
@@ -21,7 +21,7 @@ module.exports.get = (req, res, next) => {
             app: appId
         }, err => {
             if (err) { return next(err) }
-            res.redirect('/member/apps?success=' + encodeURIComponent("删除成功"))
+            res.redirect("/member/apps?success=" + encodeURIComponent("删除成功"))
         })
     })
 };

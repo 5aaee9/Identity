@@ -3,11 +3,11 @@
  */
 
 
-const db = require('mongoose');
-const oapp = require('../../Db/Schema/Application');
-const userAuth = require('../../Db/Schema/UserAuth');
-const oauthDefine = require('../../Define/OAuth');
-const dbDefine = require('../../Define/Db');
+const db = require("mongoose");
+const oapp = require("../../Db/Schema/Application");
+const userAuth = require("../../Db/Schema/UserAuth");
+const oauthDefine = require("../../Define/OAuth");
+const dbDefine = require("../../Define/Db");
 
 let appModel = db.model(dbDefine.Db.APPS_DB, oapp),
     authCode = db.model(dbDefine.Db.APP_USER_DB, userAuth);

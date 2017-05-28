@@ -1,7 +1,7 @@
 /**
  * Created by Indexyz on 2017/4/11.
  */
-'use strict';
+"use strict";
 
 const express = require("express");
 const errors = require("./Errors");

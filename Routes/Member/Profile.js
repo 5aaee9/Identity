@@ -1,8 +1,8 @@
 /**
  * Created by Indexyz on 2017/4/11.
  */
-'use strict';
-const db = require('mongoose');
+"use strict";
+const db = require("mongoose");
 const userSchema = require("../../Db/Schema/User");
 
 module.exports.get = (req, res, next) => {
