@@ -139,4 +139,68 @@ describe("User", function () {
             })
         })
     })
+    describe("Login", function(){
+        var user, cookies, passowrd;
+        beforeEach(function(done){
+            passowrd = stringLib.randomString(16)
+            user = new userModel({
+                username: stringLib.randomString(8),
+                password: passowrd,
+                email: "test@email.com"
+            })
+            user.generatorID();
+            user.refresh();
+            user.refreshSession();
+            user.save(err => {
+                if (err) return done(err);
+                done();
+            })
+        })
+        it("Get Login Page", function(done){
+            request(application)
+                .get('/auth/login')
+                .expect(200)
+                .end(function(err, res){
+                    if (err) return done(err);
+                    res.type.should.equal("text/html");
+                    done();
+                })
+        })
+        it("Login in", function(done){
+            request(application)
+                .post('/auth/login')
+                .send({
+                    username: user.username,
+                    password: passowrd
+                })
+                .expect(302)
+                .end(function(err, res){
+                    if(err) return done(err);
+                    res.text.indexOf("mdl-chip__contact").should.equal(-1)
+                    done();
+                })
+        })
+        it("Error password", function(done){
+            request(application)
+                .post('/auth/login')
+                .send({
+                    username: user.username,
+                    password: "error"
+                })
+                .expect(200)
+                .end(function(err, res){
+                    if(err) return done(err);
+                    res.text.indexOf("close").should.not.equal(-1)
+                    done();
+                })
+        })
+        afterEach(function(done){
+            userModel.remove({
+                _id: user._id
+            }, err => {
+                if (err) return done(err)
+                done();
+            })
+        })
+    })
 })
