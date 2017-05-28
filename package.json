@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "codacy-coverage": "^2.0.2",
+    "codecov": "^2.2.0",
     "eslint": "^3.x",
     "istanbul": "~0.x",
     "jsinspect": "~0.x",

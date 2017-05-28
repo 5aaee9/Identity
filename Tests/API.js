@@ -144,7 +144,7 @@ describe("API", function(){
                     .expect(400)
                     .end(done)
             })
-
+            
             afterEach(function(done){
                 userModel.remove({
                     _id: user._id
@@ -153,6 +153,15 @@ describe("API", function(){
                     done();
                 })
             })
+        })
+    })
+
+    describe("Server", function(){
+        it("ping", function(done){
+            request(application)
+                .get("/api/server/ping")
+                .expect(200)
+                .end(done)
         })
     })
 })
