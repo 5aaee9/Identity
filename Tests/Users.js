@@ -180,6 +180,20 @@ describe("User", function () {
                     done();
                 })
         })
+        it("Login in with redirect", function(done){
+            request(application)
+                .post('/auth/login?redirect=/')
+                .send({
+                    username: user.username,
+                    password: password
+                })
+                .expect(302)
+                .end(function(err, res){
+                    if(err) return done(err);
+                    res.text.should.equal("Found. Redirecting to /")
+                    done();
+                })
+        })
         it("Error password", function(done){
             request(application)
                 .post('/auth/login')
