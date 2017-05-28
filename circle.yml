@@ -1,12 +1,13 @@
- dependencies:
-   cache_directories:
-     - mongodb-linux-x86_64-2.6.4
-   pre:
-     - if [[ ! -d mongodb-linux-x86_64-2.6.4 ]]; then wget http://downloads.mongodb.org/linux/mongodb-linux-x86_64-2.6.4.tgz && tar xvzf mongodb-linux-x86_64-2.6.4.tgz; fi
-     - sudo /etc/init.d/mongodb stop
-     - sudo cp mongodb-linux-x86_64-2.6.4/bin/* /usr/bin
-     - sudo /etc/init.d/mongodb start
-
+dependencies:
+  cache_directories:
+    - ../mongodb-linux-x86_64-ubuntu1204-3.2.3
+  pre:
+    - if [[ ! -d ../mongodb-linux-x86_64-ubuntu1204-3.2.3 ]]; then wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1204-3.2.3.tgz -P ../ && tar xvzf ../mongodb-linux-x86_64-ubuntu1204-3.2.3.tgz -C ../; fi
+    - sudo stop mongodb
+    - sudo cp ../mongodb-linux-x86_64-ubuntu1204-3.2.3/bin/* /usr/bin
+    - sudo start mongodb
+    - pip install asynctest
+    
 test:
   post:
     - ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec Tests && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage && rm -rf ./coverage
