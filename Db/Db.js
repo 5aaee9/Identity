@@ -1,9 +1,10 @@
 "use strict";
 
-const config = require('../Config');
+const configFile = require('../Config');
 const mongoose = require('mongoose');
 
-function getUrl() {
+function getUrl(config) {
+    if (!config) config = configFile;
     let mongodbUri = 'mongodb://';
     if (config.db_auth){
         mongodbUri += `${config.db_username}:${config.db_password}@${config.db_host}:${config.db_port}/${config.db_name}`
@@ -22,3 +23,4 @@ function connect(func) {
 }
 
 module.exports = connect;
+module.exports.getUrl = getUrl;
