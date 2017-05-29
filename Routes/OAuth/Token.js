@@ -31,7 +31,7 @@ module.exports.post = (req, res, next) => {
         userAuthModel = db.model(DbDefine.Db.APP_USER_DB, userAuth),
         appModel = db.model(DbDefine.Db.APPS_DB, appSchema);
     appModel.findOne({
-        client_id: code
+        client_secret: code
     }, (err, app) => {
         if (err || !app) {
             return makeError(res, makeError.Types.INVALID_TOKEN)

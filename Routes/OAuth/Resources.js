@@ -63,26 +63,4 @@ module.exports.upload = (req, res, next) => {
     });
 
     req.pipe(writeStream);
-
-    // writeStream.on("close", filen => {
-    //     fs.unlink(req.file.path, err => {
-    //         if (err) { return makeError(req, makeError.Types.SERVER_ERROR) }
-    //         userModel.findOne({
-    //             _id: req.doc.user
-    //         }, (err, doc) => {
-    //             if (err || !doc) { return makeError(res, makeError.Types.INVALID_TOKEN) }
-    //             let actions = {
-    //                 "cap": () => { doc.skin.cap = filen._id },
-    //                 "skin": () => { doc.skin.skin = filen._id },
-    //                 "slim": () => { doc.skin.slim = filen._id }
-    //             };
-    //             actions[req.skinType]();
-    //             doc.save(err => {
-    //                 if (err) { return makeError(res, makeError.Types.SERVER_ERROR) }
-    //                 res.status(204).send()
-    //             })
-    //         })
-    //     })
-    // });
-    // fs.createReadStream(req.file.path).pipe(writeStream);
 };
