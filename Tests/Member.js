@@ -2,12 +2,14 @@ const should = require("should");
 const request = require("supertest");
 const db = require("mongoose");
 const userSchema = require('../Db/Schema/User');
+const appSchema = require('../Db/Schema/Application');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 const Tsession = require('supertest-session');
 
 let application = require("../App"),
-    userModel = db.model(DbDefine.Db.USER_DB, userSchema);
+    userModel = db.model(DbDefine.Db.USER_DB, userSchema),
+    appModel = db.model(DbDefine.Db.APPS_DB, appSchema);
 
 
 describe("Member", function(){
@@ -99,12 +101,18 @@ describe("Member", function(){
 
     it("test upload skin", function(done){
         session.post("/member/skin/skin")
-               .field("isSlim", "on")
+               .field("isSlim", "off")
                .attach('uploadSkin', 'Tests/Resources/test-skin.png')
                .expect(302)
                .end(function(err, res){
                    if (err) return done(err);
                    res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
+                   userModel.findOne({
+                       _id: user._id
+                   }, (err, doc) => {
+                       doc.skin.skin.should.be.ok();
+                       doc.skin.skin.toString().length.should.be.equal(24);
+                   })
                    done();
                })
     })
@@ -121,7 +129,9 @@ describe("Member", function(){
                        _id: user._id
                    }, (err, doc) => {
                        if (err) return done(err);
+                       doc.skin.slim.should.be.ok();
                        doc.skin.slim.toString().length.should.equal(24)
+                       user = doc;
                        return done();
                    })
                })
@@ -143,6 +153,61 @@ describe("Member", function(){
         session.get("/member/skin/skin")
                .expect(302)
                .end(done)
+    })
+
+    it("test application page", function(done){
+        session.get("/member/apps").expect(200).end(done)
+    })
+
+    it("test application create page", function(done){
+        session.get("/member/apps/new").expect(200).end(done)
+    })
+
+    describe("application", function(){
+        var app , appname;
+        before(function(done){
+            this.timeout(6000);
+            // create application
+            appname = stringLib.randomString(16);
+            session.post("/member/apps/new")
+                   .send({
+                       appname: appname
+                   })
+                   .expect(302)
+                   .end(function(err, doc){
+                        appModel.findOne({
+                            name: appname
+                        }, (err, doc) => {
+                            if (err) return done(err);
+                            doc.should.be.ok();
+                            app = doc;
+                            return done();
+                        })
+                   })
+        })
+
+        it("get info", function(done){
+            session.get("/member/apps").expect(200).end(function(err, res){
+                if (err) return done(err);
+                res.text.indexOf(appname).should.not.equal(-1)
+                return done();
+            })
+        })
+
+        it("create dump", function(done){
+            session.post("/member/apps/new")
+                   .send({
+                       appname: appname
+                   })
+                   .expect(200)
+                   .end(done)
+        })
+
+        after(function(done){
+            session.get("/member/apps/remove/" + app._id)
+               .expect(302)
+               .end(done)
+        })
     })
 
     after(function(done){

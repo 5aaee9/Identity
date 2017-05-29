@@ -12,7 +12,6 @@ module.exports.get = (req, res, next) => {
 };
 
 module.exports.post = (req, res, next) => {
-    console.log(req.body);
     let appName = req.body["appname"],
         homepage = req.body["homepage"],
         callback = req.body["callback"],
