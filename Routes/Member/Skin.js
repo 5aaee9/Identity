@@ -76,7 +76,6 @@ router.post("/cap", upload.single("uploadCup"), (req, res, next) => {
 });
 
 router.post("/skin", upload.single("uploadSkin"), (req, res, next) => {
-    console.log(req.body.isSlim === "on");
     uploadFile(req.file, req, req.body.isSlim === "on" ? "slim" : "skin", err => {
         if (err) { return res.redirect("/member/skin?err=" + encodeURIComponent(err.message)) }
         res.redirect("/member/skin?succ=1")

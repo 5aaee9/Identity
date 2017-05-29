@@ -97,6 +97,48 @@ describe("Member", function(){
                .end(done)
     })
 
+    it("test upload skin", function(done){
+        session.post("/member/skin/skin")
+               .send({ isSlim: "off" })
+               .attach('uploadSkin', 'Tests/Resources/test-skin.png')
+               .expect(302)
+               .end(function(err, res){
+                   if (err) return done(err);
+                   res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
+                   done();
+               })
+    })
+
+    it("test upload skin slim", function(done){
+        session.post("/member/skin/skin")
+               .send({ isSlim: "off" })
+               .attach('uploadSkin', 'Tests/Resources/test-skin.png')
+               .expect(302)
+               .end(function(err, res){
+                   if (err) return done(err);
+                   res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
+                   userModel.findOne({
+                       _id: user._id
+                   }, (err, doc) => {
+                       if (err) return done(err);
+                       doc.skin.should.have.property('slim')
+                       return done();
+                   })
+               })
+    })
+
+     it("test upload cap", function(done){
+        session.post("/member/skin/cap")
+               .send({ isSlim: "off" })
+               .attach('uploadCup', 'Tests/Resources/test-cap.png')
+               .expect(302)
+               .end(function(err, res){
+                   if (err) return done(err);
+                   res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
+                   done();
+               })
+    })
+
     after(function(done){
         userModel.remove({
             _id: user._id
