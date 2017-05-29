@@ -5,11 +5,11 @@
 const db = require('mongoose');
 const logSchema = require("../../../Db/Schema/Log");
 const userSchema = require("../../../Db/Schema/User");
-
+const dbDefine = require("../../../Define/Db").Db;
 
 module.exports.post = (req, res, next) => {
-    let logModel = db.model('logs', logSchema),
-        userModel = db.model('users', userSchema),
+    let logModel = db.model(dbDefine.LOGS_DB, logSchema),
+        userModel = db.model(dbDefine.USER_DB, userSchema),
         token = req.body.token,
         ip = req.body.ip,
         message = req.body.message;

@@ -2,13 +2,31 @@ const should = require("should");
 const request = require("supertest");
 const db = require("mongoose");
 const userSchema = require('../Db/Schema/User');
+const logSchema = require('../Db/Schema/Log');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 
 let application = require("../App"),
-    userModel = db.model(DbDefine.Db.USER_DB, userSchema);
+    userModel = db.model(DbDefine.Db.USER_DB, userSchema),
+    logModel = db.model(DbDefine.Db.LOGS_DB, logSchema);
 
 describe("API", function(){
+    var user, password;
+    beforeEach(function(done){
+        password = stringLib.randomString(16)
+        user = new userModel({
+            username: stringLib.randomString(8),
+            password: password,
+            email: "test@email.com"
+        })
+        user.generatorID();
+        user.refresh();
+        user.refreshSession();
+        user.save(err => {
+            if (err) return done(err);
+            done();
+        })
+    })
     describe("Mojang API", function(){
         it("Header error", function(done){
             request(application)
@@ -32,22 +50,6 @@ describe("API", function(){
                 })
         })
         describe("User Inferce", function(){
-            var user, password;
-            beforeEach(function(done){
-                password = stringLib.randomString(16)
-                user = new userModel({
-                    username: stringLib.randomString(8),
-                    password: password,
-                    email: "test@email.com"
-                })
-                user.generatorID();
-                user.refresh();
-                user.refreshSession();
-                user.save(err => {
-                    if (err) return done(err);
-                    done();
-                })
-            })
 
             it("test authenticate", function(done){
                 request(application)
@@ -215,14 +217,6 @@ describe("API", function(){
                     .end(done)
             })
 
-            afterEach(function(done){
-                userModel.remove({
-                    _id: user._id
-                }, err => {
-                    if (err) return done(err)
-                    done();
-                })
-            })
         })
     })
 
@@ -232,6 +226,99 @@ describe("API", function(){
                 .get("/api/server/ping")
                 .expect(200)
                 .end(done)
+        })
+
+        it("login by token with error data", function(done){
+            request(application)
+                .post("/api/server/loginByToken")
+                .expect(412)
+                .end(done)
+        })
+
+        it("login by token", function(done){
+            request(application)
+                .post("/api/server/loginByToken")
+                .send({
+                    "ip": "127.0.0.1",
+                    "token": user.profile.authToken,
+                    "message": "${player} joined server"
+                })
+                .expect(200)
+                .end(function(err, res){
+                    if (err) return done(err);
+                    logModel.findOne({
+                        user: user._id,
+                        ip: "127.0.0.1"
+                    }, (err, doc) => {
+                        if (err) return done(err);
+                        doc.should.be.ok();
+                        doc.log.should.be.equal(user.username + " joined server")
+                        done()
+                    })
+                })
+        })
+
+    })
+
+    describe("Skin", function(){
+
+        it("get skin with error user", function(done){
+            request(application)
+                .get("/api/skin/not-exist.json")
+                .expect(401)
+                .end(done)
+        })
+
+        it("get skin", function(done){
+            request(application)
+                .get("/api/skin/" + user.username + ".json")
+                .expect(200)
+                .end(done)
+        })
+
+        it("get user cap", function(done){
+            request(application)
+                .get("/api/skin/cap/" + user.username + ".png")
+                .expect(302)
+                .end(done)
+        })
+
+        it("get user skin", function(done){
+            request(application)
+                .get("/api/skin/skin/" + user.username + ".png")
+                .expect(302)
+                .end(done)
+        })
+
+        it("get user resources without id", function(done){
+            request(application)
+                .get("/api/skin/textures/")
+                .expect(404)
+                .end(done)
+        })
+
+        it("get user resources with undefined id", function(done){
+            request(application)
+                .get("/api/skin/textures/undefined")
+                .expect(404)
+                .end(done)
+        })
+
+        it("get user resources", function(done){
+            request(application)
+                .get("/api/skin/textures/user-res")
+                .expect(302)
+                .end(done)
+        })
+
+    })
+
+    afterEach(function(done){
+        userModel.remove({
+            _id: user._id
+        }, err => {
+            if (err) return done(err)
+            done();
         })
     })
 })
