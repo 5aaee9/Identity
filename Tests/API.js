@@ -31,7 +31,7 @@ describe("API", function(){
                     done();
                 })
         })
-        describe("User Test", function(){
+        describe("User Inferce", function(){
             var user, password;
             beforeEach(function(done){
                 password = stringLib.randomString(16)

@@ -67,6 +67,7 @@ describe("User", function () {
         describe("on", function(){
             var randomUsername, randomPassword;
             beforeEach(function(done){
+                this.timeout(6000)
                 randomUsername = stringLib.randomString(8),
                 randomPassword = stringLib.randomString(16);
                 request(application)
