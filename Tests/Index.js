@@ -14,5 +14,11 @@ describe("Application Index", function () {
                 done()
             })
     })
+    it("get not exist page", function(done){
+        request(application)
+            .get("/not-exist")
+            .expect(404)
+            .end(done)
+    })
 });
 

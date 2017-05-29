@@ -10,6 +10,11 @@ router.get("/", (req, res, next) => {
 });
 router.use("/auth", require("./Auth/Urls"));
 router.use("/oauth", require("./OAuth/Urls"));
+
+router.use("/member", function (req, res, next) {
+    if (!req.session.user) { return res.redirect("/auth/register"); }
+    next();
+});
 router.use("/member", require("./Member/Urls"));
 router.use("/api", require("./API/Urls"));
 
