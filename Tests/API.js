@@ -145,6 +145,76 @@ describe("API", function(){
                     .end(done)
             })
             
+            it("test validate", function(done){
+                request(application)
+                    .post("/api/mojang/validate")
+                    .set("content-type", "application/json")
+                    .send({
+                        accessToken: user.profile.Token,
+                        clientToken: user.profile.UUID,
+                    })
+                    .expect(204)
+                    .end(done)
+            })
+
+            it("test validate with error token", function(done){
+                request(application)
+                    .post("/api/mojang/validate")
+                    .set("content-type", "application/json")
+                    .send({
+                        accessToken: user.profile.Token,
+                        clientToken: "error-client-token",
+                    })
+                    .expect(403)
+                    .end(done)
+            })
+
+            it("test signout", function(done){
+                request(application)
+                    .post("/api/mojang/signout")
+                    .set("content-type", "application/json")
+                    .send({
+                        username: user.email,
+                        password: password
+                    })
+                    .expect(204)
+                    .end(done)
+            })
+
+            it("test signout with error", function(done){
+                request(application)
+                    .post("/api/mojang/signout")
+                    .set("content-type", "application/json")
+                    .send({
+                        username: user.email,
+                        password: "error"
+                    })
+                    .expect(403)
+                    .end(done)
+            })
+
+            it("test invalidate", function(done){
+                request(application)
+                    .post("/api/mojang/invalidate")
+                    .send({
+                        accessToken: user.profile.Token,
+                        clientToken: user.profile.UUID,
+                    })
+                    .expect(204)
+                    .end(done)
+            })
+
+            it("test invalidate with error token", function(done){
+                request(application)
+                    .post("/api/mojang/invalidate")
+                    .send({
+                        accessToken: user.profile.Token,
+                        clientToken: "error-client-token",
+                    })
+                    .expect(204)
+                    .end(done)
+            })
+
             afterEach(function(done){
                 userModel.remove({
                     _id: user._id

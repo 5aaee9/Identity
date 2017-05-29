@@ -15,10 +15,10 @@ module.exports.post = (req, res, next) => {
         email: username,
         password: userSchema.getSaltedPassword(password)
     }, (err, doc) => {
-        if (err || !doc) { res.status(403).send(errors.ForbiddenOperationExceptionUserAccount); return }
+        if (err || !doc) { return res.status(403).send(errors.ForbiddenOperationExceptionUserAccount); }
         doc.refresh();
         doc.save(err => {
-            if (err) { res.status(500).send(errors.ServerProblem); return }
+            if (err) { return res.status(500).send(errors.ServerProblem); }
             res.status(204).send()
         })
     })

@@ -13,7 +13,7 @@ module.exports.post = (req, res, next) => {
         "profile.UUID": uuid,
         "profile.Token": token
     }, (err, doc) => {
-        if (!doc || err) { res.status(204).send() }
+        if (!doc || err) { return res.status(204).send() }
         doc.refresh();
         doc.refresh();
         doc.save(err => {

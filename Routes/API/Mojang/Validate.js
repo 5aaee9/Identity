@@ -14,7 +14,7 @@ module.exports.post = (req, res, next) => {
         "profile.UUID": uuid,
         "profile.Token": token
     } : { "profile.Token": token }, (err, doc) => {
-        if (err || !doc) { res.status(403).send(errors.ForbiddenOperationExceptionUserToken) }
+        if (err || !doc) { return res.status(403).send(errors.ForbiddenOperationExceptionUserToken) }
         res.status(204).send();
     })
 };
