@@ -88,6 +88,18 @@ describe("User", function () {
                         })
                 })
             })
+            it("resend email", function(done){
+                request(application)
+                    .get("/auth/resend?mail=test@true.mail")
+                    .expect(200)
+                    .end(done)
+            })
+            it("resend email with error address", function(done){
+                request(application)
+                    .get("/auth/resend")
+                    .expect(302)
+                    .end(done)
+            })
             it("Email Verify", function(done){
                 request(application)
                     .post("/auth/register")

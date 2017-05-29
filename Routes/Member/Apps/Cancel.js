@@ -13,7 +13,7 @@ module.exports.get = (req, res, next) => {
     let appId = req.params["appId"];
 
     userAuthModel.remove({
-        _id: appId,
+        app: appId,
         user: req.session.user._id
     }, err => {
         if (err) { return next(err) }

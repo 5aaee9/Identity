@@ -16,7 +16,7 @@ module.exports.get = (req, res, next) => {
         if (!doc.emailToken) { res.redirect("/"); return }
         if (err) { res.redirect("/auth/register"); return }
         doc.sendMail(req.protocol + "://" + req.get("host"), err => {
-            if (err) { res.redirect("/auth/register"); return }
+            if (err) { res.redirect("/"); return }
             res.render("auth/mailed", {
                 "mail": doc.email
             })

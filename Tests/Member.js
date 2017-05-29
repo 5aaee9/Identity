@@ -3,13 +3,15 @@ const request = require("supertest");
 const db = require("mongoose");
 const userSchema = require('../Db/Schema/User');
 const appSchema = require('../Db/Schema/Application');
+const userAuthSchema = require('../Db/Schema/UserAuth');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 const Tsession = require('supertest-session');
 
 let application = require("../App"),
     userModel = db.model(DbDefine.Db.USER_DB, userSchema),
-    appModel = db.model(DbDefine.Db.APPS_DB, appSchema);
+    appModel = db.model(DbDefine.Db.APPS_DB, appSchema),
+    userAuthModel = db.model(DbDefine.Db.APP_USER_DB, userAuthSchema);
 
 
 describe("Member", function(){
@@ -46,6 +48,13 @@ describe("Member", function(){
                .end(done)
     })
     
+    it("get with none-auth", function(done){
+        request(application)
+            .get("/member")
+            .expect(302)
+            .end(done)
+    })
+
     it("get profile", function(done){
         session.get("/member/profile")
                .expect(200)
@@ -201,6 +210,85 @@ describe("Member", function(){
                    })
                    .expect(200)
                    .end(done)
+        })
+
+        it("edit application page", function(done){
+            session.get("/member/apps/edit/" + app._id)
+                   .expect(200)
+                   .end(done)
+        })
+
+        it("test edit application", function(done){
+            // gen new appname
+            appname = stringLib.randomString(16);
+            session.post("/member/apps/edit/" + app._id)
+                   .field("appname", appname)
+                   .field("get-login", "on")
+                   .expect(302)
+                   .end(function(err, res){
+                       if (err) return done(err);
+                       appModel.findOne({
+                           name: appname
+                       }, (err, doc) => {
+                           if (err) return done(err);
+                           doc.should.be.ok();
+                           doc.name.should.equal(appname)
+                           doc.scope.should.containEql("get-login")
+                           
+                           app = doc;
+                           return done();
+                       })
+                   })
+                
+        })
+
+        it("test edit application with icon file", function(done){
+            // gen new appname
+            appname = stringLib.randomString(16);
+            session.post("/member/apps/edit/" + app._id)
+                   .field("appname", appname)
+                   .field("get-login", "on")
+                   .attach('uploadLogo', 'Tests/Resources/test-icon.png')
+                   .expect(302)
+                   .end(function(err, res){
+                       if (err) return done(err);
+                       appModel.findOne({
+                           name: appname
+                       }, (err, doc) => {
+                           if (err) return done(err);
+                           doc.should.be.ok();
+                           doc.name.should.equal(appname)
+                           doc.scope.should.containEql("get-login")
+                           doc.image.should.not.be.null();
+
+                           app = doc;
+                           return done();
+                       })
+                   })
+        })
+
+        it("oauth give authorize application", function(done){
+            session.post("/oauth/authorize?response_type=code&client_id=" + app.client_id)
+                   .send({
+                       "get-login": "on"
+                   })
+                   .expect(302)
+                   .end(done)
+        })
+
+        it("cancel application", function(done){
+            session.get("/member/apps/cancel/" + app._id)
+                   .expect(302)
+                   .end(function(err, doc){
+                        userAuthModel.findOne({
+                            app: app._id,
+                            user: user._id
+                        }, (err, doc) => {
+                            if (err) return done(err);
+                            should.not.exist(doc);
+                            done();
+                        })
+                   })
         })
 
         after(function(done){
