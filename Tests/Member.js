@@ -38,27 +38,27 @@ describe("Member", function(){
                    .end(function(err, res){
                         if(err) return done(err);
                         done();
-                    })
-        })
+                    });
+        });
     })
 
     it("get member", function(done){
         session.get("/member")
                .expect(200)
-               .end(done)
+               .end(done);
     })
     
     it("get with none-auth", function(done){
         request(application)
             .get("/member")
             .expect(302)
-            .end(done)
+            .end(done);
     })
 
     it("get profile", function(done){
         session.get("/member/profile")
                .expect(200)
-               .end(done)
+               .end(done);
     })
     
     it("reset user-profile in profile", function(done){
@@ -73,11 +73,11 @@ describe("Member", function(){
                         _id: user._id
                     }, (err, doc) => {
                         if (err) { return done(err); }
-                        doc.profile.authToken.should.not.equal(user.profile.authToken)
+                        doc.profile.authToken.should.not.equal(user.profile.authToken);
                         user = doc;
                         done();
-                    })
-               })
+                    });
+               });
     })
 
     it("set username in profile page", function(done){
@@ -95,17 +95,17 @@ describe("Member", function(){
                        username: randomUsername
                    }, (err, doc) => {
                        if (err) { return done(err); }
-                       doc.username.should.equal(randomUsername)
+                       doc.username.should.equal(randomUsername);
                        user = doc;
                        done();
-                   })
-               })
+                   });
+               });
     })
 
     it("get skin", function(done){
         session.get("/member/skin")
                .expect(200)
-               .end(done)
+               .end(done);
     })
 
     it("test upload skin", function(done){
@@ -121,9 +121,9 @@ describe("Member", function(){
                    }, (err, doc) => {
                        doc.skin.skin.should.be.ok();
                        doc.skin.skin.toString().length.should.be.equal(24);
-                   })
-                   done();
-               })
+                       done();
+                   });
+               });
     })
 
     it("test upload skin slim", function(done){
@@ -142,8 +142,8 @@ describe("Member", function(){
                        doc.skin.slim.toString().length.should.equal(24)
                        user = doc;
                        return done();
-                   })
-               })
+                   });
+               });
     })
 
     it("test upload cap", function(done){
@@ -153,23 +153,23 @@ describe("Member", function(){
                .expect(302)
                .end(function(err, res){
                    if (err) return done(err);
-                   res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
+                   res.text.should.equal("Found. Redirecting to /member/skin?succ=1");
                    done();
-               })
+               });
     })
 
     it("get user skin", function(done){
         session.get("/member/skin/skin")
                .expect(302)
-               .end(done)
+               .end(done);
     })
 
     it("test application page", function(done){
-        session.get("/member/apps").expect(200).end(done)
+        session.get("/member/apps").expect(200).end(done);
     })
 
     it("test application create page", function(done){
-        session.get("/member/apps/new").expect(200).end(done)
+        session.get("/member/apps/new").expect(200).end(done);
     })
 
     describe("application", function(){
@@ -191,16 +191,8 @@ describe("Member", function(){
                             doc.should.be.ok();
                             app = doc;
                             return done();
-                        })
-                   })
-        })
-
-        it("get info", function(done){
-            session.get("/member/apps").expect(200).end(function(err, res){
-                if (err) return done(err);
-                res.text.indexOf(appname).should.not.equal(-1)
-                return done();
-            })
+                        });
+                   });
         })
 
         it("create dump", function(done){
@@ -209,13 +201,13 @@ describe("Member", function(){
                        appname: appname
                    })
                    .expect(200)
-                   .end(done)
+                   .end(done);
         })
 
         it("edit application page", function(done){
             session.get("/member/apps/edit/" + app._id)
                    .expect(200)
-                   .end(done)
+                   .end(done);
         })
 
         it("test edit application", function(done){
@@ -232,13 +224,13 @@ describe("Member", function(){
                        }, (err, doc) => {
                            if (err) return done(err);
                            doc.should.be.ok();
-                           doc.name.should.equal(appname)
+                           doc.name.should.equal(appname);
                            doc.scope.should.containEql("get-login")
                            
                            app = doc;
                            return done();
                        })
-                   })
+                   });
                 
         })
 
@@ -257,14 +249,14 @@ describe("Member", function(){
                        }, (err, doc) => {
                            if (err) return done(err);
                            doc.should.be.ok();
-                           doc.name.should.equal(appname)
-                           doc.scope.should.containEql("get-login")
+                           doc.name.should.equal(appname);
+                           doc.scope.should.containEql("get-login");
                            doc.image.should.not.be.null();
 
                            app = doc;
                            return done();
-                       })
-                   })
+                       });
+                   });
         })
 
         it("oauth give authorize application", function(done){
@@ -273,7 +265,24 @@ describe("Member", function(){
                        "get-login": "on"
                    })
                    .expect(302)
-                   .end(done)
+                   .end(function(err, doc){
+                       userAuthModel.findOne({
+                            app: app._id,
+                            user: user._id
+                        }, (err, doc) => {
+                            if (err) return done(err);
+                            should.exist(doc);
+                            done();
+                        });
+                   });
+        })
+        
+        it("get info", function(done){
+            session.get("/member/apps").expect(200).end(function(err, res){
+                if (err) return done(err);
+                res.text.indexOf(appname).should.not.equal(-1);
+                return done();
+            })
         })
 
         it("cancel application", function(done){
@@ -294,7 +303,7 @@ describe("Member", function(){
         after(function(done){
             session.get("/member/apps/remove/" + app._id)
                .expect(302)
-               .end(done)
+               .end(done);
         })
     })
 
@@ -302,7 +311,7 @@ describe("Member", function(){
         userModel.remove({
             _id: user._id
         }, err => {
-            if (err) return done(err)
+            if (err) return done(err);
             done();
         })
     })
