@@ -99,7 +99,7 @@ describe("Member", function(){
 
     it("test upload skin", function(done){
         session.post("/member/skin/skin")
-               .send({ isSlim: "off" })
+               .field("isSlim", "on")
                .attach('uploadSkin', 'Tests/Resources/test-skin.png')
                .expect(302)
                .end(function(err, res){
@@ -111,7 +111,7 @@ describe("Member", function(){
 
     it("test upload skin slim", function(done){
         session.post("/member/skin/skin")
-               .send({ isSlim: "off" })
+               .field("isSlim", "on")
                .attach('uploadSkin', 'Tests/Resources/test-skin.png')
                .expect(302)
                .end(function(err, res){
@@ -121,13 +121,13 @@ describe("Member", function(){
                        _id: user._id
                    }, (err, doc) => {
                        if (err) return done(err);
-                       doc.skin.should.have.property('slim')
+                       doc.skin.slim.toString().length.should.equal(24)
                        return done();
                    })
                })
     })
 
-     it("test upload cap", function(done){
+    it("test upload cap", function(done){
         session.post("/member/skin/cap")
                .send({ isSlim: "off" })
                .attach('uploadCup', 'Tests/Resources/test-cap.png')
@@ -137,6 +137,12 @@ describe("Member", function(){
                    res.text.should.equal("Found. Redirecting to /member/skin?succ=1")
                    done();
                })
+    })
+
+    it("get user skin", function(done){
+        session.get("/member/skin/skin")
+               .expect(302)
+               .end(done)
     })
 
     after(function(done){
