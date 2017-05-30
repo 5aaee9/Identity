@@ -7,6 +7,7 @@ const appScheam = require('../Db/Schema/Application');
 const userSchema = require('../Db/Schema/User');
 const userAuthSchema = require('../Db/Schema/UserAuth');
 const Tsession = require('supertest-session');
+const fs = require("fs");
 
 let application = require("../App"),
     appModel = db.model(DbDefine.Db.APPS_DB, appScheam),
@@ -119,6 +120,28 @@ describe("OAuth Tests", function(){
             });
     })
 
+    it("user authorize again", function(done){
+        session.post("/oauth/authorize?response_type=code&client_id=" + app.client_id)
+            .send({
+                "get-login": "on",
+                "get-log": "on",
+                "modify-skin": "on"
+            })
+            .expect(302)
+            .end(function(err, doc){
+                userAuthModel.findOne({
+                    app: app._id,
+                    user: user._id
+                }, (err, doc) => {
+                    if (err) return done(err);
+                    should.exist(doc);
+                    doc.scope.should.containEql("get-log")
+                    userauth = doc;
+                    done();
+                });
+            });
+    })
+
     it("get code", function(done){
         let code = stringLib.randomString(16);
         session.get("/oauth/getCode?code=" + code)
@@ -130,7 +153,7 @@ describe("OAuth Tests", function(){
             })
     })
 
-    describe("token", function(data){
+    describe("token", function(){
 
         it("no authorization header", function(done){
             request(application)
@@ -214,6 +237,88 @@ describe("OAuth Tests", function(){
                 .end(JsonRes(done));
         })
 
+    })
+
+    describe("resources", function(){
+        before(function(done){
+            userAuthModel.findOne({
+                user: user._id
+            }, (err, doc) => {
+                if(err) return done(err);
+                doc.should.be.ok();
+                userauth = doc;
+                done();
+            })
+        })
+
+        it("get resources with non type", function(done) {
+            request(application)
+                .get("/oauth/resources")
+                .expect(400)
+                .end(JsonRes(done))
+        })
+
+        it("get resources with error access_token", function(done){
+            request(application)
+                .get("/oauth/resources/get-login")
+                .expect(401)
+                .end(JsonRes(done))
+        })
+
+        it("get resources with error type", function(done){
+            request(application)
+                .get("/oauth/resources/get-cat")
+                .expect(401)
+                .end(JsonRes(done))
+        })
+
+        it("get resources with error client_secret", function(done){
+            request(application)
+                .get("/oauth/resources/get-login")
+                .set("access_token", userauth.accessToken)
+                .expect(401)
+                .end(JsonRes(done))
+        })
+
+        it("get login data", function(done){
+            request(application)
+                .get("/oauth/resources/get-login")
+                .set("access_token", userauth.accessToken)
+                .set("client_secret", app.client_secret)
+                .expect(200)
+                .end(JsonRes(done))
+        })
+
+        it("upload skin", function(done){
+            fs.readFile("Tests/Resources/test-skin.png", (err, buffer) => {
+                let req = request(application).post("/oauth/resources/modify-skin")
+                req.set("access_token", userauth.accessToken)
+                    .set("client_secret", app.client_secret)
+                    .set("type", "skin")
+                    .expect(204)
+                    .write(buffer)
+                req.end(done)
+            })
+        })
+
+        it("upload large file in api", function(done){
+            let largeBuffer = new Buffer(""),
+                anotherBuffer = new Buffer("test-generator-large-file");
+            
+            for (let i = 0; i <= 3000; i++) {
+                largeBuffer = Buffer.concat([largeBuffer, anotherBuffer]);
+            }
+
+            let req = request(application).post("/oauth/resources/modify-skin")
+            req.set("access_token", userauth.accessToken)
+                    .set("client_secret", app.client_secret)
+                    .set("type", "skin")
+                    .expect(406)
+                    .write(largeBuffer)
+
+            req.end(done)
+
+        })
     })
 
     after(function(done){

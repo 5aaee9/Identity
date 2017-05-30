@@ -20,11 +20,11 @@ let userModel = db.model(dbEnum.USER_DB, userSchema),
 
 module.exports.get = (req, res, next) => {
     if (req.resType === typeEnum.GET_LOGIN){
-        userSchema.findOne({
+        userModel.findOne({
             _id: req.doc.user
         }, (err, user) => {
             if (err || !user) { return makeError(res, makeError.Types.INVALID_TOKEN) }
-             return res.send(user.profile)
+            return res.send(user.profile)
         })
     } else {
         return makeError(res, makeError.Types.INVALID_REQUEST)
@@ -44,7 +44,7 @@ module.exports.upload = (req, res, next) => {
             gfs.remove({
                 _id: file._id
             }, err => {
-                res.stat(406).send({
+                res.status(406).send({
                     error: "Body too big"
                 })
             })

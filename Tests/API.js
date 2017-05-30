@@ -12,6 +12,7 @@ let application = require("../App"),
 
 describe("API", function(){
     var user, password;
+    
     beforeEach(function(done){
         password = stringLib.randomString(16)
         user = new userModel({
@@ -22,11 +23,9 @@ describe("API", function(){
         user.generatorID();
         user.refresh();
         user.refreshSession();
-        user.save(err => {
-            if (err) return done(err);
-            done();
-        })
+        user.save(done)
     })
+    
     describe("Mojang API", function(){
         it("Header error", function(done){
             request(application)

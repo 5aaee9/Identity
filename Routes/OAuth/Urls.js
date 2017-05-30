@@ -48,7 +48,7 @@ router.use("/resources/:type", (req, res, next) => {
             scope: thisType
         }, (err, doc) => {
             if (err || !doc) { return makeError(res, makeError.Types.INVALID_TOKEN) }
-            appModel.find({
+            appModel.findOne({
                 client_secret: req.headers.client_secret
             }, (err, app) => {
                 if (err || !app) { return makeError(res, makeError.Types.INVALID_SECRET) }
@@ -73,5 +73,9 @@ router.post("/resources/" + typeEnum.MODIFY_SKIN, (req, res, next) => {
 router.post("/resources/" + typeEnum.MODIFY_SKIN, require("./Resources").upload);
 
 router.get("/resources/:type", require("./Resources").get);
+
+router.use("/resources", (req, res, next) => {
+    return makeError(res, makeError.Types.TYPE_ERROR);
+});
 
 module.exports = router;

@@ -121,8 +121,6 @@ describe("User", function () {
                                     if (err) return done(err);
                                     done()
                                 })
-                        }, err => {
-                            return done(err)
                         })
                     })
             })
@@ -144,11 +142,7 @@ describe("User", function () {
             afterEach(function(done){
                 userModel.remove({
                     username: randomUsername
-                }).then(doc => {
-                    done();
-                }, err => {
-                    return done(err);
-                })
+                }, done)
             })
         })
     })
@@ -221,6 +215,19 @@ describe("User", function () {
                     done();
                 })
         })
+
+        describe("database",function(){
+
+            it("compare password with error password", function(){
+                user.comparePassword("error-password").should.be.false();
+            })
+
+            it("compare with true passowrd", function(){
+                user.comparePassword(password).should.not.be.false();
+            })
+
+        })
+
         afterEach(function(done){
             userModel.remove({
                 _id: user._id
