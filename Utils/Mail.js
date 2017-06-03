@@ -20,13 +20,20 @@ let mail = function(configDict, to, title, date, cb){
         var sendgrid = require("sendgrid")(config.sendgrid_key);
         var email = new sendgrid.Email();
 
-        email.addTo(to);
-        email.setFrom(config.mail_sender);
-        email.setSubject(title);
-        email.setHtml(date);
 
-        sendgrid.send(email);
-        cb();
+        var fromEmail = new helper.Email(config.mail_sender);
+        var toEmail = new helper.Email(to);
+        var content = new helper.Content('text/plain', date);
+        var mail = new helper.Mail(fromEmail, title, toEmail, content);
+
+        var request = sendgrid.emptyRequest({
+            method: 'POST',
+            path: '/v3/mail/send',
+            body: mail.toJSON()
+        });
+        sendgrid.API(request, function (error, response) {
+            cb();
+        })
     }
 }
 
