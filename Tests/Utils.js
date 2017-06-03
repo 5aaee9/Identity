@@ -1,6 +1,7 @@
 const should = require("should");
 const datetime = require("../Utils/DateTime")
 const stringUtils = require("../Utils/String")
+const mailUtils = require("../Utils/Mail");
 
 describe("Utils Test", function(){
     describe("Datetime", function(){
@@ -30,6 +31,16 @@ describe("Utils Test", function(){
         it("replace", function(){
             stringUtils.replace("a", "a", "b").should.equal("b")
             stringUtils.replace("A A C A", "A", "B").should.equal("B B C B")
+        })
+    })
+
+    describe("Mail", function(){
+        it("SendGrid", function(done){
+            mailUtils.mail({
+                mail_type: "sendgrid",
+                mail_sender: "Indexyz <jiduye@gmail.com>",
+                sendgrid_key: "hello"
+            }, "jiduye@gmail.com", "", "", () => { return done() })
         })
     })
 })

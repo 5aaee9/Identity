@@ -41,6 +41,11 @@ body {
     min-height: 100vh;
     flex-direction: column;
 }
+
+.blur {
+    -webkit-filter: blur(3px) grayscale(12.5%);
+}
+
 main {
     flex: 1 0 auto !important;
 }

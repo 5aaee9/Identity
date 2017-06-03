@@ -258,6 +258,13 @@ describe("OAuth Tests", function(){
                 .end(JsonRes(done))
         })
 
+        it("get resources with undefined type", function(done) {
+            request(application)
+                .get("/oauth/resources/undefined")
+                .expect(400)
+                .end(JsonRes(done))
+        })
+
         it("get resources with error access_token", function(done){
             request(application)
                 .get("/oauth/resources/get-login")
@@ -318,6 +325,15 @@ describe("OAuth Tests", function(){
 
             req.end(done)
 
+        })
+
+        it("get not exist resources", function(done){
+            request(application)
+                .get("/oauth/resources/not-exist")
+                .set("access_token", userauth.accessToken)
+                .set("client_secret", app.client_secret)
+                .expect(400)
+                .end(JsonRes(done))
         })
     })
 
