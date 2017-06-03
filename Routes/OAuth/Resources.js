@@ -29,7 +29,7 @@ module.exports.get = (req, res, next) => {
             new logModel({
                 log: "login in oauth api",
                 user: user._id,
-                type: userSchema.TYPES.CLIENT
+                type: logSchema.TYPES.CLIENT
             }).save(() => {
                 return res.send(user.profile)
             });
