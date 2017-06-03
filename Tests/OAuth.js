@@ -287,6 +287,15 @@ describe("OAuth Tests", function(){
                 .end(JsonRes(done))
         })
 
+        it("get not exist resources", function(done){
+            request(application)
+                .get("/oauth/resources/not-exist")
+                .set("access_token", userauth.accessToken)
+                .set("client_secret", app.client_secret)
+                .expect(401)
+                .end(JsonRes(done))
+        })
+
         it("get login data", function(done){
             request(application)
                 .get("/oauth/resources/get-login")
@@ -295,6 +304,7 @@ describe("OAuth Tests", function(){
                 .expect(200)
                 .end(JsonRes(done))
         })
+        
 
         it("upload skin", function(done){
             fs.readFile("Tests/Resources/test-skin.png", (err, buffer) => {
@@ -327,14 +337,6 @@ describe("OAuth Tests", function(){
 
         })
 
-        it("get not exist resources", function(done){
-            request(application)
-                .get("/oauth/resources/not-exist")
-                .set("access_token", userauth.accessToken)
-                .set("client_secret", app.client_secret)
-                .expect(400)
-                .end(JsonRes(done))
-        })
     })
 
     after(function(done){

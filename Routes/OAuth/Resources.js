@@ -18,7 +18,7 @@ let gfs = new Gridfs(db.connection.db, db.mongo);
 let userModel = db.model(dbEnum.USER_DB, userSchema),
     appModel = db.model(dbEnum.APPS_DB, appSchema),
     userAuthModel = db.model(dbEnum.APP_USER_DB, userAuthSchema),
-    logModel = db.mongo(dbEnum.LOGS_DB, logSchema);
+    logModel = db.model(dbEnum.LOGS_DB, logSchema);
 
 module.exports.get = (req, res, next) => {
     if (req.resType === typeEnum.GET_LOGIN){
@@ -26,11 +26,12 @@ module.exports.get = (req, res, next) => {
             _id: req.doc.user
         }, (err, user) => {
             if (err || !user) { return makeError(res, makeError.Types.INVALID_TOKEN) }
-            new logModel({
+            let nlog = new logModel({
                 log: "login in oauth api",
                 user: user._id,
                 type: logSchema.TYPES.CLIENT
-            }).save(() => {
+            })
+            nlog.save(() => {
                 return res.send(user.profile)
             });
         })

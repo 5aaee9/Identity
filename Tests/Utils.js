@@ -40,7 +40,7 @@ describe("Utils Test", function(){
                 mail_type: "sendgrid",
                 mail_sender: "Indexyz <jiduye@gmail.com>",
                 sendgrid_key: "hello"
-            }, "jiduye@gmail.com", "", "", () => { return done() })
+            }, "jiduye@gmail.com", "Hello", "Test Mail", () => { return done() })
         })
     })
 })
