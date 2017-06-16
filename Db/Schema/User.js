@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const config = require('../../Config');
 const crypto = require('crypto');
-const uuid  = require('node-uuid');
+const uuid  = require('uuid');
 const stringHelper = require('../../Utils/String');
 const mail = require("../../Utils/Mail");
 
@@ -10,7 +10,7 @@ const mail = require("../../Utils/Mail");
 let UserSchema = mongoose.Schema({
     username: {type: String, unique: true, required: true, index: {unique: true}},
     password: {type: String, required: true},
-    email: {type: String, unique: true, required: true},
+    email: {type: String, unique: true, required: true, index: {unique: true}},
     lastUsing: {type: Date, required: true, default: Date.now},
     join: {type: Date, required: true, default: Date.now},
     accessToken: {type: String, required: true},
