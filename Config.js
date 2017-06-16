@@ -19,5 +19,8 @@ module.exports = {
     mail_type      : _("MAIL_TYPE", "mailgun"),
     mail_sender    : _("MAIL_SENDER", ""),
     mailgun_key    : _("MAILGUN_KEY", ""),
-    sendgrid_key   : _("SENDGRID_KEY", "")
+    sendgrid_key   : _("SENDGRID_KEY", ""),
+    redis_host     : _("REDIS_HOST", "127.0.0.1"),
+    redis_port     : Number(_("REDIS_PORT", "6379")),
+    redis_auth     : _("REDIS_AUTH", "")
 };

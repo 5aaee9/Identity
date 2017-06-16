@@ -30,7 +30,7 @@ module.exports.get = (req, res, next) => {
                 log: "login in oauth api",
                 user: user._id,
                 type: logSchema.TYPES.CLIENT
-            })
+            });
             nlog.save(() => {
                 return res.send(user.profile)
             });

@@ -21,22 +21,22 @@ module.exports.post = (req, res, next) => {
             doc.profile.UUID = req.body.clientToken
         }
         doc.save(err => {
-            if (err) { res.status(403).send(errors.ForbiddenOperationExceptionUserAccount); return }
+            if (err) { return res.status(403).send(errors.ForbiddenOperationExceptionUserAccount) }
             let retDoc = {
                 accessToken: doc.profile.Token,
                 clientToken: doc.profile.UUID,
                 selectedProfile: {
                     id: doc.profile.UserID,
-                    name: doc.profile.authToken,
+                    name: doc.username,
                 },
                 availableProfiles: [{
                     id: doc.profile.UserID,
-                    name: doc.profile.authToken,
+                    name: doc.username,
                 }]
             };
             if (req.body.requestUser) {
                 retDoc["user"] = {
-                id: doc.profile.UserID
+                    id: doc.profile.UserID
                 }
             }
             res.send(retDoc)

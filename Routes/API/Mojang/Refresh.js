@@ -18,6 +18,9 @@ module.exports.post = (req, res, next) => {
         if (!doc || err) { res.status(403).send(errors.ForbiddenOperationExceptionUserToken); return }
         if (req.body.selectedProfile) { res.status(400).send(errors.IllegalArgumentException); return }
         doc.refresh();
+        if (req.body.clientToken){
+            doc.profile.UUID = req.body.clientToken
+        }
         doc.save(err => {
             if (err) { res.status(500).send(errors.ServerProblem); return }
             let retDoc = {
@@ -25,12 +28,12 @@ module.exports.post = (req, res, next) => {
                 clientToken: doc.profile.UUID,
                 selectedProfile: {
                     id: doc.profile.UserID,
-                    name: doc.profile.authToken,
+                    name: doc.username,
                 },
             };
             if (req.body.requestUser) {
                 retDoc["user"] = {
-                    id: doc.profile.UserID
+                    id: doc.username
                 }
             }
             res.send(retDoc)
