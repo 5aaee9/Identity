@@ -9,10 +9,11 @@ dependencies:
 machine:
   node:
     version: 7.7.2
+  environment:
+    REDIS_PORT: 6391
 
 test:
   pre:
-    - sudo service redis-server status || sudo service redis-server stop || echo "Failure"
     - ./redis-3.2.0/src/redis-server --port 6391 --daemonize yes
     
   post:
