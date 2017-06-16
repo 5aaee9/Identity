@@ -13,7 +13,7 @@ const app = express();
 const moment = require('./Libs/moment.min');
 const link = require("./Db/Redis").link;
 
-app.use(logger('combined'));
+// app.use(logger('combined'));
 
 app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'jade');
