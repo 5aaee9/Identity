@@ -72,7 +72,7 @@ describe("API", function(){
                             jsonObj.accessToken.should.equal(doc.profile.Token)
                             jsonObj.clientToken.should.equal(doc.profile.UUID)
                             jsonObj.selectedProfile.id.should.equal(doc.profile.UserID)
-                            jsonObj.selectedProfile.name.should.equal(doc.profile.authToken)
+                            jsonObj.selectedProfile.name.should.equal(doc.username)
 
                             done()
                         })
@@ -114,7 +114,7 @@ describe("API", function(){
                             jsonObj.accessToken.should.equal(doc.profile.Token)
                             jsonObj.clientToken.should.equal(doc.profile.UUID)
                             jsonObj.selectedProfile.id.should.equal(doc.profile.UserID)
-                            jsonObj.selectedProfile.name.should.equal(doc.profile.authToken)
+                            jsonObj.selectedProfile.name.should.equal(doc.username)
 
                             done()
                         })
