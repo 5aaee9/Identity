@@ -2,27 +2,26 @@
  * Created by Indexyz on 2017/4/15.
  */
 'use strict';
-const db = require('mongoose');
-const userSchema = require('../../../Db/Schema/User');
+
+const profileService = require("../../../Db/Service/profileService");
+const userService = require("../../../Db/Service/userService");
 
 module.exports.get = (req, res, next) => {
-    let username = req.params.username,
-        userModel = db.model('users', userSchema);
-    userModel.findOne({
-        username: username
-    }, (err, doc) => {
-        if (err || !doc) { res.status(401).send({"errno": "1", "msg": "User not found."}); return }
-        res.send({
-            player_name: doc.username,
-            last_update: doc.skin ? undefined : doc.skin.lastUpdate.getTime(),
-            model_preference: ["default", "cape", doc.skin.slim ? "slim" : null].filter(item => item !== null),
-            skins: {
-                "default": doc.skin.skin,
-                slim: doc.skin.slim,
-                cap: doc.skin.cap,
-            },
-            cap: doc.skin.cap
+    let username = req.params.username;
+    profileService.getProfileByUserName(username, profile => {
+        if (!profile) { return res.status(401).send({"errno": "1", "msg": "User not found."}) }
+        userService.getProfileOwner(profile._id, user => {
+            res.send({
+                player_name: profile.UserName,
+                last_update: user.skin ? undefined : user.skin.lastUpdate.getTime(),
+                model_preference: ["default", "cape", user.skin.slim ? "slim" : null].filter(item => item !== null),
+                skins: {
+                    "default": user.skin.skin,
+                    slim: user.skin.slim,
+                    cap: user.skin.cap,
+                },
+                cap: user.skin.cap
+            })
         })
     })
-
 };

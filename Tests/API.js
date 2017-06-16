@@ -6,24 +6,28 @@ const logSchema = require('../Db/Schema/Log');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 
+const userService = require('../Db/Service/userService');
+const profileService = require('../Db/Service/profileService');
+
 let application = require("../App"),
     userModel = db.model(DbDefine.Db.USER_DB, userSchema),
     logModel = db.model(DbDefine.Db.LOGS_DB, logSchema);
 
 describe("API", function(){
-    var user, password;
+    var user, password, profile;
     
     beforeEach(function(done){
         password = stringLib.randomString(16)
-        user = new userModel({
-            username: stringLib.randomString(8),
-            password: password,
-            email: "test@email.com"
+ 
+        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+            if (err) { return done(err); }
+            user = tuser; 
+            userService.getProfile(user, tprofile => {
+                if (!tprofile) return done(new Error("Don't get profile"))
+                profile = tprofile
+                done()
+            })
         })
-        user.generatorID();
-        user.refresh();
-        user.refreshSession();
-        user.save(done)
     })
     
     describe("Mojang API", function(){
@@ -50,7 +54,17 @@ describe("API", function(){
         })
         describe("User Inferce", function(){
 
+            beforeEach(done => {
+                userModel.findOne({
+                    _id: user._id
+                }).then(doc => {
+                    user = doc;
+                    done();
+                })
+            })
+
             it("test authenticate", function(done){
+                this.timeout(6000)
                 request(application)
                     .post("/api/mojang/authenticate")
                     .set("content-type", "application/json")
@@ -62,19 +76,16 @@ describe("API", function(){
                     .end(function(err, res){
                         if (err) return done(err)
                         let jsonObj = JSON.parse(res.text);
-                        // Refresh Docment because doc is change
                         userModel.findOne({
                             _id: user._id
-                        }, (err, doc) => {
-                            if (err) return done(err)
-                            if (!doc) return done(new Error("Not found user"))
-                            
-                            jsonObj.accessToken.should.equal(doc.profile.Token)
-                            jsonObj.clientToken.should.equal(doc.profile.UUID)
-                            jsonObj.selectedProfile.id.should.equal(doc.profile.UserID)
-                            jsonObj.selectedProfile.name.should.equal(doc.username)
-
-                            done()
+                        }).then(doc => {
+                            profileService.getProfileById(doc.selectProfile, profile => {
+                                jsonObj.accessToken.should.equal(profile.accessToken)
+                                jsonObj.clientToken.should.equal(profile.clientToken)
+                                jsonObj.selectedProfile.id.should.equal(profile.ProfileID)
+                                jsonObj.selectedProfile.name.should.equal(profile.UserName)
+                                done()
+                            })
                         })
                     })
                     
@@ -97,25 +108,19 @@ describe("API", function(){
                     .post("/api/mojang/refresh")
                     .set("content-type", "application/json")
                     .send({
-                        accessToken: user.profile.Token,
-                        clientToken: user.profile.UUID
+                        accessToken: profile.accessToken,
+                        clientToken: profile.clientToken
                     })
                     .expect(200)
                     .end(function(err, res){
                         if (err) return done(err)
                         let jsonObj = JSON.parse(res.text);
                         // Refresh Docment because doc is change
-                        userModel.findOne({
-                            _id: user._id
-                        }, (err, doc) => {
-                            if (err) return done(err)
-                            if (!doc) return done(new Error("Not found user"))
-                            
-                            jsonObj.accessToken.should.equal(doc.profile.Token)
-                            jsonObj.clientToken.should.equal(doc.profile.UUID)
-                            jsonObj.selectedProfile.id.should.equal(doc.profile.UserID)
-                            jsonObj.selectedProfile.name.should.equal(doc.username)
-
+                         profileService.getProfileById(user.selectProfile, profile => {
+                            jsonObj.accessToken.should.equal(profile.accessToken)
+                            jsonObj.clientToken.should.equal(profile.clientToken)
+                            jsonObj.selectedProfile.id.should.equal(profile.ProfileID)
+                            jsonObj.selectedProfile.name.should.equal(profile.UserName)
                             done()
                         })
                     })
@@ -126,7 +131,7 @@ describe("API", function(){
                     .post("/api/mojang/refresh")
                     .set("content-type", "application/json")
                     .send({
-                        accessToken: user.profile.Token,
+                        accessToken: profile.accessToken,
                         clientToken: "error-client-token"
                     })
                     .expect(403)
@@ -138,8 +143,8 @@ describe("API", function(){
                     .post("/api/mojang/refresh")
                     .set("content-type", "application/json")
                     .send({
-                        accessToken: user.profile.Token,
-                        clientToken: user.profile.UUID,
+                        accessToken: profile.accessToken,
+                        clientToken: profile.clientToken,
                         selectedProfile: "true"
                     })
                     .expect(400)
@@ -151,8 +156,8 @@ describe("API", function(){
                     .post("/api/mojang/validate")
                     .set("content-type", "application/json")
                     .send({
-                        accessToken: user.profile.Token,
-                        clientToken: user.profile.UUID,
+                        accessToken: profile.accessToken,
+                        clientToken: profile.clientToken,
                     })
                     .expect(204)
                     .end(done)
@@ -163,7 +168,7 @@ describe("API", function(){
                     .post("/api/mojang/validate")
                     .set("content-type", "application/json")
                     .send({
-                        accessToken: user.profile.Token,
+                        accessToken: profile.accessToken,
                         clientToken: "error-client-token",
                     })
                     .expect(403)
@@ -198,8 +203,8 @@ describe("API", function(){
                 request(application)
                     .post("/api/mojang/invalidate")
                     .send({
-                        accessToken: user.profile.Token,
-                        clientToken: user.profile.UUID,
+                        accessToken: profile.accessToken,
+                        clientToken: profile.clientToken,
                     })
                     .expect(204)
                     .end(done)
@@ -209,7 +214,7 @@ describe("API", function(){
                 request(application)
                     .post("/api/mojang/invalidate")
                     .send({
-                        accessToken: user.profile.Token,
+                        accessToken: profile.accessToken,
                         clientToken: "error-client-token",
                     })
                     .expect(204)
@@ -217,46 +222,6 @@ describe("API", function(){
             })
 
         })
-    })
-
-    describe("Server", function(){
-        it("ping", function(done){
-            request(application)
-                .get("/api/server/ping")
-                .expect(200)
-                .end(done)
-        })
-
-        it("login by token with error data", function(done){
-            request(application)
-                .post("/api/server/loginByToken")
-                .expect(412)
-                .end(done)
-        })
-
-        it("login by token", function(done){
-            request(application)
-                .post("/api/server/loginByToken")
-                .send({
-                    "ip": "127.0.0.1",
-                    "token": user.profile.authToken,
-                    "message": "${player} joined server"
-                })
-                .expect(200)
-                .end(function(err, res){
-                    if (err) return done(err);
-                    logModel.findOne({
-                        user: user._id,
-                        ip: "127.0.0.1"
-                    }, (err, doc) => {
-                        if (err) return done(err);
-                        doc.should.be.ok();
-                        doc.log.should.be.equal(user.username + " joined server")
-                        done()
-                    })
-                })
-        })
-
     })
 
     describe("Skin", function(){
@@ -270,21 +235,21 @@ describe("API", function(){
 
         it("get skin", function(done){
             request(application)
-                .get("/api/skin/" + user.username + ".json")
+                .get("/api/skin/" + profile.UserName + ".json")
                 .expect(200)
                 .end(done)
         })
 
         it("get user cap", function(done){
             request(application)
-                .get("/api/skin/cap/" + user.username + ".png")
+                .get("/api/skin/cap/" + profile.UserName + ".png")
                 .expect(302)
                 .end(done)
         })
 
         it("get user skin", function(done){
             request(application)
-                .get("/api/skin/skin/" + user.username + ".png")
+                .get("/api/skin/skin/" + profile.UserName + ".png")
                 .expect(302)
                 .end(done)
         })

@@ -2,19 +2,15 @@
  * Created by Indexyz on 2017/4/11.
  */
 "use strict";
-const db = require("mongoose");
-const userSchema = require("../../../Db/Schema/User");
+const profileService = require("../../../Db/Service/profileService");
 const errors = require("./Errors");
 
 module.exports.post = (req, res, next) => {
-    let token = req.body.accessToken,
-        uuid = req.body.clientToken,
-        userModel = db.model("users", userSchema);
-    userModel.findOne(uuid ? {
-        "profile.UUID": uuid,
-        "profile.Token": token
-    } : { "profile.Token": token }, (err, doc) => {
-        if (err || !doc) { return res.status(403).send(errors.ForbiddenOperationExceptionUserToken) }
-        res.status(204).send();
+    let accessToken = req.body.accessToken,
+        clientToken = req.body.clientToken;
+
+    profileService.getProfile(accessToken, clientToken, profile => {
+        if (!profile) return errors.makeError(res, errors.ForbiddenOperationExceptionUserToken)
+        res.status(204).send()
     })
 };

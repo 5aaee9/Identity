@@ -1,43 +1,33 @@
-/**
- * Created by Indexyz on 2017/4/11.
- */
-"use strict";
-const db = require("mongoose");
-const userSchema = require("../../../Db/Schema/User");
+const profileService = require("../../../Db/Service/profileService");
+const userService = require("../../../Db/Service/userService");
 const errors = require("./Errors");
 
 module.exports.post = (req, res, next) => {
-    let token = req.body.accessToken,
-        uuid = req.body.clientToken,
-        userModel = db.model("users", userSchema);
+    let accessToken = req.body.accessToken,
+        clientToken = req.body.clientToken;
 
-    userModel.findOne({
-        "profile.UUID": uuid,
-        "profile.Token": token
-    }, (err, doc) => {
-        if (!doc || err) { res.status(403).send(errors.ForbiddenOperationExceptionUserToken); return }
-        if (req.body.selectedProfile) { res.status(400).send(errors.IllegalArgumentException); return }
-        doc.refresh();
-        if (req.body.clientToken){
-            doc.profile.UUID = req.body.clientToken
-        }
-        doc.save(err => {
-            if (err) { res.status(500).send(errors.ServerProblem); return }
-            let retDoc = {
-                accessToken: doc.profile.Token,
-                clientToken: doc.profile.UUID,
-                selectedProfile: {
-                    id: doc.profile.UserID,
-                    name: doc.username,
-                },
-            };
-            if (req.body.requestUser) {
-                retDoc["user"] = {
-                    id: doc.username
-                }
+    profileService.getProfile(accessToken, clientToken, profile => {
+
+        if (!profile) { return errors.makeError(res, errors.ForbiddenOperationExceptionUserToken) }
+        userService.getProfileOwner(profile._id, user => {
+            if (req.body.selectedProfile) {
+                userService.hasProfile(user, req.body.selectedProfile, selectProfile => {
+                    if (!selectProfile) {
+                        return errors.makeError(res, errors.IllegalArgumentException)
+                    }
+                })
             }
-            res.send(retDoc)
+            if (clientToken !== profile.clientToken){
+                clientToken = ""
+            }
+            profile.refresh();
+            if (Boolean(clientToken)){
+                profile.clientToken = clientToken
+            }
+            profile.save(err => {
+                if (err) { return errors.makeError(res, errors.ServerProblem) }
+                userService.makeDocment(user, data => res.send(data))
+            })
         })
     })
-
 };

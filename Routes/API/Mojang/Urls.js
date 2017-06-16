@@ -11,14 +11,14 @@ let router = express.Router();
 router.use((req, res, next) => {
 
     if (req.headers["content-type"] === undefined || req.headers["content-type"].indexOf("application/json") === -1){
-        res.status(415).send(errors.UnsupportedMediaType);
+        return errors.makeError(res, errors.UnsupportedMediaType);
     } else {
         next();
     }
 });
 
 router.get("*", (req, res, next) => {
-    res.status(405).send(errors.MethodNotAllowed);
+    return errors.makeError(res, errors.MethodNotAllowed);
 });
 
 router.post("/authenticate", require("./Authenticate").post);

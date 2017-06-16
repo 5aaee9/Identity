@@ -25,7 +25,6 @@ module.exports.post = (req, res, next) => {
         _id: req.session.user._id
     }, (err, doc) => {
         let funcs = {
-            "resetUserKey": (func) => { doc.refresh(); func(undefined, "保存成功") },
             "changeUserName": (func) => {
                 let username = req.body.username;
                 if (username.length < 3){ func("用户名长度太小");return }

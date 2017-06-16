@@ -12,8 +12,9 @@ const db = require('mongoose');
 const app = express();
 const moment = require('./Libs/moment.min');
 const link = require("./Db/Redis").link;
+const dbDefine = require("./Define/Db").Db;
 
-// app.use(logger('combined'));
+app.use(logger('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
 app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'jade');
@@ -30,6 +31,8 @@ let redis = null;
 link(r => {
     redis = r;
 });
+let userModel = db.model(dbDefine.USER_DB, require("./Db/Schema/User")),
+    profileModel = db.model(dbDefine.PROFILE_DB, require("./Db/Schema/Profile"));
 
 // Database connection
 require("./Db/Db")(() => {
@@ -37,13 +40,23 @@ require("./Db/Db")(() => {
 
     app.use(function(req, res, next) {
         res.locals.config = config;
-        let userModel = db.model('users', require("./Db/Schema/User"));
         if (req.session.user) {
             userModel.findOne({
                 _id: req.session.user._id
             }, (err, doc) => {
-                res.locals.user = doc || req.session.user;
-                next()
+                let user = doc || req.session.user;
+                // res.locals.user = doc || req.session.user;
+                profileModel.findOne({
+                    _id: user.selectProfile
+                }).then(doc => {
+                    if (!doc) { return next() }
+                    user.profile = doc;
+                    user.username = doc.UserName;
+                    res.locals.user = user;
+                    next()
+                }, err => {
+                    next(err)
+                })
             })
         } else {
             res.locals.user = null;

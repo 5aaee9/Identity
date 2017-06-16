@@ -22,23 +22,6 @@ block panel
         .mdl-cell.mdl-cell--6-col.mdl-cell--8-col-tablet
             .mdl-card.mdl-shadow--2dp.index--fullwidth
                 .mdl-card__title
-                    h2.mdl-card__title-text 当前登陆Key
-                .mdl-card__supporting-text
-                    | 登陆 Key 是进行服务器认证所需要的密钥
-                    br
-                    | 在不支持 Identity 的启动器上将盗版登陆用户名设置为登陆 Key 也可以达到登陆的效果
-                    br
-                    | 当前 Key: #{user.profile.authToken}
-                .mdl-card__actions.mdl-card--border
-                    form(method="POST", id="resetUserKey")
-                        input(value="resetUserKey", name="type", hidden=true)
-                        a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(
-                            onclick="document.getElementById(\"resetUserKey\").submit();"
-                        )
-                            | 重置
-        .mdl-cell.mdl-cell--6-col.mdl-cell--8-col-tablet
-            .mdl-card.mdl-shadow--2dp.index--fullwidth
-                .mdl-card__title
                     h2.mdl-card__title-text 当前用户名
                 .mdl-card__supporting-text
                     | 没啥好讲的 就是显示的用户名呗

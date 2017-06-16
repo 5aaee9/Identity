@@ -7,6 +7,10 @@
  */
 const db = require("mongoose");
 const userSchema = require("../../Db/Schema/User");
+const userService = require("../../Db/Service/userService");
+
+let userModel = db.model(require('../../Define/Db').Db.USER_DB, userSchema);
+
 
 module.exports.get = (req, res, next) => {
     res.render("auth/login", {
@@ -15,22 +19,19 @@ module.exports.get = (req, res, next) => {
 };
 
 module.exports.post = (req, res, next) => {
-    let username = req.body.username,
-        password = req.body.password,
-        userModel = db.model("users", userSchema);
+    let email = req.body.email,
+        password = req.body.password;
 
-    if (!username || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
+    if (!email || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
 
-    userModel.findOne({
-        username: username,
-        password: userSchema.getSaltedPassword(password)
-    }, (err, doc) => {
-        if (err || !doc) { res.render("auth/login", {"e": "用户信息未找到"}); return }
+    userService.login(email, password, (err, doc) => {
+        if (err) { return next(err); }
         req.session.user = doc;
+        console.log(req.session);
         if (!req.query.redirect){
             res.redirect("/")
         } else {
             res.redirect(req.query.redirect)
         }
-    })
+    });
 };

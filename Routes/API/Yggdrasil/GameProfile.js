@@ -1,49 +1,45 @@
-const db = require("mongoose");
-const userSchema = require("../../../Db/Schema/User");
-const DbDefine = require("../../../Define/Db").Db;
-const errors = require("../Mojang/Errors");
+const profileService = require("../../../Db/Service/profileService");
+const Promise = require('bluebird');
 
-let userModel = db.model(DbDefine.USER_DB, userSchema);
 
 module.exports.username2uuid = (req, res, next) => {
-    userModel.findOne({
-        username: req.params["userName"]
-    }).then((doc) => {
-        if (!doc) { return res.status(204).send() }
+    profileService.getProfileByUserName(req.params["userName"], profile => {
+        if (!profile) return res.status(204).send();
         res.send({
-            id: doc.profile.UserID,
-            name: doc.username
+            id: profile.ProfileID,
+            name: profile.UserName
         })
     })
 };
 
 module.exports.uuid2username = (req, res, next) => {
-    userModel.findOne({
-        "profile.UserID": req.params["uuid"]
-    }).then(doc => {
-        if (!doc) { return res.status(204).send() }
+    profileService.getProfileByProfileId(req.params["uuid"], profile => {
+        if (!profile) return res.status(204).send();
         res.send([
             {
-                name: username
+                name: profile.UserName
             }
-        ])
-    })
+        ].concat(profile.userNameHistory))
+    });
 };
 
 module.exports.name2uuids = (req, res, next) => {
-    let names = JSON.parse(req.body);
-    names.map(x => {
-        userModel.findOne({
-            username: x
-        }).then(u => {
-            if (!u) { return null }
-            return {
-                id: u.profile.UserID,
-                name: u.username,
-                legacy: true
-            }
+    function makePromise(username) {
+        return new Promise(resolve => {
+            profileService.getProfileByUserName(username, profile => {
+                resolve({
+                    id: profile.ProfileID,
+                    name: profile.UserName,
+                    legacy: true
+                })
+            })
         })
-    }).then(x => {
-        res.send(x)
-    })
+    }
+
+    let names = JSON.parse(req.body);
+
+    Promise.all(names.map(item => makePromise(item)))
+        .then(data => {
+            res.send(data)
+        })
 };

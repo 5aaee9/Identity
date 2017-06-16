@@ -7,6 +7,7 @@ const userAuthSchema = require('../Db/Schema/UserAuth');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 const Tsession = require('supertest-session');
+const userService = require('../Db/Service/userService');
 
 let application = require("../App"),
     userModel = db.model(DbDefine.Db.USER_DB, userSchema),
@@ -19,19 +20,14 @@ describe("Member", function(){
     before(function(done){
         session = Tsession(application);
         password = stringLib.randomString(16)
-        user = new userModel({
-            username: stringLib.randomString(8),
-            password: password,
-            email: "test@email.com"
-        })
-        user.generatorID();
-        user.refresh();
-        user.refreshSession();
-        user.save(err => {
-            if (err) return done(err);
+
+
+        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+            if (err) { return done(err); }
+            user = tuser; 
             session.post('/auth/login')
                    .send({
-                        username: user.username,
+                        email: user.email,
                         password: password
                     })
                    .expect(302)
@@ -39,7 +35,8 @@ describe("Member", function(){
                         if(err) return done(err);
                         done();
                     });
-        });
+        })
+
     })
 
     it("get member", function(done){
@@ -60,25 +57,7 @@ describe("Member", function(){
                .expect(200)
                .end(done);
     })
-    
-    it("reset user-profile in profile", function(done){
-        session.post("/member/profile")
-               .send({
-                   type: "resetUserKey"
-               })
-               .expect(200)
-               .end(function(err, res){
-                   if (err) { return done(err); }
-                    userModel.findOne({
-                        _id: user._id
-                    }, (err, doc) => {
-                        if (err) { return done(err); }
-                        doc.profile.authToken.should.not.equal(user.profile.authToken);
-                        user = doc;
-                        done();
-                    });
-               });
-    })
+
 
     it("set username in profile page", function(done){
         let randomUsername = stringLib.randomString(16);

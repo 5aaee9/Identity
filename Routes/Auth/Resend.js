@@ -3,22 +3,20 @@
  */
 "use strict";
 
-const db = require("mongoose");
-const userSchema = require("../../Db/Schema/User");
+const userService = require("../../Db/Service/userService");
 
 module.exports.get = (req, res, next) => {
     let email = req.query.mail;
+
     if (!email) { res.redirect("/auth/register"); return }
-    let userModel = db.model("users", userSchema);
-    userModel.findOne({
-        email: email
-    }, (err, doc) => {
-        if (!doc.emailToken) { res.redirect("/"); return }
-        if (err) { res.redirect("/auth/register"); return }
-        doc.sendMail(req.protocol + "://" + req.get("host"), err => {
-            if (err) { res.redirect("/"); return }
+
+    userService.foundByEmail(email, (err, user) => {
+        if (!user.emailToken) { return res.redirect("/") }
+        if (err) { return res.redirect("/auth/register") }
+        user.sendMail(req.protocol + "://" + req.get("host"), err => {
+            console.log("asd")
             res.render("auth/mailed", {
-                "mail": doc.email
+                "mail": user.email
             })
         })
     })

@@ -3,8 +3,10 @@
  */
 'use strict';
 const db = require('mongoose');
-const userSchema = require('../../../Db/Schema/User');
 const grid = require('gridfs-stream');
+
+const profileService = require("../../../Db/Service/profileService");
+const userService = require("../../../Db/Service/userService");
 
 grid.mongo = db.mongo;
 
@@ -16,12 +18,13 @@ module.exports.get = (req, res, next) => {
 };
 
 let getSkin = (username, func) => {
-    let userModel = db.model('users', userSchema);
-    userModel.findOne({
-        username: username
-    }, (err, doc) => {
-        func(err, doc.skin)
-    })
+
+    profileService.getProfileByUserName(username, profile => {
+        if (!profile) { return func(new Error("user not found")) }
+        userService.getProfileOwner(profile._id, user => {
+            func(null, user.skin)
+        })
+    });
 };
 
 module.exports.getSkin = (req, res, next) => {

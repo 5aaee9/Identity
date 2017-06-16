@@ -5,6 +5,8 @@ const userSchema = require('../Db/Schema/User');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 
+const userService = require('../Db/Service/userService');
+
 let application = require("../App"),
     userModel = db.model(DbDefine.Db.USER_DB, userSchema);
 
@@ -70,17 +72,18 @@ describe("User", function () {
                 this.timeout(6000)
                 randomUsername = stringLib.randomString(8),
                 randomPassword = stringLib.randomString(16);
+                randomemail = stringLib.randomString(16) + "@true.mail";
                 request(application)
                     .post("/auth/register")
                     .send({
                         username: randomUsername,
                         password: randomPassword,
-                        email: "test@true.mail"
+                        email: randomemail
                     })
                     .expect(200)
                     .end(function(err, res){
                         userModel.findOne({
-                            username: randomUsername
+                            email: randomemail
                         }, (err, doc) => {
                             if (err) return done(err);
                             if (!doc) return done(new Error("Not found user"))
@@ -89,6 +92,7 @@ describe("User", function () {
                 })
             })
             it("resend email", function(done){
+                this.timeout(10000)
                 request(application)
                     .get("/auth/resend?mail=test@true.mail")
                     .expect(200)
@@ -101,6 +105,7 @@ describe("User", function () {
                     .end(done)
             })
             it("Email Verify", function(done){
+                this.timeout(10000)
                 request(application)
                     .post("/auth/register")
                     .send({
@@ -150,15 +155,8 @@ describe("User", function () {
         var user, cookies, password;
         beforeEach(function(done){
             password = stringLib.randomString(16)
-            user = new userModel({
-                username: stringLib.randomString(8),
-                password: password,
-                email: "test@email.com"
-            })
-            user.generatorID();
-            user.refresh();
-            user.refreshSession();
-            user.save(err => {
+            userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+                user = tuser
                 if (err) return done(err);
                 done();
             })
@@ -177,7 +175,7 @@ describe("User", function () {
             request(application)
                 .post('/auth/login')
                 .send({
-                    username: user.username,
+                    email: user.email,
                     password: password
                 })
                 .expect(302)
@@ -191,7 +189,7 @@ describe("User", function () {
             request(application)
                 .post('/auth/login?redirect=/')
                 .send({
-                    username: user.username,
+                    email: user.email,
                     password: password
                 })
                 .expect(302)

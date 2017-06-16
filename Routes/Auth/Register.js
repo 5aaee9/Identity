@@ -4,7 +4,8 @@
 "use strict";
 const db = require("mongoose");
 const mail = require("../../Utils/Mail");
-const userSchema = require("../../Db/Schema/User");
+const userService = require("../../Db/Service/userService");
+
 
 module.exports.get = (req, res, next) => {
     res.render("auth/register")
@@ -21,17 +22,8 @@ module.exports.post = (req, res, next) => {
         || password.length < 6) {
         res.status(401).render("auth/register", {"e": "数据检验出错"}); return;
     }
-    let userModel = db.model(require('../../Define/Db').Db.USER_DB, userSchema);
-    let user = new userModel({
-        username: username,
-        password: password,
-        email: email
-    });
-    user.generatorEmailToken();
-    user.generatorID();
-    user.refresh();
-    user.refreshSession();
-    user.save(err => {
+
+    userService.create(username, email, password, (err, user) => {
         if (err){ res.render("auth/register", {"e": err.message}); return; }
         user.sendMail(req.protocol + "://" + req.get("host"), err => {
             if (err){ res.render("auth/register", {"e": err.message}); return; }

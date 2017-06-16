@@ -8,6 +8,7 @@ const userSchema = require('../Db/Schema/User');
 const userAuthSchema = require('../Db/Schema/UserAuth');
 const Tsession = require('supertest-session');
 const fs = require("fs");
+const userService = require('../Db/Service/userService');
 
 let application = require("../App"),
     appModel = db.model(DbDefine.Db.APPS_DB, appScheam),
@@ -30,20 +31,13 @@ describe("OAuth Tests", function(){
         password = stringLib.randomString(16)
         appname = stringLib.randomString(16);
         session = Tsession(application);
-        user = new userModel({
-            username: stringLib.randomString(8),
-            password: password,
-            email: "test@email.com"
-        })
-        user.generatorID();
-        user.refresh();
-        user.refreshSession();
 
-        user.save(err => {
+        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+            user = tuser;
             if (err) return done(err);
             session.post('/auth/login')
                 .send({
-                    username: user.username,
+                    email: user.email,
                     password: password
                 })
                 .expect(302)

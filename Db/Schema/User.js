@@ -3,24 +3,19 @@ const mongoose = require('mongoose');
 const config = require('../../Config');
 const crypto = require('crypto');
 const uuid  = require('uuid');
-const stringHelper = require('../../Utils/String');
 const mail = require("../../Utils/Mail");
 
 
 let UserSchema = mongoose.Schema({
-    username: {type: String, unique: true, required: true, index: {unique: true}},
+    username: String,
     password: {type: String, required: true},
-    email: {type: String, unique: true, required: true, index: {unique: true}},
+    email: {type: String, unique: true, required: true},
     lastUsing: {type: Date, required: true, default: Date.now},
     join: {type: Date, required: true, default: Date.now},
     accessToken: {type: String, required: true},
     emailToken: {type: String},
-    profile: {
-        UUID: String,
-        Token: String,
-        UserID: String,
-        authToken: String
-    },
+    selectProfile: mongoose.Schema.Types.ObjectId,
+    profile: [],
     skin: {
         lastUpdate: Date,
         skin: { type: mongoose.Schema.Types.ObjectId },
@@ -55,17 +50,6 @@ UserSchema.methods.refreshSession = function(){
     this.accessToken = uuid.v4();
 };
 
-UserSchema.methods.refresh = function(){
-    this.profile.Token = stringHelper.replace(uuid.v4(), "-", "");
-    this.profile.UUID  = stringHelper.replace(uuid.v4(), "-", "");
-    this.profile.authToken  = stringHelper.randomString(16);
-};
-
-UserSchema.methods.generatorID = function(){
-    this.profile.UserID = stringHelper.replace(uuid.v4(), "-", "");
-    this.profile.authToken  = stringHelper.randomString(16);
-};
-
 UserSchema.methods.generatorEmailToken = function(){
     this.emailToken = uuid.v4();
 };
@@ -78,6 +62,13 @@ UserSchema.methods.sendMail = function (url, func) {
             func(err)
         }
     )
+};
+
+UserSchema.methods.cinit = function (profile) {
+    this.generatorEmailToken();
+    this.refreshSession();
+    this.selectProfile = profile._id;
+    this.profile.push(profile._id);
 };
 
 module.exports = UserSchema;
