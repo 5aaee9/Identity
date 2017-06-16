@@ -1,8 +1,19 @@
+dependencies:
+  pre:
+    - wget http://download.redis.io/releases/redis-3.2.0.tar.gz
+    - tar xzf redis-3.2.0.tar.gz
+    - cd redis-3.2.0 && make
+  cache_directories:
+    - redis-3.2.0
+
 machine:
   node:
     version: 7.7.2
 
 test:
+  pre:
+    - sudo service redis-server stop
+    - ./redis-3.2.0/src/redis-server --port 6391 --daemonize yes
   post:
     - ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec Tests 
     - cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
