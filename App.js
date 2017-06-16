@@ -11,12 +11,12 @@ const config = require('./Config');
 const db = require('mongoose');
 const app = express();
 const moment = require('./Libs/moment.min');
-const link = require("./Db/Redis").link
+const link = require("./Db/Redis").link;
 
+app.use(logger('combined'));
 
 app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'jade');
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -26,7 +26,6 @@ app.use(cookieSession({
 }));
 app.use(express.static(path.join(__dirname, 'Public')));
 
-
 let redis = null;
 link(r => {
     redis = r;
@@ -35,7 +34,6 @@ link(r => {
 // Database connection
 require("./Db/Db")(() => {
     // values
-    app.use(logger())
 
     app.use(function(req, res, next) {
         res.locals.config = config;
