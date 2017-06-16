@@ -67,7 +67,7 @@ describe("User", function () {
             })
         })
         describe("on", function(){
-            var randomUsername, randomPassword;
+            var randomUsername, randomPassword, user, randomemail;
             beforeEach(function(done){
                 this.timeout(6000)
                 randomUsername = stringLib.randomString(8),
@@ -87,6 +87,7 @@ describe("User", function () {
                         }, (err, doc) => {
                             if (err) return done(err);
                             if (!doc) return done(new Error("Not found user"))
+                            user = doc
                             done();
                         })
                 })
@@ -94,7 +95,7 @@ describe("User", function () {
             it("resend email", function(done){
                 this.timeout(10000)
                 request(application)
-                    .get("/auth/resend?mail=test@true.mail")
+                    .get("/auth/resend?mail=" + user.email)
                     .expect(200)
                     .end(done)
             })
@@ -111,13 +112,13 @@ describe("User", function () {
                     .send({
                         username: randomUsername,
                         password: randomPassword,
-                        email: "test@true.mail"
+                        email: randomemail
                     })
                     .expect(200)
                     .end(function(err, res){
                         if (err) return done(err);
                         userModel.findOne({
-                            username: randomUsername
+                            email: randomemail
                         }).then(doc => {
                             request(application)
                                 .get("/auth/email?code=" + doc.emailToken)
@@ -146,7 +147,7 @@ describe("User", function () {
             })
             afterEach(function(done){
                 userModel.remove({
-                    username: randomUsername
+                    _id: user._id
                 }, done)
             })
         })

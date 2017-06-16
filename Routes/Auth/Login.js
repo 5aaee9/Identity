@@ -27,7 +27,6 @@ module.exports.post = (req, res, next) => {
     userService.login(email, password, (err, doc) => {
         if (err) { return next(err); }
         req.session.user = doc;
-        console.log(req.session);
         if (!req.query.redirect){
             res.redirect("/")
         } else {

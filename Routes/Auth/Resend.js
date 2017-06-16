@@ -11,10 +11,10 @@ module.exports.get = (req, res, next) => {
     if (!email) { res.redirect("/auth/register"); return }
 
     userService.foundByEmail(email, (err, user) => {
+        if (!user) { return res.redirect("/auth/register") }
         if (!user.emailToken) { return res.redirect("/") }
         if (err) { return res.redirect("/auth/register") }
         user.sendMail(req.protocol + "://" + req.get("host"), err => {
-            console.log("asd")
             res.render("auth/mailed", {
                 "mail": user.email
             })
