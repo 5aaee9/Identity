@@ -12,8 +12,9 @@ machine:
 
 test:
   pre:
-    - sudo service redis-server stop
+    - sudo service redis-server status || sudo service redis-server stop || echo "Failure"
     - ./redis-3.2.0/src/redis-server --port 6391 --daemonize yes
+    
   post:
     - ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec Tests 
     - cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
