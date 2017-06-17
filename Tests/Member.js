@@ -73,6 +73,7 @@ describe("Member", function(){
                    userService.getProfile(user, profile => {
                        if (!profile) return done(new Error("not found profile"))
                        profile.UserName.should.equal(randomUsername)
+                       done()
                    })
                });
     })
