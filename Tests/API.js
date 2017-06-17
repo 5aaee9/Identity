@@ -277,6 +277,87 @@ describe("API", function(){
 
     })
 
+    describe("Yggdrasil", function(){
+        var serverId, tp, tu;
+        before(function(done){
+            serverId = stringLib.randomString(16)
+            userService.create(stringLib.randomString(8), "test@emmail.com", password, (err, tuser) => {
+                if (err) { return done(err); }
+                tu = tuser; 
+                userService.getProfile(user, tprofile => {
+                    if (!tprofile) return done(new Error("Don't get profile"))
+                    tp = tprofile
+                    done()
+                })
+            })
+        })
+
+        it("has joinserver before join server", function(done){
+            request(application).get("/api/yggdrasil/hasjoinserver?serverId=" + serverId + "&username=" + tp.UserName)
+            .expect(204)
+            .end(done)
+        })
+
+        it("test joinserver", function(done){
+            console.log(profile)
+            request(application).post("/api/yggdrasil/joinserver")
+            .send({
+                accessToken: tp.accessToken,
+                selectedProfile: tp.ProfileID,
+                serverId: serverId
+            })
+            .expect(204)
+            .end(done)
+        })
+        
+        it("test join server with unknow profile", function(done){
+            request(application).post("/api/yggdrasil/joinserver")
+            .send({
+                accessToken: "error access token",
+                selectedProfile: tp.ProfileID,
+                serverId: serverId
+            })
+            .expect(403)
+            .end(done)
+        })
+
+        it("test join server with error serverId", function(done){
+            request(application).get("/api/yggdrasil/hasjoinserver?serverId=test&username=" + tp.UserName)
+            .expect(204)
+            .end(done)
+        })
+
+        it("test has join server", function(done){
+            console.log(profile)
+
+            request(application).get("/api/yggdrasil/hasjoinserver?serverId=" + serverId + "&username=" + tp.UserName)
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+                jsonObj = JSON.parse(res.text)
+                jsonObj.should.not.be.null();
+
+                profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
+
+                    console.log(newProfile)
+                    console.log(res.text)
+
+                    jsonObj.id.should.be.equal(newProfile.accessToken)
+                    jsonObj.name.should.be.equal(newProfile.UserName)
+                    console.log(newProfile)
+                    done()
+                })
+            })
+        })
+
+        after(function(done){
+            userModel.remove({
+                email: "test@email.com2"
+            }).then(er => done())
+        })
+
+    })
+
     afterEach(function(done){
         userModel.remove({
             _id: user._id
