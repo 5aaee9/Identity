@@ -4,6 +4,8 @@
 "use strict";
 const db = require("mongoose");
 const userSchema = require("../../Db/Schema/User");
+const userService = require("../../Db/Service/userService");
+const Promise = require('bluebird');
 
 module.exports.get = (req, res, next) => {
     let userModel = db.model("users", userSchema);
@@ -18,34 +20,38 @@ module.exports.get = (req, res, next) => {
 };
 
 module.exports.post = (req, res, next) => {
-    let type = req.body.type,
-        userModel = db.model("users", userSchema);
+    let type = req.body.type;
 
-    userModel.findOne({
-        _id: req.session.user._id
-    }, (err, doc) => {
-        let funcs = {
-            "changeUserName": (func) => {
-                let username = req.body.username;
-                if (username.length < 3){ func("用户名长度太小");return }
-                doc.username = username;
-                func(undefined, "修改成功")
-            }
-        };
-        funcs[type]((err, info) => {
-            let ret = (err, info) => {
+    userService.findById(req.session.user._id, (err, user) => {
+        userService.getProfile(user, profile => {
+            new Promise((resolve, reject) => {
+                switch (type){
+                    case "changeUserName": {
+                        let username = req.body.username;
+                        if (username.length < 3) return reject(new Error("用户名长度太小"));
+                        profile.UserName = username;
+                        profile.save(err => {
+                            if (err) return reject(err);
+                            resolve()
+                        });
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            }).then(() => {
                 res.render("member/profile", {
-                    user: doc,
-                    e: err,
-                    info: info
+                    user: user
                 })
-            };
-            if (err) { ret(err, null) }
-            doc.save(err => {
-                if (err) { ret(err.message); return }
-                ret(undefined, info)
-            })
-        })
+            }, (err) => {
+                res.render("member/profile", {
+                    user: user,
+                    e: err.message
+                })
+            });
 
+        })
     });
+
 };

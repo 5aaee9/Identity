@@ -126,4 +126,12 @@ module.exports.foundByEmail = (email, callback) => {
     }).then(doc => {
         callback(null, doc)
     }, err => callback(err))
-}
+};
+
+module.exports.findById = (id, callback) => {
+    userModel.findOne({
+        _id: id
+    }).then(doc => {
+        callback(null, doc)
+    }, err => callback(err))
+};

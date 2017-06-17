@@ -5,11 +5,14 @@ const errors = require("../Mojang/Errors");
 module.exports.joinserver = (req, res, next) => {
     let accessToken = req.body.accessToken,
         selectedProfile = req.body.selectedProfile,
-        serverId = req.body.serverId;
+        serverId = req.body.serverId,
+        server = "Unknown" || req.params["server"];
     profileService.getProfileByProfileId(selectedProfile, profile => {
-        if (!profile || profile.accessToken !== accessToken) return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount)
+        if (!profile || profile.accessToken !== accessToken) return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount);
         req.db.redis.set(serverId, selectedProfile, (err, msg) => {
-            res.status(204).send()
+            profileService.loginServer(profile, "${player} joined " + server + " Server", req.ip, () => {
+                res.status(204).send()
+            })
         })
     })
 };
