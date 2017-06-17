@@ -70,14 +70,10 @@ describe("Member", function(){
                .expect(200)
                .end(function(err, res){
                    if (err) { return done(err) }
-                   userModel.findOne({
-                       username: randomUsername
-                   }, (err, doc) => {
-                       if (err) { return done(err); }
-                       doc.username.should.equal(randomUsername);
-                       user = doc;
-                       done();
-                   });
+                   userService.getProfile(user, profile => {
+                       if (!profile) return done(new Error("not found profile"))
+                       profile.UserName.should.equal(randomUsername)
+                   })
                });
     })
 
