@@ -299,7 +299,6 @@ describe("API", function(){
         })
 
         it("test joinserver", function(done){
-            console.log(profile)
             request(application).post("/api/yggdrasil/joinserver")
             .send({
                 accessToken: tp.accessToken,
@@ -328,8 +327,6 @@ describe("API", function(){
         })
 
         it("test has join server", function(done){
-            console.log(profile)
-
             request(application).get("/api/yggdrasil/hasjoinserver?serverId=" + serverId + "&username=" + tp.UserName)
             .expect(200)
             .end(function(err, res) {
@@ -338,21 +335,80 @@ describe("API", function(){
                 jsonObj.should.not.be.null();
 
                 profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
-
-                    console.log(newProfile)
-                    console.log(res.text)
-
                     jsonObj.id.should.be.equal(newProfile.accessToken)
                     jsonObj.name.should.be.equal(newProfile.UserName)
-                    console.log(newProfile)
                     done()
                 })
             })
         })
 
+        it("username2uuid with error username", function(done){
+            request(application).get("/api/yggdrasil/profiles/minecraft/test")
+            .expect(204)
+            .end(done)
+        })
+
+        it("username2uuid", function(done){
+            request(application).get("/api/yggdrasil/profiles/minecraft/" + tp.UserName)
+            .expect(200)
+            .end(function(err, res) {
+                if (err) return done(err);
+                jsonObj = JSON.parse(res.text)
+                jsonObj.should.not.be.null();
+
+                profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
+                    jsonObj.id.should.be.equal(newProfile.ProfileID)
+                    jsonObj.name.should.be.equal(newProfile.UserName)
+                    done()
+                })
+            })
+        })
+
+        it("uuid to username", function(done){
+            request(application).get("/api/yggdrasil/profiles/" + tp.ProfileID + "/names")
+            .expect(200)
+            .end(function(err, res){
+                if (err) return done(err);
+                res.text.should.equal('[{"name":"' + tp.UserName + '"}]')
+                done()
+            })
+        })
+
+        it("uuid to username with errro uuid", function(done){
+            request(application).get("/api/yggdrasil/profiles/error-uuid/names")
+            .expect(204)
+            .end(done)
+        })
+        
+        it("uuid to usernames", function(done){
+            request(application).post("/api/yggdrasil/profiles/minecraft")
+            .send([
+                tp.UserName,
+                profile.UserName
+            ])
+            .expect(200)
+            .end(done)
+        })
+
+        it("uuid with error usernames", function(done){
+            request(application).post("/api/yggdrasil/profiles/minecraft")
+            .send([
+                "error-user-name"
+            ])
+            .expect(200)
+            .end(done)
+        })
+
+
+        it("uuid to usernames with none args", function(done){
+            request(application).post("/api/yggdrasil/profiles/minecraft")
+            .expect(200)
+            .end(done)
+        })
+
         after(function(done){
             userModel.remove({
-                email: "test@email.com2"
+                email: "test@emmail.com"
             }).then(er => done())
         })
 
