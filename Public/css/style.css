@@ -48,6 +48,11 @@ body {
 
 main {
     flex: 1 0 auto !important;
+    padding-bottom: 24px;
+}
+
+.mdl-layout__drawer> .mdl-navigation > a {
+    padding-left: 32px !important;
 }
 
 footer {

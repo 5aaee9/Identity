@@ -22,7 +22,6 @@ i18n.configure({
     objectNotation: true,
     defaultLocale: "zh_CN"
 });
-i18n.setLocale("en_US");
 
 app.use(logger('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
