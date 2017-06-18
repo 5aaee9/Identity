@@ -14,7 +14,7 @@ block panel
         .mdl-cell.mdl-cell--6-col.mdl-cell--6-col-tablet
             .mdl-card.mdl-shadow--2dp.index--fullwidth
                 .mdl-card__title
-                    h2.mdl-card__title-text 我使用的应用
+                    h2.mdl-card__title-text=$("apps.header.usingApp")
                 - for app in userAuth
                     .mdl-list
                         .mdl-list__item
@@ -26,12 +26,12 @@ block panel
                                 span=app.name
                             a.mdl-list__item-secondary-action(href='/member/apps/cancel/' + app._id, id="clear-" + app._id)
                                 i.material-icons clear
-                            .mdl-tooltip(data-mdl-for='clear-' + app._id) 取消权限
+                            .mdl-tooltip(data-mdl-for='clear-' + app._id)=$("apps.message.cancelApp")
 
         .mdl-cell.mdl-cell--6-col.mdl-cell--6-col-tablet
             .mdl-card.mdl-shadow--2dp.index--fullwidth
                 .mdl-card__title
-                    h2.mdl-card__title-text 我申请的应用
+                    h2.mdl-card__title-text=$("apps.header.applyApp")
                 .mdl-list
                     - for app in createApps
                         .mdl-list__item

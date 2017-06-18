@@ -1,0 +1,82 @@
+{
+    "index": {
+        "content": {
+            "title": "Hello, welcome to Identity",
+            "message": "A simple minecraft login solution."
+        }
+    },
+    "register": "Register",
+    "login": "Login",
+    "member": {
+		"profile": "Profile",
+		"name": "Member",
+        "skin": "Skin",
+        "app": "Apps",
+		"index": "Index",
+        "page": {
+            "index": {
+                "lastLoginHistory": "Last 10 times login history",
+                "loginAddress": "Login at: ",
+                "lastSevenLogin": "Last 7 dayes login monitor"
+            }
+        }
+	},
+    "profile": {
+        "nowUsername": "Username",
+        "nowUsernameMessage": {
+            "1": "It's your username now.",
+            "2": "Some plugins will lost your information when you change the name"
+        }
+    },
+    "footer": {
+        "help": "Help",
+        "makeWithLove": "Made with love"
+    },
+    "edit": "Edit",
+    "form": {
+        "username": {
+            "name": "Username",
+            "errors": {
+				"longgerThen3": "Username should more than 3 chars"
+			}
+        },
+		"errors": {
+			"notAUrl": "Input is not a URL!"
+		}
+    },
+    "skin": {
+        "uploadSuccess": "Upload Success!",
+        "preview": "Skin Preview",
+        "upload": {
+            "header": "Skin Upload",
+            "button": "Upload File",
+            "alex": "The skin is for Alex"
+        },
+        "type": {
+            "cap": "Cap",
+            "skin": "Skin"
+        },
+        "api": {
+            "message": "API Endpoint",
+            "message-1": "You can use this urls in game"
+        }
+    },
+    "apps": {
+        "header": {
+            "usingApp": "Apps in Using",
+            "applyApp": "Apps you apply"
+        },
+        "message": {
+            "cancelApp": "Remove app token"
+        },
+        "create": {
+            "header": "Register a new application",
+			"create": "Create",
+            "application": {
+                "name": "Application name",
+                "homepage": "Homepage URL",
+                "callback": "Authorization callback URL"
+            }
+        }
+    }
+}

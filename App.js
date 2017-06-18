@@ -13,6 +13,16 @@ const app = express();
 const moment = require('./Libs/moment.min');
 const link = require("./Db/Redis").link;
 const dbDefine = require("./Define/Db").Db;
+const i18n = require("i18n");
+
+i18n.configure({
+    locals: ['en_US', 'zh_CN'],
+    directory: __dirname + "/Locales",
+    cookie: 'i18n',
+    objectNotation: true,
+    defaultLocale: "zh_CN"
+});
+i18n.setLocale("en_US");
 
 app.use(logger('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
@@ -25,6 +35,7 @@ app.use(cookieParser(config.salt));
 app.use(cookieSession({
     secret: config.salt
 }));
+app.use(i18n.init);
 app.use(express.static(path.join(__dirname, 'Public')));
 
 let redis = null;
@@ -39,6 +50,7 @@ require("./Db/Db")(() => {
     // values
 
     app.use(function(req, res, next) {
+        res.locals.$ = i18n.__ || (() => {});
         res.locals.config = config;
         if (req.session.user) {
             userModel.findOne({

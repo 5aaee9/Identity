@@ -13,23 +13,23 @@ block panel
         br
     .mdl-shadow--2dp.mdl-typography--text-center
         .mdl-card__title.underline
-            h2.mdl-card__title-text Register a new application
+            h2.mdl-card__title-text=$("apps.create.header")
         form(method='POST')
             .mdl-card__supporting-text
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                     input#appname.mdl-textfield__input(type='text' name="appname")
-                    label.mdl-textfield__label(for='appname') Application name
+                    label.mdl-textfield__label(for='appname')=$("apps.create.application.name")
                 br
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                     input#homepage.mdl-textfield__input(type='text' name="homepage" pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
-                    label.mdl-textfield__label(for='homepage') Homepage URL
-                    span.mdl-textfield__error Input is not a URL!
+                    label.mdl-textfield__label(for='homepage')=$("apps.create.application.homepage")
+                    span.mdl-textfield__error=$("form.errors.notAUrl")
                 br
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label
                     input#callback.mdl-textfield__input(type='text' name="callback" pattern="(http|ftp|https)+:\/\/[a-zA-Z0-9_\\-\\/.%]+")
-                    label.mdl-textfield__label(for='callback') Authorization callback URL
-                    span.mdl-textfield__error Input is not a URL!
+                    label.mdl-textfield__label(for='callback')=$("apps.create.application.callback")
+                    span.mdl-textfield__error=$("form.errors.notAUrl")
 
             .mdl-card__actions.mdl-card--border
                     button.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(type="submit")
-                        | Create
+                        | #{$("apps.create.create")}

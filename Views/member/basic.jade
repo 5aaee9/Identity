@@ -4,19 +4,19 @@ extends ../navbar
 block content
     .mdl-layout.mdl-js-layout.mdl-layout--fixed-drawer.mdl-layout--overlay-drawer-button.mdl-layout--large-screen-only
         .mdl-layout__drawer.mdl-color--blue-grey-800
-            span.mdl-layout-title.font-white Member
+            span.mdl-layout-title.font-white=$("member.name")
             nav.mdl-navigation
                 a.mdl-navigation__link.font-white(href='/member')
                     i.material-icons home
-                    |Index
+                    |#{$("member.index")}
                 a.mdl-navigation__link.font-white(href='/member/profile')
                     i.material-icons settings
-                    |Profile
+                    |#{$("member.profile")}
                 a.mdl-navigation__link.font-white(href='/member/skin')
                     i.material-icons accessibility
-                    |Skin
+                    |#{$("member.skin")}
                 a.mdl-navigation__link.font-white(href='/member/apps')
                     i.material-icons extension
-                    | Apps
+                    |#{$("member.app")}
     .container.panel-carv
         block panel

@@ -12,11 +12,11 @@ block body
                 // Navigation. We hide it in small screens.
                 nav.mdl-navigation.mdl-layout--large-screen-only.index-navigation
                     if (user == null)
-                        a.mdl-navigation__link(href='/auth/login') Login
-                        a.mdl-navigation__link(href='/auth/register') Register
+                        a.mdl-navigation__link(href='/auth/login')=$("login")
+                        a.mdl-navigation__link(href='/auth/register')=$("register")
                     else
                         a.mdl-navigation__link(href="/member/profile")=user.username
-                        a.mdl-navigation__link(href='/member') Member
+                        a.mdl-navigation__link(href='/member')=$("member.name")
         .mdl-layout__drawer
             if (user == null)
                 span.mdl-layout-title Identity
@@ -24,21 +24,21 @@ block body
                 span.mdl-layout-title="Hello, " + user.username
             nav.mdl-navigation
                 if (user == null)
-                    a.mdl-navigation__link(href='/auth/login') Login
-                    a.mdl-navigation__link(href='/auth/register') Register
+                    a.mdl-navigation__link(href='/auth/login')=$("login")
+                    a.mdl-navigation__link(href='/auth/register')=$("register")
                 else
                     a.mdl-navigation__link(href='/member')
                         i.material-icons.index-color--blue-grey-800 home
-                        |Member
+                        |#{$("member.name")}
                     a.mdl-navigation__link(href='/member/profile')
                         i.material-icons.index-color--blue-grey-800 settings
-                        |Profile
+                        |#{$("member.profile")}
                     a.mdl-navigation__link(href='/member/skin')
                         i.material-icons.index-color--blue-grey-800 accessibility
-                        | Skin
+                        |#{$("member.skin")}
                     a.mdl-navigation__link(href='/member/apps')
                         i.material-icons.index-color--blue-grey-800 extension
-                        | Apps
+                        |#{$("member.app")}
 
         block nearHeader
         main.mdl-layout__content
@@ -51,11 +51,11 @@ block body
                 .mdl-logo Identity
                 ul.mdl-mini-footer__link-list
                     li
-                        a(href='https://github.com/Indexyz/Identity/wiki') Help
+                        a(href='https://github.com/Indexyz/Identity/wiki')=$("footer.help")
             .mdl-mini-footer__right-section
                 ul.mdl-mini-footer__link-list
                     li
-                        a Made with love
+                        a=$("footer.makeWithLove")
                     li
                         a(href='https://github.com/Indexyz/Identity/') Identity
 

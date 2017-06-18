@@ -1,0 +1,79 @@
+{
+	"index": {
+		"content": {
+			"title": "你好 欢迎来到 Identity",
+			"message": "一个简单的 Minecraft 登陆解决方案"
+		}
+	},
+	"register": "注册",
+	"login": "登陆",
+	"member": {
+		"profile": "个人资料",
+		"name": "控制面板",
+		"skin": "皮肤",
+		"app": "第三方应用",
+		"index": "主页",
+		"page": {
+			"index": {
+				"lastLoginHistory": "最近十次登陆记录",
+				"loginAddress": "登陆地址: ",
+				"lastSevenLogin": "过去7日登陆情况"
+			}
+		}
+	},
+	"footer": {
+		"help": "帮助",
+		"makeWithLove": "用爱制成"
+	},
+	"profile": {
+		"nowUsername": "当前用户名",
+		"nowUsernameMessage": {
+			"1": "没啥好讲的 就是显示的用户名呗",
+			"2": "某些插件可能在用户名修改后不认识你了233 "
+		}
+	},
+	"edit": "编辑",
+	"form": {
+		"username": {
+			"name": "用户名",
+			"errors": {
+				"longgerThen3": "用户名长度至少为3位"
+			}
+		},
+		"errors": {
+			"notAUrl": "输入的不是一个网址"
+		}
+	},
+	"skin": {
+		"uploadSuccess": "上传成功!",
+		"preview": "皮肤预览",
+		"upload": {
+			"header": "皮肤上传",
+			"button": "上传文件",
+			"alex": "我的皮肤适合新版 Alex"
+		},
+		"type": {
+			"cap": "披风",
+			"skin": "皮肤"
+		},
+		"api": {
+			"message": "API接口",
+			"message-1": "使用以下地址在游戏中使用皮肤"
+		}
+	},
+	"apps": {
+		"header": {
+			"usingApp": "我使用的应用",
+			"applyApp": "我申请的应用"
+		},
+		"create": {
+			"header": "创建一个新应用",
+			"create": "创建",
+			"application": {
+				"name": "应用名称",
+				"homepage": "应用主页",
+				"callback": "回调地址"
+			}
+		}
+	}
+}

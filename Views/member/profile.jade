@@ -22,21 +22,21 @@ block panel
         .mdl-cell.mdl-cell--6-col.mdl-cell--8-col-tablet
             .mdl-card.mdl-shadow--2dp.index--fullwidth
                 .mdl-card__title
-                    h2.mdl-card__title-text 当前用户名
+                    h2.mdl-card__title-text=$("profile.nowUsername")
                 .mdl-card__supporting-text
-                    | 没啥好讲的 就是显示的用户名呗
+                    |#{$("profile.nowUsernameMessage.1")}
                     br
-                    | 某些插件可能在用户名修改后不认识你了233
+                    |#{$("profile.nowUsernameMessage.2")}
                     form(method="POST", id="postUserName")
                         .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text.index--fullwidth
                             input(value="changeUserName", name="type", hidden=true)
                             input#username.mdl-textfield__input(type='text', pattern="^\.{3,}$", name = "username")
-                            label.mdl-textfield__label(for='username') 用户名
-                            span.mdl-textfield__error 用户名长度至少为3位
+                            label.mdl-textfield__label(for='username')=$("form.username.name")
+                            span.mdl-textfield__error=$("form.username.errors.longgerThen3")
                 .mdl-card__actions.mdl-card--border
                     a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(
                         onclick="document.getElementById(\"postUserName\").submit();"
                     )
-                        | 修改
+                        |#{$("edit")}
         br
         br
