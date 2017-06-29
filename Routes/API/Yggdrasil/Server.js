@@ -24,7 +24,7 @@ module.exports.hasjoinserver = (req, res, next) => {
             if (profile.UserName !== req.query.username ) { return res.status(204).send() }
             if (!profile) { return res.status(204).send() }
             res.send({
-                id: profile.accessToken,
+                id: profile.ProfileID,
                 name: profile.UserName
             })
         })
