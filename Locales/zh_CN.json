@@ -74,6 +74,9 @@
 				"homepage": "应用主页",
 				"callback": "回调地址"
 			}
+		},
+		"message": {
+			"cancelApp": "移除认证令牌"
 		}
 	}
 }

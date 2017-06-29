@@ -10,7 +10,7 @@ module.exports.joinserver = (req, res, next) => {
     profileService.getProfileByProfileId(selectedProfile, profile => {
         if (!profile || profile.accessToken !== accessToken) return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount);
         req.db.redis.set(serverId, selectedProfile, (err, msg) => {
-            profileService.loginServer(profile, "${player} joined " + server + " Server", req.ip, () => {
+            profileService.loginServer(profile, "${player} joined " + server + " Server", req.headers['x-forwarded-for'] || req.ip, () => {
                 res.status(204).send()
             })
         })
