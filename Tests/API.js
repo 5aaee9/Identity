@@ -335,7 +335,7 @@ describe("API", function(){
                 jsonObj.should.not.be.null();
 
                 profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
-                    jsonObj.id.should.be.equal(newProfile.accessToken)
+                    jsonObj.id.should.be.equal(newProfile.ProfileID)
                     jsonObj.name.should.be.equal(newProfile.UserName)
                     done()
                 })
