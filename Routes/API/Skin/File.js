@@ -12,7 +12,7 @@ grid.mongo = db.mongo;
 
 module.exports.get = (req, res, next) => {
     if (!req.params.fileId || req.params.fileId === "undefined"){
-        return res.sendStatus(404);
+        return res.status(404).send();
     }
     res.redirect('/resources/' + req.params.fileId)
 };
