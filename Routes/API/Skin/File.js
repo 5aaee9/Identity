@@ -34,6 +34,18 @@ module.exports.getSkin = (req, res, next) => {
     })
 };
 
+module.exports.getSkinByUUID = (req, res, next) => {
+    profileService.getProfileByProfileId(req.params.profileId, profile => {
+        if (!profile){
+            res.redirect("https://public.hyperworld.xyz/Gamer/Minecraft/public.png")
+        } else {
+            userService.getProfileOwner(profile._id, user => {
+                res.redirect('/resources/' + user.skin.skin)
+            })
+        }
+    })
+};
+
 module.exports.getCup = (req, res, next) => {
     getSkin(req.params.username, (err, doc) => {
         if (err) { return res.sendStatus(404) }

@@ -254,6 +254,24 @@ describe("API", function(){
                 .end(done)
         })
 
+        it("get user uuid skin with error uuid", function(done){
+            request(application)
+                .get("/api/skin/uskin/notauuid.png")
+                .expect(302)
+                .end(function(err, res){
+                    if (err) return done(err);
+                    res.text.should.equal("Found. Redirecting to https://public.hyperworld.xyz/Gamer/Minecraft/public.png");
+                    done()
+                });
+        })
+
+        it("get user uuid skin", function (done) {
+            request(application)
+                .get("/api/skin/uskin/" + profile.ProfileID + ".png")
+                .expect(302)
+                .end(done);
+        })
+
         it("get user resources without id", function(done){
             request(application)
                 .get("/api/skin/textures/")
