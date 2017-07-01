@@ -40,6 +40,9 @@ module.exports.getSkinByUUID = (req, res, next) => {
             res.redirect("https://public.hyperworld.xyz/Gamer/Minecraft/public.png")
         } else {
             userService.getProfileOwner(profile._id, user => {
+                if (!user.skin.skin){
+                    return res.redirect("https://public.hyperworld.xyz/Gamer/Minecraft/public.png")
+                }
                 res.redirect('/resources/' + user.skin.skin)
             })
         }
