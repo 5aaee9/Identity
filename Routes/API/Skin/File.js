@@ -43,7 +43,16 @@ module.exports.getSkinByUUID = (req, res, next) => {
                 if (!user.skin.skin){
                     return res.redirect("https://public.hyperworld.xyz/Gamer/Minecraft/public.png")
                 }
-                res.redirect('/resources/' + user.skin.skin)
+                let gfs = grid(db.connection.db);
+                gfs.exist({
+                    _id: db.Types.ObjectId(user.skin.skin)
+                }, (err, found) => {
+                    if (!found || err) { res.status(404).send(); return }
+                    // res.setHeader("Content-disposition", "attachment;");
+                    gfs.createReadStream({
+                        _id: db.Types.ObjectId(user.skin.skin)
+                    }).pipe(res);
+                })
             })
         }
     })
