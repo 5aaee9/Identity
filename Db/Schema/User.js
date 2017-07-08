@@ -4,7 +4,7 @@ const config = require('../../Config');
 const crypto = require('crypto');
 const uuid  = require('uuid');
 const mail = require("../../Utils/Mail");
-
+const i18n = require("../../App").local;
 
 let UserSchema = mongoose.Schema({
     username: String,
@@ -56,7 +56,7 @@ UserSchema.methods.generatorEmailToken = function(){
 
 UserSchema.methods.sendMail = function (url, func) {
     mail.send(
-        this.email, "VeryAuth verify mail", "Your verify url: " +
+        this.email, i18n("mail.title"), i18n("mail.before") +
         url + "/auth/email?code=" + this.emailToken,
         err => {
             func(err)

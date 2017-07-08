@@ -83,5 +83,8 @@
         "register": {
             "disable": "Register system is disable now"
         }
+    "mail": {
+        "title": "Identity verify mail",
+        "before": "Your verify url: "
     }
 }

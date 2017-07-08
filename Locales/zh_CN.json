@@ -83,5 +83,8 @@
 		"register": {
 			"disable": "用户注册系统被关闭"
 		}
+	"mail": {
+		"title": "Identity 验证邮件",
+		"before": "请点击以下邮件来验证你的账号: "
 	}
 }

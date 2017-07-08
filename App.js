@@ -37,6 +37,8 @@ app.use(cookieSession({
 app.use(i18n.init);
 app.use(express.static(path.join(__dirname, 'Public')));
 
+module.exports.local = i18n.__;
+
 let redis = null;
 link(r => {
     redis = r;
