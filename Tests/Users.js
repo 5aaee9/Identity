@@ -65,6 +65,27 @@ describe("User", function () {
                         done();
                     })
             })
+            it("when unable to register", function(done){
+                process.env.DISABLE_REGISTER = 'true';
+                request(application)
+                    .get("/auth/register")
+                    .expect(403)
+                    .end(function(err, res){
+                        process.env.DISABLE_REGISTER = undefined;
+                        done()
+                    })
+            })
+
+            it("when unable to register post", function(done){
+                process.env.DISABLE_REGISTER = 'true';
+                request(application)
+                    .post("/auth/register")
+                    .expect(403)
+                    .end(function(err, res){
+                        process.env.DISABLE_REGISTER = undefined;
+                        done()
+                    })
+            })
         })
         describe("on", function(){
             var randomUsername, randomPassword, user, randomemail;

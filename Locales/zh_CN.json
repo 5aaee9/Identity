@@ -78,5 +78,10 @@
 		"message": {
 			"cancelApp": "移除认证令牌"
 		}
+	},
+	"auth": {
+		"register": {
+			"disable": "用户注册系统被关闭"
+		}
 	}
 }

@@ -1,0 +1,18 @@
+//
+   Created by Indexyz on 2017/7/8.
+
+extends ../navbar
+
+block title
+    title Identity · Mailed
+
+block content
+    .section.page-section.mdl-shadow--2dp
+        .index--block
+            h1 World denied you
+
+    .disagree-form.container
+        span.mdl-chip.mdl-chip--contact
+            span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
+                i.material-icons.mdl-chip__contact.chip--icon close
+            span.mdl-chip__text=$('auth.register.disable')

@@ -8,6 +8,10 @@ const userService = require("../../Db/Service/userService");
 
 
 module.exports.get = (req, res, next) => {
+    if (process.env['DISABLE_REGISTER'] === 'true'){
+        return res.status(403).render("auth/disable");
+    }
+
     res.render("auth/register")
 };
 
@@ -15,6 +19,10 @@ module.exports.post = (req, res, next) => {
     let username = req.body.username,
         password = req.body.password,
         email    = req.body.email;
+
+    if (process.env['DISABLE_REGISTER'] === 'true'){
+        return res.status(403).render("auth/disable");
+    }
 
     if (!username && !password && !email) { res.status(401).render("auth/register", {"e": "请填写全部的信息"}); return; }
     if (username.length < 3

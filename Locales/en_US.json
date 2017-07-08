@@ -78,5 +78,10 @@
                 "callback": "Authorization callback URL"
             }
         }
+    },
+    "auth": {
+        "register": {
+            "disable": "Register system is disable now"
+        }
     }
 }

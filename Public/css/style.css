@@ -90,25 +90,18 @@ footer {
     padding-bottom: 24px;
 }
 
-.login-form {
+.login-form,
+.register-form,
+.disagree-form{
     width: 100%;
     text-align: center;
-}
-.login-form {
     padding-left: 0% !important;
 }
 
 .input--text {
     width: 60%;
 }
-.login-form {
-    /*margin-top: 5%;*/
-}
-.register-form {
-    width: 100%;
-    text-align: center;
-    padding-left: 0% !important;
-}
+
 
 .card-square.mdl-card {
     vertical-align: middle;
