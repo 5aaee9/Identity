@@ -2,10 +2,7 @@
  * Created by Indexyz on 2017/4/10.
  */
 "use strict";
-const db = require("mongoose");
-const mail = require("../../Utils/Mail");
 const userService = require("../../Db/Service/userService");
-
 
 module.exports.get = (req, res, next) => {
     if (process.env['DISABLE_REGISTER'] === 'true'){

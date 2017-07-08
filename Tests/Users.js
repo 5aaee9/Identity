@@ -146,7 +146,12 @@ describe("User", function () {
                                 .expect(302)
                                 .end(function(err, res){
                                     if (err) return done(err);
-                                    done()
+                                    userModel.findOne({
+                                        email: randomemail
+                                    }).then(doc => {
+                                        doc.emailToken.should.equal("");
+                                        done()
+                                    })
                                 })
                         })
                     })
