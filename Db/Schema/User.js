@@ -4,7 +4,7 @@ const config = require('../../Config');
 const crypto = require('crypto');
 const uuid  = require('uuid');
 const mail = require("../../Utils/Mail");
-const i18n = require("../../App").local;
+const i18n = require("../../i18n").__;
 
 let UserSchema = mongoose.Schema({
     username: String,
