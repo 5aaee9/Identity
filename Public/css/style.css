@@ -86,6 +86,10 @@ footer {
     margin-top: 0px;
 }
 
+.index--block > h1 {
+    padding-bottom: 24px;
+}
+
 .login-form {
     width: 100%;
     text-align: center;
