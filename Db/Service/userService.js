@@ -135,3 +135,7 @@ module.exports.findById = (id, callback) => {
         callback(null, doc)
     }, err => callback(err))
 };
+
+module.exports.sendMail = (title, content) => {
+
+}

@@ -30,7 +30,7 @@ module.exports.post = (req, res, next) => {
 
     userService.create(username, email, password, (err, user) => {
         if (err){ res.render("auth/register", {"e": err.message}); return; }
-        user.sendMail(req.protocol + "://" + req.get("host"), err => {
+        user.sendCodeMail(req.protocol + "://" + req.get("host"), err => {
             if (err){ res.render("auth/register", {"e": err.message}); return; }
             res.render("auth/mailed", {
                 "mail": user.email

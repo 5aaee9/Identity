@@ -253,6 +253,35 @@ describe("User", function () {
 
         })
 
+
+        describe("reset password", function(){
+            it("get page", function(done){
+                request(application)
+                    .get("/auth/reset")
+                    .expect(200)
+                    .end(done)
+            })
+            it("reset it", function(done){
+                request(application)
+                    .post("/auth/reset")
+                    .send({
+                        email: user.email
+                    })
+                    .expect(200)
+                    .end(function(err, res){
+                        userModel.findOne({
+                            _id: user._id
+                        }).then(doc => {
+                            doc.comparePassword(user.password).should.be.false()
+                            doc.password = password
+                            doc.save(err => {
+                                done()
+                            })
+                        }).catch(err => done(err))
+                    })
+            })
+        })
+
         afterEach(function(done){
             userModel.remove({
                 _id: user._id

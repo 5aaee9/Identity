@@ -2,8 +2,6 @@
  * Created by Indexyz on 2017/4/11.
  */
 "use strict";
-const db = require("mongoose");
-const userSchema = require("../../Db/Schema/User");
 const userService = require("../../Db/Service/userService");
 const Promise = require('bluebird');
 
@@ -24,7 +22,21 @@ module.exports.post = (req, res, next) => {
                         profile.UserName = username;
                         profile.save(err => {
                             if (err) return reject(err);
-                            resolve()
+                            resolve("修改成功")
+                        });
+                        break;
+                    }
+                    case "modifyPassword": {
+                        let oldPassword = req.body.oldPassword,
+                            newPassword = req.body.newPassword;
+                        if (newPassword.length < 3) return reject(new Error("密码长度太小"));
+                        if (!user.comparePassword(oldPassword)) {
+                            return reject(new Error("密码错误"))
+                        }
+                        user.password = newPassword;
+                        user.save(err => {
+                            if (err) return reject(err);
+                            resolve("修改成功")
                         });
                         break;
                     }
@@ -32,13 +44,12 @@ module.exports.post = (req, res, next) => {
                         break;
                     }
                 }
-            }).then(() => {
+            }).then((info) => {
                 res.render("member/profile", {
-                    user: user
+                    info: info
                 })
             }, (err) => {
-                res.render("member/profile", {
-                    user: user,
+                res.status(400).render("member/profile", {
                     e: err.message
                 })
             });

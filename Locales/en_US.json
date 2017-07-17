@@ -26,7 +26,8 @@
         "nowUsernameMessage": {
             "1": "It's your username now.",
             "2": "Some plugins will lost your information when you change the name"
-        }
+        },
+        "modifyPassword": "Modify your password"
     },
     "footer": {
         "help": "Help",
@@ -42,7 +43,14 @@
         },
 		"errors": {
 			"notAUrl": "Input is not a URL!"
-		}
+		},
+        "password": {
+            "oldPassword": "Old Password",
+            "newPassword": "New Password",
+            "errors": {
+                "longgerThen6": "Password should more than 6 chars"
+            }
+        }
     },
     "skin": {
         "uploadSuccess": "Upload Success!",
@@ -82,9 +90,24 @@
     "auth": {
         "register": {
             "disable": "Register system is disable now"
+        },
+        "login": {
+            "forgot": "Forgot Password?"
         }
+    },
+    "email": "Email",
+    "password": "Password",
+    "submit": "Submit",
     "mail": {
         "title": "Identity verify mail",
-        "before": "Your verify url: "
+        "before": "Your verify url: ",
+        "resetPassword": "Identity: Password is rested",
+        "passwordSetTo": "Your password is reset to: "
+    },
+    "reset": {
+        "password": "Reset your password"
+    },
+    "message": {
+        "passwordRested": "If mail is exist, password is send to your mail"
     }
 }

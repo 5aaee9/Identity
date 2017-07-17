@@ -40,3 +40,22 @@ block panel
                         |#{$("edit")}
         br
         br
+        .mdl-cell.mdl-cell--6-col.mdl-cell--8-col-tablet
+            .mdl-card.mdl-shadow--2dp.index--fullwidth
+                .mdl-card__title(style="padding-bottom: 0px;")
+                    h2.mdl-card__title-text=$("profile.modifyPassword")
+                .mdl-card__supporting-text(style="padding-top: 0px;")
+                    form(method="POST", id="modifyPassword")
+                        input(value="modifyPassword", name="type", hidden=true)
+                        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text.index--fullwidth
+                            input#oldPassword.mdl-textfield__input(type='text', name = "oldPassword")
+                            label.mdl-textfield__label(for='oldPassword')=$("form.password.oldPassword")
+                        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text.index--fullwidth
+                            input#newPassword.mdl-textfield__input(type='text', pattern="^\.{6,}$", name = "newPassword")
+                            label.mdl-textfield__label(for='newPassword')=$("form.password.newPassword")
+                            span.mdl-textfield__error=$("form.password.errors.longgerThen6")
+                .mdl-card__actions.mdl-card--border
+                    a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(
+                        onclick="document.getElementById(\"modifyPassword\").submit();"
+                    )
+                        | #{$("edit")}

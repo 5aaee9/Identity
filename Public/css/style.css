@@ -92,7 +92,8 @@ footer {
 
 .login-form,
 .register-form,
-.disagree-form{
+.disagree-form,
+.__input-form{
     width: 100%;
     text-align: center;
     padding-left: 0% !important;
@@ -283,4 +284,10 @@ a.font-white:hover {
 
 .icon-image {
     padding-right: 8px;
+}
+
+
+.forgot-password {
+    width: 80%;
+    text-align: right;
 }

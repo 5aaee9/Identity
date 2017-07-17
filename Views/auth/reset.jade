@@ -1,17 +1,16 @@
 //
-   Created by Indexyz on 2017/4/10.
+   Created by Indexyz on 2017/7/18.
 
 extends ../navbar
 
 block title
-    title Identity · Login
+    title Identity · Reset
 
 block content
     .section.page-section.mdl-shadow--2dp
         .index--block
-            h1 Login to the world
-
-    .login-form.container
+            h1 In the yggdrasil
+    .__input-form.container
         if (info)
             span.mdl-chip.mdl-chip--contact
                 span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
@@ -24,24 +23,10 @@ block content
                 span.mdl-chip__text=e
         form(method="POST")
             div
+                p=$("reset.password")
                 .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
                     input#email.mdl-textfield__input(type='text', name="email")
                     label.mdl-textfield__label(for='email')=$("email")
                 br
-                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
-                    input#password.mdl-textfield__input(type='password', name="password")
-                    label.mdl-textfield__label(for='password')=$("password")
-                br
-                br
                 button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.input--text(type="submit")
-                    |#{$("submit")}
-                br
-                br
-                .forgot-password
-                    a(href="/auth/reset")#forgot-link=$("auth.login.forgot")
-
-
-block javascript
-    script(type='text/javascript').
-        console.log("a")
-
+                    | #{$("submit")}

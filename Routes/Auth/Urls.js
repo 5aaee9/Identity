@@ -14,5 +14,7 @@ router.get("/register", require("./Register").get);
 router.post("/register", require("./Register").post);
 router.get("/resend", require("./Resend").get);
 router.get("/email", require("./Mail").get);
+router.get("/reset", require("./Reset").get);
+router.post("/reset", require("./Reset").post);
 
 module.exports = router;

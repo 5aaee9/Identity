@@ -77,6 +77,53 @@ describe("Member", function(){
                    })
                });
     })
+    
+    it("set password in profile page with less 3 char", function(done){
+        session.post("/member/profile")
+            .send({
+                type: "modifyPassword",
+                oldPassword: password,
+                newPassword: "hi"
+            })
+            .expect(400)
+            .end(done)
+
+    })
+
+    it("set password in profile page with error origin password", function(done){
+        session.post("/member/profile")
+            .send({
+                type: "modifyPassword",
+                oldPassword: "hi",
+                newPassword: "oh my new password"
+            })
+            .expect(400)
+            .end(done)
+
+    })
+
+    it("set password in profile page", function(done){
+        var newPassword = stringLib.randomString(16);
+        session.post("/member/profile")
+            .send({
+                type: "modifyPassword",
+                oldPassword: password,
+                newPassword: newPassword
+            })
+            .expect(200)
+            .end(function(err, res){
+                if (err) return done(err);
+                userModel.findOne({
+                    _id: user._id
+                }).then(doc => {
+                    doc.comparePassword(newPassword).should.be.true()
+                    password = newPassword
+                    user = doc
+                    done()
+                }).catch(err => done(err))
+            })
+
+    })
 
     it("get skin", function(done){
         session.get("/member/skin")

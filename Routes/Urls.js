@@ -12,7 +12,7 @@ router.use("/auth", require("./Auth/Urls"));
 router.use("/oauth", require("./OAuth/Urls"));
 
 router.use("/member", function (req, res, next) {
-    if (!req.session.user) { return res.redirect("/auth/register"); }
+    if (!req.session.user) { return res.redirect("/auth/login"); }
     next();
 });
 router.use("/member", require("./Member/Urls"));

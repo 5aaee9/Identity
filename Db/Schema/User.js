@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const uuid  = require('uuid');
 const mail = require("../../Utils/Mail");
 const i18n = require("../../i18n").__;
+const stringUtil = require("../../Utils/String");
 
 let UserSchema = mongoose.Schema({
     username: String,
@@ -54,14 +55,19 @@ UserSchema.methods.generatorEmailToken = function(){
     this.emailToken = uuid.v4();
 };
 
-UserSchema.methods.sendMail = function (url, func) {
-    mail.send(
-        this.email, i18n("mail.title"), i18n("mail.before") +
-        url + "/auth/email?code=" + this.emailToken,
-        err => {
-            func(err)
-        }
-    )
+UserSchema.methods.sendMail = function (title, content, func) {
+    mail.send(this.email, title, content, func)
+};
+
+UserSchema.methods.sendCodeMail = function (url, func) {
+    this.sendMail(i18n("mail.title"), i18n("mail.before") +
+        url + "/auth/email?code=" + this.emailToken, func)
+};
+
+UserSchema.methods.setRandomPassword = function () {
+    let password = stringUtil.randomString(16);
+    this.password = password;
+    return password
 };
 
 UserSchema.methods.cinit = function (profile) {
