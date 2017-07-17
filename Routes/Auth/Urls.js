@@ -16,5 +16,5 @@ router.get("/resend", require("./Resend").get);
 router.get("/email", require("./Mail").get);
 router.get("/reset", require("./Reset").get);
 router.post("/reset", require("./Reset").post);
-
+router.get("/logout", require("./Logout").get);
 module.exports = router;

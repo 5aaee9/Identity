@@ -17,6 +17,7 @@ block body
                     else
                         a.mdl-navigation__link(href="/member/profile")=user.username
                         a.mdl-navigation__link(href='/member')=$("member.name")
+                        a.mdl-navigation__link(href='/auth/logout')=$("logout")
         .mdl-layout__drawer
             if (user == null)
                 span.mdl-layout-title Identity

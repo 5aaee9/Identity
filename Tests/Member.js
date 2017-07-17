@@ -124,6 +124,29 @@ describe("Member", function(){
             })
 
     })
+
+    it("logout", function(done){
+        session.get("/auth/logout")
+            .expect(302)
+            .end(function(err, res){
+                if (err) return done(err);
+                session.get("/member")
+                    .expect(302)
+                    .end(function(err, res){
+                        if (err) return done(err);
+                        session.post('/auth/login')
+                        .send({
+                            email: user.email,
+                            password: password
+                        })
+                        .expect(302)
+                        .end(function(err, res){
+                            if(err) return done(err);
+                            done();
+                        });
+                    })
+            })
+    })
     
     it("undefined type in profile page", function(done){
         session.post("/member/profile")
