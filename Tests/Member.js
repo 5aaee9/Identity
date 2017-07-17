@@ -124,6 +124,15 @@ describe("Member", function(){
             })
 
     })
+    
+    it("undefined type in profile page", function(done){
+        session.post("/member/profile")
+            .send({
+                type: "not-set"
+            })
+            .expect(400)
+            .end(done)
+    })
 
     it("get skin", function(done){
         session.get("/member/skin")

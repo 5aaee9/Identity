@@ -41,6 +41,7 @@ module.exports.post = (req, res, next) => {
                         break;
                     }
                     default: {
+                        reject("Not found method");
                         break;
                     }
                 }
