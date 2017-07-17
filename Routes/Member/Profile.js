@@ -8,15 +8,7 @@ const userService = require("../../Db/Service/userService");
 const Promise = require('bluebird');
 
 module.exports.get = (req, res, next) => {
-    let userModel = db.model("users", userSchema);
-    userModel.findOne({
-        _id: req.session.user._id
-    }, (err, doc) => {
-        if (err) { next(err); return }
-        res.render("member/profile", {
-            user: doc
-        })
-    });
+    res.render("member/profile");
 };
 
 module.exports.post = (req, res, next) => {
