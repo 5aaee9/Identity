@@ -191,6 +191,10 @@ footer {
     text-decoration: none;
 }
 
+.link--no-underline {
+    text-decoration: none;
+}
+
 .mdl-layout__drawer.is-visible {
     position: fixed;
 }
