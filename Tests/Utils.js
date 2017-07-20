@@ -42,5 +42,16 @@ describe("Utils Test", function(){
                 sendgrid_key: "hello"
             }, "jiduye@gmail.com", "Hello", "Test Mail", () => { return done() })
         })
+        it("SMTP", function (done) {
+            this.timeout(10000);
+            mailUtils.mail({
+                mail_type: "smtp",
+                smtp_user: "xxxxxxxx@qq.com",
+                smtp_password: "xxxxxxxx",
+                smtp_host: "smtp.qq.com",
+                smtp_secure: true,
+                smtp_port: 465,
+            }, "jiduye@gmail.com", "Hello", "Test Mail", () => { return done() })
+        })
     })
 })
