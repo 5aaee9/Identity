@@ -43,6 +43,7 @@ describe("Utils Test", function(){
             }, "jiduye@gmail.com", "Hello", "Test Mail", () => { return done() })
         })
         it("SMTP", function (done) {
+            this.timeout(10000);
             mailUtils.mail({
                 mail_type: "smtp",
                 smtp_user: "xxxxxxxx@qq.com",
