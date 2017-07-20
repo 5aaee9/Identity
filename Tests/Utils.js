@@ -45,9 +45,9 @@ describe("Utils Test", function(){
         it("SMTP", function (done) {
             mailUtils.mail({
                 mail_type: "smtp",
-                smtp_user: "hh",
-                smtp_password: "hh",
-                smtp_host: "mail.qq.com",
+                smtp_user: "xxxxxxxx@qq.com",
+                smtp_password: "xxxxxxxx",
+                smtp_host: "smtp.qq.com",
                 smtp_secure: true,
                 smtp_port: 465,
             }, "jiduye@gmail.com", "Hello", "Test Mail", () => { return done() })

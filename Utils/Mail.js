@@ -60,12 +60,19 @@ let mail = function(configDict, to, title, date, cb){
         const nodeMailer = require("nodemailer");
         const smtpTransport = require("nodemailer-smtp-transport");
         const transport = nodeMailer.createTransport(smtpTransport(mailServer));
-        transport.sendMail(message, (error, _) => {
+        transport.verify(function (error, success) {
+            console.log("a")
             if (error) {
                 console.log(error);
+                return cb()
             }
-            transport.close();
-            cb()
+            transport.sendMail(message, (error, _) => {
+                if (error) {
+                    console.log(error);
+                }
+                cb();
+                transport.close();
+            })
         })
     }
 };
