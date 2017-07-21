@@ -13,8 +13,9 @@ block panel
                span.mdl-chip__contact.mdl-color--teal.mdl-color-text--white
                    i.material-icons.mdl-chip__contact.chip--icon priority_high
                span.mdl-chip__text 您的账户还未验证邮箱 请及时验证
-                    a.mdl-chip__action(href='/auth/resend?mail=' + user.email)
+                    a#resendButton.mdl-chip__action(href='/auth/resend?mail=' + user.email)
                         i.material-icons(style="line-height: 0.95;") cached
+                    .mdl-tooltip(data-mdl-for="resendButton") 重发邮件
 
     br
     #chartContainer(style="height: 300px; width: 100%;")
