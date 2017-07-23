@@ -204,7 +204,7 @@ describe("Member", function(){
     it("test upload cap", function(done){
         session.post("/member/skin/cap")
                .send({ isSlim: "off" })
-               .attach('uploadCup', 'Tests/Resources/test-cap.png')
+               .attach('uploadCap', 'Tests/Resources/test-cap.png')
                .expect(302)
                .end(function(err, res){
                    if (err) return done(err);
