@@ -39,10 +39,6 @@ let setDb = (fileType, fileId, user, func) => {
     });
 };
 
-module.exports.postCap = (req, res, next) => {
-
-};
-
 let uploadFile = (file, req, type, func) => {
     let writeStream = gfs.createWriteStream({
         filename: file.filename + ".png",
@@ -68,7 +64,7 @@ router.get("/", (req, res, next) => {
     );
 });
 
-router.post("/cap", upload.single("uploadCup"), (req, res, next) => {
+router.post("/cap", upload.single("uploadCap"), (req, res, next) => {
     uploadFile(req.file, req, "cap", err => {
         if (err) { return res.redirect("/member/skin?err=" + encodeURIComponent(err.message)) }
         res.redirect("/member/skin?succ=1")

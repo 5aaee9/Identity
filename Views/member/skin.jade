@@ -33,13 +33,13 @@ block panel
                     h2.mdl-card__title-text=$("skin.upload.header")
                 .mdl-card__supporting-text
                     | #{$("skin.type.cap")}
-                    form(method='post', id="formCup", enctype='multipart/form-data', action='/member/skin/cup')
+                    form(method='post', id="formCap", enctype='multipart/form-data', action='/member/skin/cap')
                         .mdl-grid
                             .mdl-cell.mdl-cell--8-col.mdl-cell--8-col-tablet
                                 a.file-uploader.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect(href="javascript:;",
-                                    onchange="document.getElementById(\"formCup\").submit();"
+                                    onchange="document.getElementById(\"formCap\").submit();"
                                 )=$("skin.upload.button")
-                                    input(type='file', name='uploadCup')
+                                    input(type='file', name='uploadCap')
                     | #{$("skin.type.skin")}
                     form(method='post', id="formSkin", enctype='multipart/form-data', action='/member/skin/skin')
                         .mdl-grid
