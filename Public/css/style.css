@@ -37,7 +37,6 @@
 
 
 body {
-    display: q;
     min-height: 100vh;
     flex-direction: column;
 }
@@ -52,7 +51,10 @@ main {
 }
 
 .mdl-layout__drawer> .mdl-navigation > a {
-    padding-left: 32px !important;
+    padding-left: 24px !important;
+}
+.sidebar--member > span {
+    padding-left: 24px !important;
 }
 
 footer {
@@ -294,4 +296,8 @@ a.font-white:hover {
 .forgot-password {
     width: 80%;
     text-align: right;
+}
+
+.sidebar--member {
+    width: 200px;
 }

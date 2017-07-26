@@ -14,6 +14,7 @@ const moment = require('./Libs/moment.min');
 const link = require("./Db/Redis").link;
 const dbDefine = require("./Define/Db").Db;
 const i18n = require("./i18n");
+const userService = require("./Db/Service/userService");
 
 app.use(logger('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
@@ -39,6 +40,17 @@ let userModel = db.model(dbDefine.USER_DB, require("./Db/Schema/User")),
 // Database connection
 require("./Db/Db")(() => {
     // values
+
+    app.use(function (req, res, next) {
+        if (config.remove_expire_user){
+            userService.removeExpire(function (err) {
+                if (err) return next(err);
+                next()
+            })
+        } else {
+            next()
+        }
+    });
 
     app.use(function(req, res, next) {
         res.locals.$ = i18n.__ || (() => {});

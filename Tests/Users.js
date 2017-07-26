@@ -4,6 +4,7 @@ const db = require("mongoose");
 const userSchema = require('../Db/Schema/User');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
+const dateLib = require("../Utils/DateTime");
 
 const userService = require('../Db/Service/userService');
 
@@ -171,6 +172,39 @@ describe("User", function () {
                         done()
                     })
             })
+            it("remove expire users", function(done) {
+                userModel.findOne({
+                    _id: user._id
+                }, (err, doc) => {
+                    if (err) return done(err);
+                    doc.join = dateLib.getPreTimesDay(2, new Date())
+                    doc.save(err => {
+                        userService.removeExpire((err) => {
+                            if (err) return done(err);
+                            userModel.findById(doc._id, (err, res) => {
+                                if (err) return done(err);
+                                if (res) return done(new Error("User " + res._id + " is not remvoed!"));
+                                return done()
+                            })
+                        })
+                    })
+                })
+            })
+            
+            it("remove user in request", function(done){
+                user.join = dateLib.getPreTimesDay(2, new Date())
+                user.save(err => {
+                    request(application).get("/").expect(200).end(function(err, res) {
+                        if (err) return err;
+                        userModel.findById(user._id, (err, res) => {
+                            if (err) return done(err);
+                            if (res) return done(new Error("User " + res._id + " is not remvoed!"));
+                            return done()
+                        })
+                    })
+                })
+            })
+
             afterEach(function(done){
                 userModel.remove({
                     _id: user._id

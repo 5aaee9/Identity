@@ -8,6 +8,7 @@ const userS = require("../Schema/User");
 const profileS = require("../Schema/Profile");
 const Promise = require('bluebird');
 const profileService = require("./profileService");
+const dateHelper = require("../../Utils/DateTime");
 
 let profileModel = db.model(dbDefine.Db.PROFILE_DB, profileS),
     userModel = db.model(dbDefine.Db.USER_DB, userS);
@@ -136,6 +137,41 @@ module.exports.findById = (id, callback) => {
     }, err => callback(err))
 };
 
-module.exports.sendMail = (title, content) => {
-
+function deleteUserProfiles(user) {
+    return new Promise((resolve, reject) => {
+        Promise.all(user.profile.map(profile => {
+            return profileModel.remove({
+                _id: profile
+            })
+        })).then(() => resolve(user)).catch(err => reject(err))
+    })
 }
+
+
+module.exports.removeExpire = (callback) => {
+    userModel.find({
+        join: {
+            $lte: dateHelper.getPreDay(new Date())
+        },
+        emailToken: {
+            $ne: ""
+        }
+    }).then(docs => {
+        if (docs.length === 0) {
+             return new Promise(resolve => resolve())
+        }
+        return Promise.all(docs.map(item => {
+            return new Promise((reslove, reject) => {
+                deleteUserProfiles(item).then(() => {
+                    userModel.remove({
+                        _id: item._id
+                    }, (err, status) => {
+                        if (err) return reject(err);
+                        return reslove(item.id)
+                    })
+                })
+            })
+        }))
+    }).then(user => callback(undefined, user))
+      .catch(err => callback(err))
+};
