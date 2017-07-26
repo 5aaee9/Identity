@@ -2,11 +2,11 @@
 	"index": {
 		"content": {
 			"title": "你好 欢迎来到 Identity",
-			"message": "一个简单的 Minecraft 登陆解决方案"
+			"message": "一个简单的 Minecraft 账户解决方案"
 		}
 	},
 	"register": "注册",
-	"login": "登陆",
+	"login": "登入",
 	"member": {
 		"profile": "个人资料",
 		"name": "控制面板",
@@ -15,9 +15,9 @@
 		"index": "主页",
 		"page": {
 			"index": {
-				"lastLoginHistory": "最近十次登陆记录",
-				"loginAddress": "登陆地址: ",
-				"lastSevenLogin": "过去7日登陆情况"
+				"lastLoginHistory": "最近十次登入记录",
+				"loginAddress": "登入地址: ",
+				"lastSevenLogin": "过去7日登入情况"
 			}
 		}
 	},
