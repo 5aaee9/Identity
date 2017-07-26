@@ -205,6 +205,27 @@ describe("User", function () {
                 })
             })
 
+            it("dont't remove user when remove_expire_user set to false", function(done){
+                process.env.remove_expire_user = 0;
+                userModel.findOne({
+                    _id: user._id
+                }, (err, doc) => {
+                    if (err) return done(err);
+                    doc.join = dateLib.getPreTimesDay(2, new Date())
+                    doc.save(err => {
+                        userService.removeExpire((err) => {
+                            if (err) return done(err);
+                            userModel.find({_id: doc._id}, (err, res) => {
+                                if (err) return done(err);
+                                if (!res) return done(new Error("User " + res._id + " remvoed!"));
+                                return done()
+                            })
+                        })
+                    })
+                })
+            })
+
+
             afterEach(function(done){
                 userModel.remove({
                     _id: user._id
