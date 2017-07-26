@@ -25,6 +25,7 @@ module.exports.post = (req, res, next) => {
     if (!email || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
 
     userService.login(email, password, (err, doc) => {
+        if (!doc) { return res.render("auth/login", {"e": "用户名或密码错误"}); }
         if (err) { return next(err); }
         req.session.user = doc;
         if (!req.query.redirect){
