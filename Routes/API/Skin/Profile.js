@@ -18,9 +18,9 @@ module.exports.get = (req, res, next) => {
                 skins: {
                     "default": user.skin.skin,
                     slim: user.skin.slim,
-                    cap: user.skin.cap,
+                    cape: user.skin.cap,
                 },
-                cap: user.skin.cap
+                cape: user.skin.cap
             })
         })
     })
