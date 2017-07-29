@@ -33,4 +33,12 @@ describe("Db", function(){
         }).should.be.equal("mongodb://test:password@127.0.0.1:1234/test")
         done();
     })
+    it("set db env ret", function(done) {
+        process.env["MONGODB_URI"] = "mongodb://test:password@127.0.0.1:1234/test";
+        db.getUrl({
+            "db_host": "localhost"
+        }).should.be.equal("mongodb://test:password@127.0.0.1:1234/test")
+        process.env["MONGODB_URI"] = undefined;
+        done()
+    })
 })

@@ -4,6 +4,10 @@ const configFile = require('../Config');
 const mongoose = require('mongoose');
 
 function getUrl(config) {
+    if (process.env["MONGODB_URI"]) {
+        return process.env["MONGODB_URI"]
+    }
+
     if (!config) config = configFile;
     let mongodbUri = 'mongodb://';
     if (config.db_auth){

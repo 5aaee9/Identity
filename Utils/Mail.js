@@ -61,7 +61,6 @@ let mail = function(configDict, to, title, date, cb){
         const smtpTransport = require("nodemailer-smtp-transport");
         const transport = nodeMailer.createTransport(smtpTransport(mailServer));
         transport.verify(function (error, success) {
-            console.log("a")
             if (error) {
                 console.log(error);
                 return cb()
