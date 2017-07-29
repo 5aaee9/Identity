@@ -17,7 +17,7 @@ block content
                     i.material-icons.mdl-chip__contact.chip--icon close
                 span.mdl-chip__text=e
 
-        form(method="POST")
+        form(method="POST", action="/auth/register", id="registerForm")
             .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label.input--text
                 input#username.mdl-textfield__input(type='text', pattern="^\.{3,}$", name="username")
                 label.mdl-textfield__label(for='username') 用户名
@@ -34,5 +34,16 @@ block content
                 span.mdl-textfield__error 检查你所输入的邮箱!
             br
             br
-            button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.input--text(type="submit")
+            button.mdl-button.mdl-js-button.mdl-button--raised.mdl-button--colored.input--text(type="submit", id="registerButton")
                 | 提交
+
+block javascript
+    script(type='text/javascript').
+        var registerButton = document.getElementById("registerButton")
+        function disableButton() {
+            registerButton.disabled = true
+        }
+        var registerForm = document.getElementById("registerForm")
+        registerForm.addEventListener("submit", function (event) {
+            disableButton()
+        })
