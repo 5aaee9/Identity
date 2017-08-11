@@ -22,7 +22,8 @@ let UserSchema = mongoose.Schema({
         skin: { type: mongoose.Schema.Types.ObjectId },
         cap: { type: mongoose.Schema.Types.ObjectId },
         slim: { type: mongoose.Schema.Types.ObjectId }
-    }
+    },
+    isAdmin: { type: Boolean, default: false }
 });
 
 

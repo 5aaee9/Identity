@@ -29,7 +29,7 @@ module.exports.post = (req, res, next) => {
     }
 
     userService.create(username, email, password, (err, user) => {
-        if (err){ res.render("auth/register", {"e": err.message}); return; }
+        if (err){ return res.render("auth/register", {"e": err.message}); }
         user.sendCodeMail(req.protocol + "://" + req.get("host"), err => {
             if (err){ res.render("auth/register", {"e": err.message}); return; }
             res.render("auth/mailed", {
