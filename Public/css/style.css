@@ -142,6 +142,7 @@ main {
 @media (min-width: 1025px) {
     .panel-carv {
         padding-left: 280px;
+        padding-right: 80px;
     }
 }
 
@@ -301,3 +302,4 @@ a.font-white:hover {
 .sidebar--member {
     width: 200px;
 }
+

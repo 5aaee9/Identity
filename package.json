@@ -13,6 +13,7 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "body-parser": "~1.15.1",
+    "co": "^4.6.0",
     "cookie-parser": "~1.4.3",
     "cookie-session": "^2.0.0-alpha.1",
     "debug": "~2.2.0",

@@ -66,6 +66,11 @@ describe("Admin", function() {
                 .expect(200)
                 .end(done)
         })
+        it("Test Admin User View", function(done){
+            session.get("/admin/users")
+                .expect(200)
+                .end(done)
+        })
     })
 
     afterEach(function(done) {

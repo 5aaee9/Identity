@@ -1,0 +1,30 @@
+//
+   Created by Indexyz on 2017/8/20.
+
+extends ./basic
+
+block title
+    title Identity · Users
+
+block panel
+    h4 用户管理
+    table.mdl-data-table.mdl-js-data-table.mdl-data-table--selectable.mdl-shadow--2dp.index--fullwidth
+        thead
+            tr
+                th.mdl-data-table__cell--non-numeric=$("admin.users.email")
+                th.mdl-data-table__cell--non-numeric=$("admin.users.id")
+                th.mdl-data-table__cell--non-numeric=$("admin.users.lastUse")
+                th.mdl-data-table__cell--non-numeric(style="text-align: center;")=$("admin.users.edit")
+
+        tbody
+            - for user in users
+                tr
+                    td.mdl-data-table__cell--non-numeric=user.email
+                    td.mdl-data-table__cell--non-numeric=user._id
+                    td.mdl-data-table__cell--non-numeric=moment(user.lastUsing).fromNow()
+                    td
+                        button.mdl-button.mdl-js-button.mdl-button--primary
+                            | EDIT
+    br
+    button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent
+        | #{$("admin.user.delete")}

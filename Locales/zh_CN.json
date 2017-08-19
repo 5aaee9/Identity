@@ -111,5 +111,19 @@
 		"passwordRested": "如果邮箱存在, 新的密码已发往你的邮箱"
 	},
 	"logout": "登出",
-	"logoutSuccess": "登出成功"
+	"logoutSuccess": "登出成功",
+	"admin": {
+		"name": "管理面板",
+		"index": "管理面板",
+		"users": {
+			"email": "邮箱",
+			"id": "ID",
+			"lastUse": "最后一次使用",
+			"edit": "编辑",
+			"name": "用户管理"
+		},
+		"user": {
+			"delete": "删除"
+		}
+	}
 }
