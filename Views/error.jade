@@ -1,1 +1,21 @@
-h1=message
+//
+   Created by Indexyz on 2017/8/20.
+
+extends ./navbar
+
+block title
+    title Identity · Error
+
+block content
+    .section.page-section.mdl-shadow--2dp
+        .index--block
+            h1 Word Crashed
+
+    .container(style="padding-left: 12vw")
+        h4 The error is recorded
+        - for e in error.stack.split("\n")
+            p.error-message=e
+    style.
+        .error-message {
+            line-height: 0.4;
+        }
