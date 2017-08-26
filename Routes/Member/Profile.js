@@ -9,7 +9,7 @@ module.exports.get = (req, res, next) => {
     res.render("member/profile");
 };
 
-module.exports.post = (req, res, next) => {
+module.exports.post = function* (req, res, next) {
     let type = req.body.type;
 
     userService.findById(req.session.user._id, (err, user) => {

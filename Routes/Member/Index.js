@@ -5,30 +5,25 @@
 const db = require("mongoose");
 const logSchema = require("../../Db/Schema/Log");
 const dateHelper = require("../../Utils/DateTime");
+const co = require("co");
 
-let getLastWeekLog = (user, func) => {
-    let dateDict = {},
-        count = 0;
+let getLastWeekLog = function* (user) {
+    let res = {};
     for (let i = 0; i <= 6; i++){
         let startTime = dateHelper.getPreTimesDay(i, dateHelper.getZeroTime(new Date()));
         let endTime = dateHelper.getPreTimesDay(i - 1, dateHelper.getZeroTime(new Date()));
         let logModel = db.model("logs", logSchema);
-        logModel.count({
+        res[i] = logModel.count({
             user: user,
             date: {
                 $gte: startTime,
                 $lte: endTime
             }
-        }, (err, num) => {
-            if (err) { func(err); return }
-            dateDict[i] = num;
-            count ++;
-            if (count === 7) {
-                func(undefined, dateDict)
-            }
-        })
+        });
     }
+    return Promise.resolve(yield res)
 };
+
 let convToShow = (doc) => {
     let dateList = [];
     for (let i = 0; i <= 6; i++){
@@ -41,24 +36,16 @@ let convToShow = (doc) => {
     return dateList.reverse()
 };
 
-let getLastLog = (user, func) => {
-    let logModel = db.model("logs", logSchema);
-    logModel.find({
+let getLastLog = function* (user)  {
+    const logModel = db.model("logs", logSchema);
+    return Promise.resolve(yield logModel.find({
         user: user
-    }).limit(10).sort({date: -1}).then(docs => {
-        func(undefined, docs)
-    }).catch(err => {
-        func(err)
-    })
+    }).limit(10).sort({date: -1}))
 };
 
-module.exports.get = (req, res, next) => {
-    getLastWeekLog(req.session.user._id, (err, doc) => {
-        getLastLog(req.session.user._id, (err, docs) => {
-            res.render("member/index", {
-                data: JSON.stringify(convToShow(doc)),
-                logs: docs
-            })
-        })
-    });
+module.exports.get = function* (req, res, next) {
+    res.render("member/index", {
+        data: JSON.stringify(convToShow(yield getLastWeekLog(req.session.user._id))),
+        logs: yield getLastLog(req.session.user._id)
+    })
 };

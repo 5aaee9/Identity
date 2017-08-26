@@ -1,0 +1,21 @@
+//
+   Created by Indexyz on 2017/8/20.
+
+extends ./basic
+
+block title
+    title Identity · Edit User - #{profile.UserName}
+
+
+block panel
+    h4 Edit User
+    .mdl-shadow--2dp.index--fullwidth
+        .mdl-card__title.underline
+            h2.mdl-card__title-text #{user._id}
+        form(method='post', id="appEdit", enctype='multipart/form-data')
+            .mdl-card__supporting-text.index--fullwidth
+                p
+                    strong User Email Address
+                .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label(style="width: 97%")
+                    input#userEmail.mdl-textfield__input(type='text', value=user.email)
+                    label.mdl-textfield__label(for='userEmail') Email Address

@@ -303,3 +303,6 @@ a.font-white:hover {
     width: 200px;
 }
 
+.card-input {
+    padding-right: 3vw;
+}

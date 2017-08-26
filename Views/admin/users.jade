@@ -7,7 +7,7 @@ block title
     title Identity · Users
 
 block panel
-    h4 用户管理
+    h4=$("admin.users.name")
     table.mdl-data-table.mdl-js-data-table.mdl-data-table--selectable.mdl-shadow--2dp.index--fullwidth
         thead
             tr
@@ -23,7 +23,7 @@ block panel
                     td.mdl-data-table__cell--non-numeric=user._id
                     td.mdl-data-table__cell--non-numeric=moment(user.lastUsing).fromNow()
                     td
-                        button.mdl-button.mdl-js-button.mdl-button--primary
+                        a.mdl-button.mdl-js-button.mdl-button--primary(href="/admin/users/" + user._id)
                             | EDIT
     br
     button.mdl-button.mdl-js-button.mdl-button--raised.mdl-js-ripple-effect.mdl-button--accent
