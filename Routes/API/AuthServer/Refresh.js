@@ -1,6 +1,6 @@
 const profileService = require("../../../Db/Service/profileService");
 const userService = require("../../../Db/Service/userService");
-const errors = require("./Errors");
+const errors = require("../Errors");
 
 module.exports.post = function* (req, res, next)  {
     let {accessToken, clientToken, selectedProfile} = req.body;

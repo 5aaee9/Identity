@@ -56,3 +56,10 @@ module.exports.loginServer = function* (profile, message, ip) {
     if (!user) return new Error("No user found");
     yield logService.loginLog(message, user, profile, ip)
 };
+
+module.exports.getDocment = function (profile) {
+    return {
+        id: profile.ProfileID,
+        name: profile.UserName
+    }
+};

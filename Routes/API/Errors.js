@@ -52,6 +52,13 @@ module.exports.ServerProblem = {
     code: 500
 };
 
+module.exports.ForbiddenOperationBiggestLength = {
+    message: {
+        "error": "Forbidden Operation Biggest Length",
+        "errorMessage": "Account number need less than 10."
+    },
+    code: 403
+};
 
 module.exports.makeError = (res, error) => {
     res.status(error.code).send(error.message)

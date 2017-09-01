@@ -31,7 +31,7 @@ describe("API", function(){
     describe("Mojang API", function(){
         it("Header error", function(done){
             request(application)
-                .get("/api/mojang")
+                .get("/api/authserver")
                 .expect(415)
                 .end(function(err, res){
                     if (err) return done(err);
@@ -41,7 +41,7 @@ describe("API", function(){
         })
         it("Method error", function(done){
             request(application)
-                .get("/api/mojang")
+                .get("/api/authserver")
                 .set("content-type", "application/json")
                 .expect(405)
                 .end(function(err, res){
@@ -64,7 +64,7 @@ describe("API", function(){
             it("test authenticate", function(done){
                 this.timeout(6000)
                 request(application)
-                    .post("/api/mojang/authenticate")
+                    .post("/api/authserver/authenticate")
                     .set("content-type", "application/json")
                     .send({
                         username: user.email,
@@ -90,7 +90,7 @@ describe("API", function(){
 
             it("test error password when authenticate", function(done){
                 request(application)
-                    .post("/api/mojang/authenticate")
+                    .post("/api/authserver/authenticate")
                     .set("content-type", "application/json")
                     .send({
                         username: user.email,
@@ -102,7 +102,7 @@ describe("API", function(){
 
             it("test refresh", function(done){
                 request(application)
-                    .post("/api/mojang/refresh")
+                    .post("/api/authserver/refresh")
                     .set("content-type", "application/json")
                     .send({
                         accessToken: profile.accessToken,
@@ -127,7 +127,7 @@ describe("API", function(){
 
             it("test refresh with error token", function(done){
                 request(application)
-                    .post("/api/mojang/refresh")
+                    .post("/api/authserver/refresh")
                     .set("content-type", "application/json")
                     .send({
                         accessToken: profile.accessToken,
@@ -139,7 +139,7 @@ describe("API", function(){
 
             it("test refresh with select profile", function(done){
                 request(application)
-                    .post("/api/mojang/refresh")
+                    .post("/api/authserver/refresh")
                     .set("content-type", "application/json")
                     .send({
                         accessToken: profile.accessToken,
@@ -152,7 +152,7 @@ describe("API", function(){
             
             it("test validate", function(done){
                 request(application)
-                    .post("/api/mojang/validate")
+                    .post("/api/authserver/validate")
                     .set("content-type", "application/json")
                     .send({
                         accessToken: profile.accessToken,
@@ -164,7 +164,7 @@ describe("API", function(){
 
             it("test validate with error token", function(done){
                 request(application)
-                    .post("/api/mojang/validate")
+                    .post("/api/authserver/validate")
                     .set("content-type", "application/json")
                     .send({
                         accessToken: profile.accessToken,
@@ -176,7 +176,7 @@ describe("API", function(){
 
             it("test signout", function(done){
                 request(application)
-                    .post("/api/mojang/signout")
+                    .post("/api/authserver/signout")
                     .set("content-type", "application/json")
                     .send({
                         username: user.email,
@@ -188,7 +188,7 @@ describe("API", function(){
 
             it("test signout with error", function(done){
                 request(application)
-                    .post("/api/mojang/signout")
+                    .post("/api/authserver/signout")
                     .set("content-type", "application/json")
                     .send({
                         username: user.email,
@@ -200,7 +200,7 @@ describe("API", function(){
 
             it("test invalidate", function(done){
                 request(application)
-                    .post("/api/mojang/invalidate")
+                    .post("/api/authserver/invalidate")
                     .send({
                         accessToken: profile.accessToken,
                         clientToken: profile.clientToken,
@@ -211,7 +211,7 @@ describe("API", function(){
 
             it("test invalidate with error token", function(done){
                 request(application)
-                    .post("/api/mojang/invalidate")
+                    .post("/api/authserver/invalidate")
                     .send({
                         accessToken: profile.accessToken,
                         clientToken: "error-client-token",
@@ -274,6 +274,7 @@ describe("API", function(){
         it("get user resources without id", function(done){
             request(application)
                 .get("/api/skin/textures/")
+                .set("content-type", "application/json")
                 .expect(404)
                 .end(done)
         })
@@ -281,6 +282,7 @@ describe("API", function(){
         it("get user resources with undefined id", function(done){
             request(application)
                 .get("/api/skin/textures/undefined")
+                .set("content-type", "application/json")
                 .expect(404)
                 .end(done)
         })
@@ -288,6 +290,7 @@ describe("API", function(){
         it("get user resources", function(done){
             request(application)
                 .get("/api/skin/textures/user-res")
+                .set("content-type", "application/json")
                 .expect(302)
                 .end(done)
         })
@@ -309,13 +312,15 @@ describe("API", function(){
         })
 
         it("has joinserver before join server", function(done){
-            request(application).get("/api/yggdrasil/hasjoinserver?serverId=" + serverId + "&username=" + tp.UserName)
+            request(application).get("/api/sessionserver/session/minecraft/hasJoined?serverId=" + serverId + "&username=" + tp.UserName)
+            .set("content-type", "application/json")
             .expect(204)
             .end(done)
         })
 
         it("test joinserver", function(done){
-            request(application).post("/api/yggdrasil/joinserver")
+            request(application).post("/api/sessionserver/session/minecraft/join")
+            .set("content-type", "application/json")
             .send({
                 accessToken: tp.accessToken,
                 selectedProfile: tp.ProfileID,
@@ -326,7 +331,8 @@ describe("API", function(){
         })
         
         it("test join server with unknow profile", function(done){
-            request(application).post("/api/yggdrasil/joinserver")
+            request(application).post("/api/sessionserver/session/minecraft/join")
+            .set("content-type", "application/json")
             .send({
                 accessToken: "error access token",
                 selectedProfile: tp.ProfileID,
@@ -337,13 +343,15 @@ describe("API", function(){
         })
 
         it("test join server with error serverId", function(done){
-            request(application).get("/api/yggdrasil/hasjoinserver?serverId=test&username=" + tp.UserName)
+            request(application).get("/api/sessionserver/session/minecraft/hasJoined?serverId=test&username=" + tp.UserName)
+            .set("content-type", "application/json")
             .expect(204)
             .end(done)
         })
 
         it("test has join server", function(done){
-            request(application).get("/api/yggdrasil/hasjoinserver?serverId=" + serverId + "&username=" + tp.UserName)
+            request(application).get("/api/sessionserver/session/minecraft/hasJoined?serverId=" + serverId + "&username=" + tp.UserName)
+            .set("content-type", "application/json")
             .expect(200)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -358,13 +366,15 @@ describe("API", function(){
         })
 
         it("username2uuid with error username", function(done){
-            request(application).get("/api/yggdrasil/profiles/minecraft/test")
+            request(application).get("/api/sessionserver/session/minecraft/profile/error-name")
+            .set("content-type", "application/json")
             .expect(204)
             .end(done)
         })
 
         it("username2uuid", function(done){
-            request(application).get("/api/yggdrasil/profiles/minecraft/" + tp.UserName)
+            request(application).get("/api/sessionserver/session/minecraft/profile/" + tp.ProfileID)
+            .set("content-type", "application/json")
             .expect(200)
             .end(function(err, res) {
                 if (err) return done(err);
@@ -378,24 +388,25 @@ describe("API", function(){
             })
         })
 
-        it("uuid to username", function(done){
-            request(application).get("/api/yggdrasil/profiles/" + tp.ProfileID + "/names")
-            .expect(200)
-            .end(function(err, res){
-                if (err) return done(err);
-                res.text.should.equal('[{"name":"' + tp.UserName + '"}]')
-                done()
-            })
-        })
+        // it("uuid to username", function(done){
+        //     request(application).get("/api/yggdrasil/profiles/" + tp.ProfileID + "/names")
+        //     .expect(200)
+        //     .end(function(err, res){
+        //         if (err) return done(err);
+        //         res.text.should.equal('[{"name":"' + tp.UserName + '"}]')
+        //         done()
+        //     })
+        // })
 
-        it("uuid to username with errro uuid", function(done){
-            request(application).get("/api/yggdrasil/profiles/error-uuid/names")
-            .expect(204)
-            .end(done)
-        })
+        // it("uuid to username with errro uuid", function(done){
+        //     request(application).get("/api/yggdrasil/profiles/error-uuid/names")
+        //     .expect(204)
+        //     .end(done)
+        // })
         
         it("uuid to usernames", function(done){
-            request(application).post("/api/yggdrasil/profiles/minecraft")
+            request(application).post("/api/api/profiles/minecraft")
+            .set("content-type", "application/json")
             .send([
                 tp.UserName,
                 profile.UserName
@@ -405,7 +416,8 @@ describe("API", function(){
         })
 
         it("uuid with error usernames", function(done){
-            request(application).post("/api/yggdrasil/profiles/minecraft")
+            request(application).post("/api/api/profiles/minecraft")
+            .set("content-type", "application/json")
             .send([
                 "error-user-name"
             ])
@@ -415,7 +427,8 @@ describe("API", function(){
 
 
         it("uuid to usernames with none args", function(done){
-            request(application).post("/api/yggdrasil/profiles/minecraft")
+            request(application).post("/api/api/profiles/minecraft")
+            .set("content-type", "application/json")
             .expect(200)
             .end(done)
         })
