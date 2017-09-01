@@ -5,8 +5,10 @@
 const config = require("../Config");
 
 
-module.exports.send = function(to, title, date ,cb){
-    mail(config, to, title, date, cb)
+module.exports.send = function(to, title, date){
+    return new Promise(resolve => {
+        mail(config, to, title, date, () => resolve())
+    })
 };
 
 let mail = function(configDict, to, title, date, cb){

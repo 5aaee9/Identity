@@ -56,13 +56,13 @@ UserSchema.methods.generatorEmailToken = function(){
     this.emailToken = uuid.v4();
 };
 
-UserSchema.methods.sendMail = function (title, content, func) {
-    mail.send(this.email, title, content, func)
+UserSchema.methods.sendMail = function (title, content) {
+    return mail.send(this.email, title, content)
 };
 
-UserSchema.methods.sendCodeMail = function (url, func) {
-    this.sendMail(i18n("mail.title"), i18n("mail.before") +
-        url + "/auth/email?code=" + this.emailToken, func)
+UserSchema.methods.sendCodeMail = function (url) {
+    return this.sendMail(i18n("mail.title"), i18n("mail.before") +
+        url + "/auth/email?code=" + this.emailToken)
 };
 
 UserSchema.methods.setRandomPassword = function () {

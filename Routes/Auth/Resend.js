@@ -15,10 +15,8 @@ module.exports.get = function* (req, res, next) {
     if (!user) { return res.redirect("/auth/register") }
     if (!user.emailToken) { return res.redirect("/") }
 
-    user.sendCodeMail(req.protocol + "://" + req.get("host"), err => {
-        res.render("auth/mailed", {
-            "mail": user.email
-        })
+    yield user.sendCodeMail(req.protocol + "://" + req.get("host"));
+    res.render("auth/mailed", {
+        "mail": user.email
     })
-
 };

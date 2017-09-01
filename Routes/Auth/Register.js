@@ -20,11 +20,9 @@ module.exports.post = function* (req, res, next) {
 
     try {
         const user = yield userService.create(username, email, password);
-        user.sendCodeMail(req.protocol + "://" + req.get("host"), err => {
-            if (err){ res.render("auth/register", {"e": err.message}); return; }
-            res.render("auth/mailed", {
-                "mail": user.email
-            })
+        yield user.sendCodeMail(req.protocol + "://" + req.get("host"));
+        res.render("auth/mailed", {
+            "mail": user.email
         })
     } catch (err){
         if (err){ return res.render("auth/register", {"e": err.message}); }
