@@ -5,6 +5,7 @@ const stringLib = require('../Utils/String');
 const dbDefine = require("../Define/Db");
 const userS = require("../Db/Schema/User");
 const Tsession = require('supertest-session');
+const co = require("co");
 
 let application = require("../App"),
     userService = require("../Db/Service/userService"),
@@ -16,33 +17,33 @@ describe("Admin", function() {
         session = Tsession(application);
         done()
     })
+
     beforeEach(function(done) {
         userName = stringLib.randomString(12)
         password = stringLib.randomString(12)
         email = stringLib.randomString(8) + "@example.com"
-        userService.create(
-            userName, 
-            email,
-            password,
-            (err, u) => {
-                if (err) return done(err);
-                u.isAdmin = true
-                u.save(err => {
-                    if (err) return done(err);
-                    user = u
-                    session.post('/auth/login')
-                        .send({
-                            email: user.email,
-                            password: password
-                        })
-                        .expect(302)
-                        .end(function(err, res){
-                            if(err) return done(err);
-                            done();
-                        });
-                })
-            }
-        )
+        co(function*(){
+            const u = yield userService.create(
+                userName, 
+                email,
+                password
+            )
+            u.isAdmin = true
+            yield u.save()
+            user = u
+        
+        }).then(() => {
+            session.post('/auth/login')
+            .send({
+                email: user.email,
+                password: password
+            })
+            .expect(302)
+            .end(function(err, res){
+                if(err) return done(err);
+                done();
+            });
+        })
     })
     
     describe("Access Test", function() {

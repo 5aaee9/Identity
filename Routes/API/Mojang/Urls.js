@@ -3,9 +3,9 @@
  */
 "use strict";
 
-const express = require("express");
+const Router = require('co-router');
+let router = Router();
 const errors = require("./Errors");
-let router = express.Router();
 
 // Application Request Method Check
 router.use((req, res, next) => {

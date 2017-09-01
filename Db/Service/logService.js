@@ -7,11 +7,11 @@ const logSchema = require("../Schema/Log");
 const dbDefine = require("../../Define/Db").Db;
 let logModel = db.model(dbDefine.LOGS_DB, logSchema);
 
-module.exports.loginLog = (message, user, profile, ip, callback) => {
-    new logModel({
+module.exports.loginLog = function* (message, user, profile, ip) {
+    return yield new logModel({
         log: message.replace("${player}", profile.UserName),
         user: user._id,
         ip: ip,
         type: logSchema.TYPES.SERVER
-    }).save(callback)
+    }).save()
 };

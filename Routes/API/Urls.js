@@ -3,8 +3,8 @@
  */
 'use strict';
 
-const express = require('express');
-let router = express.Router();
+const Router = require('co-router');
+let router = Router();
 
 router.use("/mojang", require("./Mojang/Urls"));
 router.use("/skin", require("./Skin/Urls"));

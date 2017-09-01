@@ -5,6 +5,7 @@ const userSchema = require('../Db/Schema/User');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 const dateLib = require("../Utils/DateTime");
+const co = require("co");
 
 const userService = require('../Db/Service/userService');
 
@@ -91,7 +92,7 @@ describe("User", function () {
         describe("on", function(){
             var randomUsername, randomPassword, user, randomemail;
             beforeEach(function(done){
-                this.timeout(6000)
+                this.timeout(12000)
                 randomUsername = stringLib.randomString(8),
                 randomPassword = stringLib.randomString(16);
                 randomemail = stringLib.randomString(16) + "@true.mail";
@@ -179,14 +180,12 @@ describe("User", function () {
                     if (err) return done(err);
                     doc.join = dateLib.getPreTimesDay(2, new Date())
                     doc.save(err => {
-                        userService.removeExpire((err) => {
+                        co(function* () {
+                            yield userService.removeExpire()
                             if (err) return done(err);
-                            userModel.findById(doc._id, (err, res) => {
-                                if (err) return done(err);
-                                if (res) return done(new Error("User " + res._id + " is not remvoed!"));
-                                return done()
-                            })
-                        })
+                            const res = yield userModel.findById(doc._id)
+                            if (res) return done(new Error("User " + res._id + " is not remvoed!"));
+                        }).then(() => done())
                     })
                 })
             })
@@ -204,28 +203,7 @@ describe("User", function () {
                     })
                 })
             })
-
-            it("dont't remove user when remove_expire_user set to false", function(done){
-                process.env.remove_expire_user = 0;
-                userModel.findOne({
-                    _id: user._id
-                }, (err, doc) => {
-                    if (err) return done(err);
-                    doc.join = dateLib.getPreTimesDay(2, new Date())
-                    doc.save(err => {
-                        userService.removeExpire((err) => {
-                            if (err) return done(err);
-                            userModel.find({_id: doc._id}, (err, res) => {
-                                if (err) return done(err);
-                                if (!res) return done(new Error("User " + res._id + " remvoed!"));
-                                return done()
-                            })
-                        })
-                    })
-                })
-            })
-
-
+            
             afterEach(function(done){
                 userModel.remove({
                     _id: user._id
@@ -237,11 +215,10 @@ describe("User", function () {
         var user, cookies, password;
         beforeEach(function(done){
             password = stringLib.randomString(16)
-            userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+            co(function* () {
+                const tuser = yield userService.create(stringLib.randomString(8), stringLib.randomString(8) + "@email.com", password)
                 user = tuser
-                if (err) return done(err);
-                done();
-            })
+            }).then(() => done())
         })
         it("Get Login Page", function(done){
             request(application)

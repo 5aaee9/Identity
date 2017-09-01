@@ -2,15 +2,15 @@
  * Created by Indexyz on 2017/5/14.
  */
 "use strict";
-const express = require("express");
 const multer  = require("multer");
+const Router = require('co-router');
+let router = Router();
 
 let upload = multer({
     dest: "tmp/",
     limits: { fileSize:  1024 * 64 }
 });
 
-let router = express.Router();
 
 router.get("/", require("./Root").get);
 

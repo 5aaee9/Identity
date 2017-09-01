@@ -5,19 +5,18 @@
 const userService = require("../../../Db/Service/userService");
 const errors = require("./Errors");
 
-module.exports.post = (req, res, next) => {
-    let username = req.body.username,
-        password = req.body.password;
+module.exports.post = function* (req, res, next) {
+    let {username, password} = req.body;
+    const user = yield userService.login(username, password);
+    if (!user) {
+        return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount)
+    }
+    const profile = yield userService.getProfile(user);
+    if (!profile) {
+        return errors.makeError(res. errors.ForbiddenOperationExceptionUserAccount)
+    }
 
-    userService.login(username, password, (err, user) => {
-        if (!user) { return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount) }
-        userService.getProfile(user, profile => {
-            profile.refresh();
-            profile.save(err => {
-                if (err) { return errors.makeError(res, errors.ServerProblem) }
-                res.status(204).send()
-            })
-        })
-    })
-
+    profile.refresh();
+    yield profile.save();
+    res.status(204).send()
 };

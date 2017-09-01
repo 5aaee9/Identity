@@ -5,12 +5,10 @@
 const profileService = require("../../../Db/Service/profileService");
 const errors = require("./Errors");
 
-module.exports.post = (req, res, next) => {
-    let accessToken = req.body.accessToken,
-        clientToken = req.body.clientToken;
+module.exports.post = function* (req, res, next) {
+    let {accessToken, clientToken} = req.body;
 
-    profileService.getProfile(accessToken, clientToken, profile => {
-        if (!profile) return errors.makeError(res, errors.ForbiddenOperationExceptionUserToken)
-        res.status(204).send()
-    })
+    const profile = yield profileService.getProfile(accessToken, clientToken);
+    if (!profile) return errors.makeError(res, errors.ForbiddenOperationExceptionUserToken);
+    res.status(204).send()
 };

@@ -1,7 +1,7 @@
 'use strict';
 
-const express = require('express');
-let router = express.Router();
+const Router = require('co-router');
+let router = Router();
 
 router.post("/joinserver", require('./Server').joinserver);
 router.post("/joinserver/:server", require('./Server').joinserver);

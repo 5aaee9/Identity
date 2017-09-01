@@ -4,58 +4,54 @@
 "use strict";
 const userService = require("../../Db/Service/userService");
 const Promise = require('bluebird');
+const i18n = require("../../i18n");
 
 module.exports.get = (req, res, next) => {
     res.render("member/profile");
 };
 
 module.exports.post = function* (req, res, next) {
-    let type = req.body.type;
+    let {type} = req.body;
 
-    userService.findById(req.session.user._id, (err, user) => {
-        userService.getProfile(user, profile => {
-            new Promise((resolve, reject) => {
-                switch (type){
-                    case "changeUserName": {
-                        let username = req.body.username;
-                        if (username.length < 3) return reject(new Error("用户名长度太小"));
-                        profile.UserName = username;
-                        profile.save(err => {
-                            if (err) return reject(err);
-                            resolve("修改成功")
-                        });
-                        break;
-                    }
-                    case "modifyPassword": {
-                        let oldPassword = req.body.oldPassword,
-                            newPassword = req.body.newPassword;
-                        if (newPassword.length < 3) return reject(new Error("密码长度太小"));
-                        if (!user.comparePassword(oldPassword)) {
-                            return reject(new Error("密码错误"))
-                        }
-                        user.password = newPassword;
-                        user.save(err => {
-                            if (err) return reject(err);
-                            resolve("修改成功")
-                        });
-                        break;
-                    }
-                    default: {
-                        reject("Not found method");
-                        break;
-                    }
-                }
-            }).then((info) => {
-                res.render("member/profile", {
-                    info: info
-                })
-            }, (err) => {
-                res.status(400).render("member/profile", {
-                    e: err.message
-                })
-            });
+    const user = yield userService.findById(req.session.user._id);
+    const profile = yield userService.getProfile(user);
 
+    function resolve(message) {
+        res.render("member/profile", {
+            info: message
         })
-    });
+    }
+
+    function reject(message) {
+        res.status(400).render("member/profile", {
+            e: message
+        })
+    }
+
+    switch (type) {
+        case "changeUserName": {
+            const {username} = req.body;
+            if (username.length < 3) return reject(i18n.__("member.error.usernameMissChar"));
+            profile.UserName = username;
+            yield profile.save();
+            resolve(i18n.__("editSuccess"));
+            break;
+        }
+        case "modifyPassword": {
+            let {oldPassword, newPassword} = req.body;
+            if (newPassword.length < 3) return reject(i18n.__("member.error.passwordMissChar"));
+            if (!user.comparePassword(oldPassword)) {
+                return reject(i18n.__("member.error.errorPassword"))
+            }
+            user.password = newPassword;
+            yield user.save();
+            resolve(i18n.__("editSuccess"));
+            break;
+        }
+        default: {
+            reject(i18n.__("member.error.noMethodFound"));
+            break;
+        }
+    }
 
 };

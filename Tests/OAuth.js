@@ -9,6 +9,7 @@ const userAuthSchema = require('../Db/Schema/UserAuth');
 const Tsession = require('supertest-session');
 const fs = require("fs");
 const userService = require('../Db/Service/userService');
+const co = require("co");
 
 let application = require("../App"),
     appModel = db.model(DbDefine.Db.APPS_DB, appScheam),
@@ -31,36 +32,35 @@ describe("OAuth Tests", function(){
         password = stringLib.randomString(16)
         appname = stringLib.randomString(16);
         session = Tsession(application);
-
-        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
+        co(function*() {
+            const tuser = yield userService.create(stringLib.randomString(8), stringLib.randomString(8) + "@email.com", password)
             user = tuser;
-            if (err) return done(err);
+        }).catch(err => done(err)).then(() => {
             session.post('/auth/login')
-                .send({
-                    email: user.email,
-                    password: password
-                })
-                .expect(302)
-                .end(function(err, res){
-                    if(err) return done(err);
-                    session.post("/member/apps/new")
-                        .send({
-                            appname: appname
-                        })
-                        .expect(302)
-                        .end(function(err, doc){
-                                appModel.findOne({
-                                    name: appname
-                                }, (err, doc) => {
-                                    if (err) return done(err);
-                                    doc.should.be.ok();
-                                    app = doc;
-                                    return done();
-                                });
-                        });
-                });
+            .send({
+                email: user.email,
+                password: password
+            })
+            .expect(302)
+            .end(function(err, res){
+                if(err) return done(err);
+                session.post("/member/apps/new")
+                    .send({
+                        appname: appname
+                    })
+                    .expect(302)
+                    .end(function(err, doc){
+                            appModel.findOne({
+                                name: appname
+                            }, (err, doc) => {
+                                if (err) return done(err);
+                                doc.should.be.ok();
+                                app = doc;
+                                return done();
+                            });
+                    });
+            });
         })
-
     })
 
     it("index", function(done){

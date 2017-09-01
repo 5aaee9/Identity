@@ -19,6 +19,12 @@
 				"loginAddress": "登入地址: ",
 				"lastSevenLogin": "过去7日登入情况"
 			}
+		},
+		"error": {
+			"usernameMissChar": "用户名长度太小",
+			"passwordMissChar": "密码长度太小",
+			"errorPassword": "密码错误",
+			"noMethodFound": "未找到此方法"
 		}
 	},
 	"footer": {
@@ -125,5 +131,6 @@
 		"user": {
 			"delete": "删除"
 		}
-	}
+	},
+	"editSuccess": "修改成功"
 }

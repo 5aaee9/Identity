@@ -6,10 +6,11 @@ const db = require("mongoose");
 const grid = require("gridfs-stream");
 const userSchema = require("../../Db/Schema/User");
 const multer  = require("multer");
-const express = require("express");
 const fs = require("fs");
+const Router = require('co-router');
 
-let router = express.Router();
+let router = Router();
+
 let upload = multer({
     dest: "tmp/",
     limits: { fileSize:  1024 * 64 }

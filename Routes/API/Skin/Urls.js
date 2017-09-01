@@ -2,8 +2,8 @@
  * Created by Indexyz on 2017/4/15.
  */
 'use strict';
-const express = require('express');
-let router = express.Router();
+const Router = require('co-router');
+let router = Router();
 
 router.get('/:username.json', require("./Profile").get);
 router.get('/textures/:fileId', require("./File").get);

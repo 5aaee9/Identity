@@ -8,6 +8,7 @@ const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
 const Tsession = require('supertest-session');
 const userService = require('../Db/Service/userService');
+const co = require("co")
 
 let application = require("../App"),
     userModel = db.model(DbDefine.Db.USER_DB, userSchema),
@@ -21,22 +22,21 @@ describe("Member", function(){
         session = Tsession(application);
         password = stringLib.randomString(16)
 
-
-        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
-            if (err) { return done(err); }
+        co(function*() {
+            const tuser = yield userService.create(stringLib.randomString(8), stringLib.randomString(8) + "@email.com", password)
             user = tuser; 
+        }).then(() => {
             session.post('/auth/login')
-                   .send({
-                        email: user.email,
-                        password: password
-                    })
-                   .expect(302)
-                   .end(function(err, res){
-                        if(err) return done(err);
-                        done();
-                    });
+            .send({
+                email: user.email,
+                password: password
+            })
+            .expect(302)
+            .end(function(err, res){
+                if(err) return done(err);
+                done();
+            });
         })
-
     })
 
     it("get member", function(done){
@@ -69,12 +69,12 @@ describe("Member", function(){
                })
                .expect(200)
                .end(function(err, res){
-                   if (err) { return done(err) }
-                   userService.getProfile(user, profile => {
-                       if (!profile) return done(new Error("not found profile"))
-                       profile.UserName.should.equal(randomUsername)
-                       done()
-                   })
+                    if (err) { return done(err) }
+                    co(function* () {
+                        const profile = yield userService.getProfile(user)
+                        if (!profile) return done(new Error("not found profile"))
+                        profile.UserName.should.equal(randomUsername)
+                    }).then(() => done())
                });
     })
     

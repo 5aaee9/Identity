@@ -5,8 +5,8 @@
 /**
  * Created by Indexyz on 2017/4/7.
  */
-const express = require("express");
-let router = express.Router();
+const Router = require('co-router');
+let router = Router();
 
 router.get("/login", require("./Login").get);
 router.post("/login", require("./Login").post);

@@ -2,28 +2,27 @@ const profileService = require("../../../Db/Service/profileService");
 const Promise = require('bluebird');
 
 
-module.exports.username2uuid = (req, res, next) => {
-    profileService.getProfileByUserName(req.params["userName"], profile => {
-        if (!profile) return res.status(204).send();
-        res.send({
-            id: profile.ProfileID,
-            name: profile.UserName
-        })
+module.exports.username2uuid = function* (req, res, next) {
+    const profile = yield profileService.getProfileByUserName(req.params["userName"]);
+    if (!profile) return res.status(204).send();
+    res.send({
+        id: profile.ProfileID,
+        name: profile.UserName
     })
 };
 
-module.exports.uuid2username = (req, res, next) => {
-    profileService.getProfileByProfileId(req.params["uuid"], profile => {
-        if (!profile) return res.status(204).send();
-        res.send([
-            {
-                name: profile.UserName
-            }
-        ].concat(profile.userNameHistory))
-    });
+module.exports.uuid2username = function* (req, res, next) {
+    const profile = yield profileService.getProfileByProfileId(req.params["uuid"]);
+
+    if (!profile) return res.status(204).send();
+    res.send([
+        {
+            name: profile.UserName
+        }
+    ].concat(profile.userNameHistory))
 };
 
-module.exports.name2uuids = (req, res, next) => {
+module.exports.name2uuids = function* (req, res, next) {
     let names = [];
 
     if (req.body !== "" || req.body !== "{}")
@@ -31,29 +30,17 @@ module.exports.name2uuids = (req, res, next) => {
     else
         names = [];
 
-    function makePromise(username) {
-        return new Promise(resolve => {
-            profileService.getProfileByUserName(username, profile => {
-                if (profile) {
-                    resolve({
-                        id: profile.ProfileID,
-                        name: profile.UserName,
-                        legacy: true
-                    })
-                } else {
-                    resolve()
-                }
+    let profileSet = new Set([]);
+    for (const item of names) {
+        const profile = yield profileService.getProfileByUserName(item);
+        if (profile) {
+            profileSet.add({
+                id: profile.ProfileID,
+                name: profile.UserName,
+                legacy: true,
             })
-        })
+        }
     }
 
-    Promise.all(names.map(item => makePromise(item)))
-        .then(data => {
-            return Promise.filter(data, item => {
-                return Boolean(item)
-            })
-        })
-        .then(data => {
-            res.send(data)
-        })
+    res.send([...profileSet])
 };

@@ -8,27 +8,22 @@ const userService = require("../../../Db/Service/userService");
 
 const errors = require("./Errors");
 
-module.exports.post = (req, res, next) => {
-    let username = req.body.username,
-        password = req.body.password,
-        clientToken = req.body.clientToken;
+module.exports.post = function* (req, res, next) {
+    let {username, password, clientToken} = req.body;
 
-    userService.login(username, password, (err, user) => {
-        if (!user || err) { return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount) }
-        userService.getProfile(user, profile => {
-            if (clientToken instanceof String){
-                if (!profile.clientToken === clientToken){
-                    clientToken = null;
-                }
-            }
-            profile.refresh();
-            if (Boolean(clientToken)){
-                profile.clientToken = clientToken
-            }
-            profile.save(err => {
-                if (err) { return errors.makeError(res, errors.ServerProblem) }
-                userService.makeDocment(user, data => res.send(data))
-            })
-        })
-    })
+    const user = yield userService.login(username, password);
+
+    if (!user) { return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount) }
+    const profile = yield userService.getProfile(user);
+    if (clientToken instanceof String){
+        if (!profile.clientToken === clientToken){
+            clientToken = null;
+        }
+    }
+    profile.refresh();
+    if (Boolean(clientToken)){
+        profile.clientToken = clientToken
+    }
+    yield profile.save();
+    res.send(yield userService.makeDocment(user));
 };

@@ -2,9 +2,8 @@
 /**
  * Created by Indexyz on 2017/4/7.
  */
-const express = require("express");
-let router = express.Router();
-
+const Router = require('co-router');
+let router = Router();
 
 function needLogin(req, res, next) {
     if (!req.session.user) { return res.redirect("/auth/login"); }

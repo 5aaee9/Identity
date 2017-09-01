@@ -18,20 +18,18 @@ module.exports.get = (req, res, next) => {
     })
 };
 
-module.exports.post = (req, res, next) => {
-    let email = req.body.email,
-        password = req.body.password;
+module.exports.post = function* (req, res, next)  {
+    let {email, password} = req.body;
 
     if (!email || !password) { res.render("auth/login", {"e": "请填写全部的信息"}); return }
 
-    userService.login(email, password, (err, doc) => {
-        if (!doc) { return res.render("auth/login", {"e": "用户名或密码错误"}); }
-        if (err) { return next(err); }
-        req.session.user = doc;
-        if (!req.query.redirect){
-            res.redirect("/")
-        } else {
-            res.redirect(req.query.redirect)
-        }
-    });
+    const user = yield userService.login(email, password);
+
+    if (!user) { return res.render("auth/login", {"e": "用户名或密码错误"}); }
+    req.session.user = user;
+    if (!req.query.redirect){
+        res.redirect("/")
+    } else {
+        res.redirect(req.query.redirect)
+    }
 };

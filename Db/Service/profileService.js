@@ -13,52 +13,46 @@ let profileModel = db.model(dbDefine.Db.PROFILE_DB, profileS),
     userModel = db.model(dbDefine.Db.USER_DB, userS);
 
 
-module.exports.invalid = (accessToken, clientToken, callback) => {
-    profileModel.findOne({
+module.exports.invalid = function* (accessToken, clientToken) {
+    const profile = yield profileModel.findOne({
         accessToken: accessToken,
         clientToken: clientToken
-    }).then(doc => {
-        if (!doc) { return callback(new Error("No doc found")) }
-        doc.refresh();
-        doc.save(callback)
-    })
+    });
+    if (profile) {
+        profile.refresh();
+        yield profile.save()
+    }
 };
 
 
-module.exports.getProfile = (accessToken, clientToken, callback) => {
-    profileModel.findOne({
+module.exports.getProfile = function* (accessToken, clientToken) {
+    return yield profileModel.findOne({
         accessToken: accessToken,
         clientToken: clientToken
-    }).then(doc => {
-        callback(doc);
     })
 };
 
-module.exports.getProfileByProfileId = (profileId, callback) => {
-    profileModel.findOne({
+module.exports.getProfileByProfileId = function* (profileId) {
+    return yield profileModel.findOne({
         ProfileID: profileId
-    }).then(doc => callback(doc));
-};
-
-module.exports.getProfileByUserName = (username, callback) => {
-    profileModel.findOne({
-        UserName: username
-    }).then(doc => callback(doc))
-};
-
-
-module.exports.getProfileById = (id, callback) => {
-    profileModel.findOne({
-        _id: id
-    }).then(doc => callback(doc))
-};
-
-module.exports.loginServer = (profile, message, ip, callback) => {
-    userService.getProfileOwner(profile._id, user => {
-        if (!user) return callback(new Error("No user found"));
-        logService.loginLog(message, user, profile, ip, err => {
-            if (err) return callback(err);
-            callback()
-        })
     })
+};
+
+module.exports.getProfileByUserName = function* (username) {
+    return yield profileModel.findOne({
+        UserName: username
+    })
+};
+
+
+module.exports.getProfileById = function* (id) {
+    return yield profileModel.findOne({
+        _id: id
+    })
+};
+
+module.exports.loginServer = function* (profile, message, ip) {
+    const user = yield userService.getProfileOwner(profile._id);
+    if (!user) return new Error("No user found");
+    yield logService.loginLog(message, user, profile, ip)
 };

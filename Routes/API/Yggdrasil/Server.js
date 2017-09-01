@@ -2,32 +2,28 @@ const profileService = require("../../../Db/Service/profileService");
 
 const errors = require("../Mojang/Errors");
 
-module.exports.joinserver = (req, res, next) => {
-    let accessToken = req.body.accessToken,
-        selectedProfile = req.body.selectedProfile,
-        serverId = req.body.serverId,
+module.exports.joinserver = function* (req, res, next) {
+    let {accessToken, selectedProfile, serverId} = req.body,
         server = "Unknown" || req.params["server"];
-    profileService.getProfileByProfileId(selectedProfile, profile => {
-        if (!profile || profile.accessToken !== accessToken) return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount);
-        req.db.redis.set(serverId, selectedProfile, (err, msg) => {
-            profileService.loginServer(profile, "${player} joined " + server + " Server", req.headers['x-forwarded-for'] || req.ip, () => {
-                res.status(204).send()
-            })
-        })
-    })
+
+    const profile = yield profileService.getProfileByProfileId(selectedProfile);
+
+    if (!profile || profile.accessToken !== accessToken) return errors.makeError(res, errors.ForbiddenOperationExceptionUserAccount);
+
+    const msg = yield req.db.redis.setAsync(serverId, selectedProfile);
+    yield profileService.loginServer(profile, "${player} joined " + server + " Server", req.headers['x-forwarded-for'] || req.ip)
+    res.status(204).send()
 };
 
-module.exports.hasjoinserver = (req, res, next) => {
-    req.db.redis.get(req.query.serverId, (err, reply) => {
-        if (err || !reply) { return res.status(204).send() }
-        profileService.getProfileByProfileId(reply, profile => {
-            if (profile.UserName !== req.query.username ) { return res.status(204).send() }
-            if (!profile) { return res.status(204).send() }
-            res.send({
-                id: profile.ProfileID,
-                name: profile.UserName
-            })
-        })
-    });
+module.exports.hasjoinserver = function* (req, res, next) {
+    const reply = yield req.db.redis.getAsync(req.query.serverId);
+    if (!reply) { return res.status(204).send() }
+    const profile = yield profileService.getProfileByProfileId(reply);
 
+    if (profile.UserName !== req.query.username ) { return res.status(204).send() }
+    if (!profile) { return res.status(204).send() }
+    res.send({
+        id: profile.ProfileID,
+        name: profile.UserName
+    })
 };

@@ -6,172 +6,125 @@ const db = require("mongoose");
 const dbDefine = require("../../Define/Db");
 const userS = require("../Schema/User");
 const profileS = require("../Schema/Profile");
-const Promise = require('bluebird');
-const profileService = require("./profileService");
 const dateHelper = require("../../Utils/DateTime");
 
 let profileModel = db.model(dbDefine.Db.PROFILE_DB, profileS),
     userModel = db.model(dbDefine.Db.USER_DB, userS);
 
-module.exports.create = (username, email, password, next) => {
+module.exports.create = function* (username, email, password) {
     let user = new userModel({
         password: password,
         email: email
     });
-
     let profile = new profileModel({});
     profile.cinit(username);
-    profile.save(err => {
-        if (err) { return next(err) }
-        user.cinit(profile);
-        user.save(err => {
-            if (err) { return next(err) }
-            else return next(null, user);
-        })
-    })
+    yield profile.save();
+    user.cinit(profile);
+    yield user.save();
+    return user
 };
 
 
-module.exports.login = (email, password, callback) => {
-    userModel.findOne({
+module.exports.login = function* (email, password) {
+    return yield userModel.findOne({
         email: {
             $regex: new RegExp("^" + String(email) + "$", "i")
         },
         password: userS.getSaltedPassword(password)
-    }).then(doc => {
-        callback(null, doc)
-    }, err => callback(err))
-};
-
-
-module.exports.getProfile = (user, callback) => {
-    profileModel.findOne({
-        _id: user.selectProfile
-    }).then(profile => {
-        callback(profile)
-    }, (err) => {
-        throw err
     })
 };
 
 
-module.exports.makeDocment = (user, callback) => {
-    let backDoc;
-    profileModel.findOne({
+module.exports.getProfile = function* (user) {
+    return yield profileModel.findOne({
         _id: user.selectProfile
-    }).then(doc => {
-        backDoc = {
-            accessToken: doc.accessToken,
-            clientToken: doc.clientToken,
-            selectedProfile: {
-                id: doc.ProfileID,
-                name: doc.UserName
-            },
-            availableProfiles: []
-        };
-    }).then(() => {
-        function makePromise(profileId){
-            return new Promise(resolve => {
-                profileModel.findOne({
-                    _id: profileId
-                }).then(doc => {
-                    resolve({
-                        id: doc.ProfileID,
-                        name: doc.UserName
-                    })
-                })
-            })
-        }
-
-        return Promise.all(user.profile.map(item => makePromise(item)))
-    }).then((res) => {
-        backDoc["availableProfiles"] = res;
-        callback(backDoc)
     })
 };
 
 
-module.exports.getProfileOwner = (profileId, callback) => {
-    userModel.findOne({
-        profile: profileId
-    }).then(doc => callback(doc))
-};
+module.exports.makeDocment = function* (user) {
+    const profile = yield profileModel.findOne({
+        _id: user.selectProfile
+    });
 
+    const backDoc = {
+        accessToken: profile.accessToken,
+        clientToken: profile.clientToken,
+        selectedProfile: {
+            id: profile.ProfileID,
+            name: profile.UserName
+        },
+        availableProfiles: []
+    };
 
-module.exports.hasProfile = (user, profileId, callback) => {
-    function makePromise(profileId){
-        return new Promise(resolve => {
-            profileModel.findOne({
-                _id: profileId
-            }).then(doc => {
-                resolve(doc.ProfileID)
-            })
+    const profileList = new Set([]);
+    for (const profile of user.profile) {
+        const user = yield profileModel.findOne({_id: profile});
+        profileList.add({
+            id: user.ProfileID,
+            name: user.UserName,
         })
     }
-    Promise.all(user.profile.map(item => makePromise(item)))
-        .then(res => {
-            if (res.indexOf(profileId) !== -1){
-                profileService.getProfileByProfileId(profileId, callback)
-            } else {
-                callback(null)
-            }
-        })
+
+    backDoc["availableProfiles"] = [...profileList];
+
+    return backDoc
 };
 
 
-module.exports.foundByEmail = (email, callback) => {
-    userModel.findOne({
+module.exports.getProfileOwner = function* (profileId)  {
+    return yield userModel.findOne({
+        profile: profileId
+    })
+};
+
+
+module.exports.hasProfile = function* (user, profileId) {
+    for (const id of user.profile) {
+        const profile = yield profileModel.findOne({_id: id});
+        if (profile.ProfileID === profileId) {
+            return profile
+        }
+    }
+    return null;
+};
+
+
+module.exports.foundByEmail = function* (email) {
+    return yield userModel.findOne({
         email: {
             $regex: new RegExp("^" + String(email) + "$", "i")
         }
-    }).then(doc => {
-        callback(null, doc)
-    }, err => callback(err))
-};
-
-module.exports.findById = (id, callback) => {
-    userModel.findOne({
-        _id: id
-    }).then(doc => {
-        callback(null, doc)
-    }, err => callback(err))
-};
-
-function deleteUserProfiles(user) {
-    return new Promise((resolve, reject) => {
-        Promise.all(user.profile.map(profile => {
-            return profileModel.remove({
-                _id: profile
-            })
-        })).then(() => resolve(user)).catch(err => reject(err))
     })
+};
+
+module.exports.findById = function* (id) {
+    return yield userModel.findOne({
+        _id: id
+    })
+};
+
+function* deleteUserProfiles(user) {
+    for (const profile of user.profile) {
+        yield profileModel.remove({_id: profile})
+    }
 }
 
 
-module.exports.removeExpire = (callback) => {
-    userModel.find({
+module.exports.removeExpire = function* () {
+    const expireUsers = yield userModel.find({
         join: {
             $lte: dateHelper.getPreDay(new Date())
         },
         emailToken: {
             $ne: ""
         }
-    }).then(docs => {
-        if (docs.length === 0) {
-             return new Promise(resolve => resolve())
-        }
-        return Promise.all(docs.map(item => {
-            return new Promise((reslove, reject) => {
-                deleteUserProfiles(item).then(() => {
-                    userModel.remove({
-                        _id: item._id
-                    }, (err, status) => {
-                        if (err) return reject(err);
-                        return reslove(item.id)
-                    })
-                })
-            })
-        }))
-    }).then(user => callback(undefined, user))
-      .catch(err => callback(err))
+    });
+
+    for (const user of expireUsers) {
+        yield deleteUserProfiles(user);
+        yield userModel.remove({_id: user.id})
+    }
+
+    return expireUsers
 };

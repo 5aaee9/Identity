@@ -17,6 +17,7 @@ const link = require("./Db/Redis").link;
 const dbDefine = require("./Define/Db").Db;
 const i18n = require("./i18n");
 const userService = require("./Db/Service/userService");
+const co = require("co");
 
 if (process.env["RAVEN_TOKEN"]) {
     git.long(function (str) {
@@ -30,7 +31,6 @@ if (process.env["RAVEN_TOKEN"]) {
         ).install();
     })
 }
-
 
 app.use(logger('[:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
@@ -56,13 +56,9 @@ let userModel = db.model(dbDefine.USER_DB, require("./Db/Schema/User")),
 // Database connection
 require("./Db/Db")(() => {
     // values
-
-    app.use(function (req, res, next) {
+    app.use(function(req, res, next) {
         if (config.remove_expire_user){
-            userService.removeExpire(function (err) {
-                if (err) return next(err);
-                next()
-            })
+            co(function*() { yield userService.removeExpire() }).then(() => next())
         } else {
             next()
         }

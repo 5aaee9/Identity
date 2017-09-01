@@ -6,22 +6,20 @@
 const profileService = require("../../../Db/Service/profileService");
 const userService = require("../../../Db/Service/userService");
 
-module.exports.get = (req, res, next) => {
+module.exports.get = function* (req, res, next)  {
     let username = req.params.username;
-    profileService.getProfileByUserName(username, profile => {
-        if (!profile) { return res.status(401).send({"errno": "1", "msg": "User not found."}) }
-        userService.getProfileOwner(profile._id, user => {
-            res.send({
-                player_name: profile.UserName,
-                last_update: user.skin ? undefined : user.skin.lastUpdate.getTime(),
-                model_preference: ["default", "cape", user.skin.slim ? "slim" : null].filter(item => item !== null),
-                skins: {
-                    "default": user.skin.skin,
-                    slim: user.skin.slim,
-                    cape: user.skin.cap,
-                },
-                cape: user.skin.cap
-            })
-        })
+    const profile = yield profileService.getProfileByUserName(username)
+    if (!profile) { return res.status(401).send({"errno": "1", "msg": "User not found."}) }
+    const user = yield userService.getProfileOwner(profile._id);
+    res.send({
+        player_name: profile.UserName,
+        last_update: user.skin ? undefined : user.skin.lastUpdate.getTime(),
+        model_preference: ["default", "cape", user.skin.slim ? "slim" : null].filter(item => item !== null),
+        skins: {
+            "default": user.skin.skin,
+            slim: user.skin.slim,
+            cape: user.skin.cap,
+        },
+        cape: user.skin.cap
     })
 };

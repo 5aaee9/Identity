@@ -2,7 +2,8 @@
  * Created by Indexyz on 2017/4/30.
  */
 
-const express = require("express");
+const Router = require('co-router');
+let router = Router();
 const typeEnum = require("../../Define/OAuth").scope;
 const multer  = require("multer");
 const makeError = require("./Error");
@@ -10,7 +11,7 @@ const db = require("mongoose");
 const userAuthSchema = require("../../Db/Schema/UserAuth");
 const appSchema = require("../../Db/Schema/Application");
 const dbEnum = require("../../Define/Db").Db;
-let router = express.Router();
+
 
 let upload = multer({
     dest: "tmp/",

@@ -5,6 +5,7 @@ const userSchema = require('../Db/Schema/User');
 const logSchema = require('../Db/Schema/Log');
 const DbDefine = require('../Define/Db');
 const stringLib = require('../Utils/String');
+const co = require("co");
 
 const userService = require('../Db/Service/userService');
 const profileService = require('../Db/Service/profileService');
@@ -17,17 +18,14 @@ describe("API", function(){
     var user, password, profile;
     
     beforeEach(function(done){
-        password = stringLib.randomString(16)
- 
-        userService.create(stringLib.randomString(8), "test@email.com", password, (err, tuser) => {
-            if (err) { return done(err); }
+        co(function*() {
+            password = stringLib.randomString(16)
+            const tuser = yield userService.create(stringLib.randomString(8), stringLib.randomString(8) + "@email.com", password)
             user = tuser; 
-            userService.getProfile(user, tprofile => {
-                if (!tprofile) return done(new Error("Don't get profile"))
-                profile = tprofile
-                done()
-            })
-        })
+            const tprofile = yield userService.getProfile(user)
+            if (!tprofile) throw new Error("Don't get profile")
+            profile = tprofile
+        }).then(() => done()).catch(err => done(err))
     })
     
     describe("Mojang API", function(){
@@ -79,16 +77,15 @@ describe("API", function(){
                         userModel.findOne({
                             _id: user._id
                         }).then(doc => {
-                            profileService.getProfileById(doc.selectProfile, profile => {
+                            co(function* () {
+                                const profile = yield profileService.getProfileById(doc.selectProfile)
                                 jsonObj.accessToken.should.equal(profile.accessToken)
                                 jsonObj.clientToken.should.equal(profile.clientToken)
                                 jsonObj.selectedProfile.id.should.equal(profile.ProfileID)
                                 jsonObj.selectedProfile.name.should.equal(profile.UserName)
-                                done()
-                            })
-                        })
+                            }).then(() => done())
                     })
-                    
+                })
             })
 
             it("test error password when authenticate", function(done){
@@ -113,16 +110,18 @@ describe("API", function(){
                     })
                     .expect(200)
                     .end(function(err, res){
+                    
                         if (err) return done(err)
+                
                         let jsonObj = JSON.parse(res.text);
                         // Refresh Docment because doc is change
-                         profileService.getProfileById(user.selectProfile, profile => {
+                        co(function* () {
+                            const profile = yield profileService.getProfileById(user.selectProfile)
                             jsonObj.accessToken.should.equal(profile.accessToken)
                             jsonObj.clientToken.should.equal(profile.clientToken)
                             jsonObj.selectedProfile.id.should.equal(profile.ProfileID)
                             jsonObj.selectedProfile.name.should.equal(profile.UserName)
-                            done()
-                        })
+                        }).then(() => done())
                     })
             })
 
@@ -298,16 +297,15 @@ describe("API", function(){
     describe("Yggdrasil", function(){
         var serverId, tp, tu;
         before(function(done){
-            serverId = stringLib.randomString(16)
-            userService.create(stringLib.randomString(8), "test@emmail.com", password, (err, tuser) => {
-                if (err) { return done(err); }
+            co(function* () { 
+                serverId = stringLib.randomString(16)
+                const tuser = yield userService.create(stringLib.randomString(8), stringLib.randomString(8) + "@emmail.com", password)
+                if (!tuser) { throw new Error("No user found"); }
                 tu = tuser; 
-                userService.getProfile(user, tprofile => {
-                    if (!tprofile) return done(new Error("Don't get profile"))
-                    tp = tprofile
-                    done()
-                })
-            })
+                const tprofile = yield userService.getProfile(user)
+                if (!tprofile) throw new Error("Don't get profile")
+                tp = tprofile
+            }).then(() => done()).catch(err => done(err))
         })
 
         it("has joinserver before join server", function(done){
@@ -351,12 +349,11 @@ describe("API", function(){
                 if (err) return done(err);
                 jsonObj = JSON.parse(res.text)
                 jsonObj.should.not.be.null();
-
-                profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
+                co(function* (){
+                    const newProfile = yield profileService.getProfileByProfileId(tp.ProfileID)
                     jsonObj.id.should.be.equal(newProfile.ProfileID)
                     jsonObj.name.should.be.equal(newProfile.UserName)
-                    done()
-                })
+                }).then(() => done())
             })
         })
 
@@ -373,12 +370,11 @@ describe("API", function(){
                 if (err) return done(err);
                 jsonObj = JSON.parse(res.text)
                 jsonObj.should.not.be.null();
-
-                profileService.getProfileByProfileId(tp.ProfileID, newProfile => {
+                co(function*() {
+                    const newProfile = yield profileService.getProfileByProfileId(tp.ProfileID)
                     jsonObj.id.should.be.equal(newProfile.ProfileID)
                     jsonObj.name.should.be.equal(newProfile.UserName)
-                    done()
-                })
+                }).then(() => done())
             })
         })
 
@@ -426,7 +422,7 @@ describe("API", function(){
 
         after(function(done){
             userModel.remove({
-                email: "test@emmail.com"
+                _id: tu._id
             }).then(er => done())
         })
 

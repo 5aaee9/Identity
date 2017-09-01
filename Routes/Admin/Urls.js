@@ -1,9 +1,9 @@
 /**
  * Created by Indexyz on 2017/8/4.
  */
-const express = require("express");
 
-let router = express.Router();
+const Router = require('co-router');
+let router = Router();
 
 router.get("/", require("./Index").get);
 router.get("/users", require("./Users").get);
