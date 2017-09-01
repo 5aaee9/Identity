@@ -23,6 +23,8 @@
     "express": "~4.13.4",
     "git-rev": "^0.2.1",
     "gridfs-stream": "^1.1.1",
+    "gulp": "^3.9.1",
+    "gulp-help-doc": "^1.1.0",
     "i18n": "^0.8.3",
     "jade": "~1.11.0",
     "mailgun": "^0.5.0",

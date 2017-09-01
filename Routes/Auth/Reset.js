@@ -17,9 +17,8 @@ module.exports.post = function* (req, res, next)  {
     if (user){
         let password = user.setRandomPassword();
         yield user.save();
-        user.sendMail(i18n("mail.resetPassword"), i18n("mail.passwordSetTo") + password, () => {
-            res.redirect("/auth/login?info=" + encodeURIComponent(i18n("message.passwordRested")))
-        })
+        yield user.sendMail(i18n("mail.resetPassword"), i18n("mail.passwordSetTo") + password)
+        res.redirect("/auth/login?info=" + encodeURIComponent(i18n("message.passwordRested")))
     } else {
         res.redirect("/auth/login?info=" + encodeURIComponent(i18n("message.passwordRested")))
     }
