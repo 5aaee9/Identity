@@ -23,7 +23,7 @@ router.get("/", (req, res, next) => {
 
 router.use("/skin", require("./Skin/Urls"));
 
-router.use((req, res, next) => {
+router.use("/authserver", (req, res, next) => {
     if (req.headers["content-type"] === undefined || req.headers["content-type"].indexOf("application/json") === -1){
         return errors.makeError(res, errors.UnsupportedMediaType);
     } else {
