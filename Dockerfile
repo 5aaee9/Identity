@@ -1,4 +1,4 @@
-FROM mhart/alpine-node
+FROM mhart/alpine-node:8.6.0
 MAINTAINER Indexyz <jiduye@gmail.com>
 
 ARG VCS_REF
